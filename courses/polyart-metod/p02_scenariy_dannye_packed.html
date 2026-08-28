@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>POL · Полиарт-метод: Сценарий — данные</title>
+<style>
+  body{background:#0b1220;color:#cfd8e3;margin:0;display:flex;flex-direction:column;align-items:center;
+       font-family:"Segoe UI",Arial,sans-serif}
+  .wrap{max-width:980px;width:100%;padding:16px}
+  h1{font-size:18px;letter-spacing:2px;margin:0 0 4px}
+  #info{color:#8fa3b9;font-size:13px;margin-bottom:10px}
+  #stage canvas{width:100%;height:auto;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.55)}
+  #err{color:#ffb3a0;background:#2a1216;border:1px solid #5a2430;border-radius:8px;padding:10px 14px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>▶ Полиарт-метод: Сценарий — данные</h1>
+  <div id="info">курс «Полиарт-метод» · урок 2 · упаковано pack v1 · клик = пауза</div>
+  <div id="err">⚠</div>
+  <div id="stage"><canvas id="cv" width="960" height="540"></canvas></div>
+</div>
+<script>/* polimuli_engine.js
+ * Мини-движок для полиарт-мультфильмов (Canvas 2D).
+ * Без зависимостей. Предоставляет:
+ *  - холст с автопультом размеров
+ *  - «сценарный таймлайн»: сцены {'from','to','draw'}
+ *  - системy частиц (эмодзи-спрайты, серый цвет по умолчанию)
+ *  - эмодзи-спрайт-рендер (тень для «тёмных» сцен)
+ *  - подпись-титры / прогресс-бар
+ */
+
+var Polimuli = (() => {
+  function makeCanvas(id, W, H) {
+    const cv = document.getElementById(id);
+    if (!cv) return null;
+    cv.width = W; cv.height = H;
+    const ctx = cv.getContext('2d');
+    return { cv, ctx, W, H };
+  }
+
+  // Эмодзи можно рисовать либо <canvas> (если есть эмодзи-фонт), либо
+  // заполнять стандартным emoji-шрифтом браузера.
+  function drawEmoji(ctx, emoji, x, y, size, alignCenter = true) {
+    ctx.font = `${size}px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emoji, x, y);
+  }
+
+  // Система частиц. Каждая частица: {x,y,vx,vy,life,maxLife,size,emoji|color,gravity}
+  class Particles {
+    constructor() { this.list = []; }
+    spawn(o) {
+      this.list.push({
+        x: o.x, y: o.y, vx: o.vx || 0, vy: o.vy || 0,
+        life: o.life || 1, maxLife: o.life || 1,
+        size: o.size || 16, emoji: o.emoji || null,
+        color: o.color || null, gravity: o.gravity || 0,
+        alpha: o.alpha != null ? o.alpha : 1,
+      });
+    }
+    burst(n, make) { for (let i = 0; i < n; i++) this.spawn(make(i)); }
+    update(dt) {
+      const alive = [];
+      for (const p of this.list) {
+        p.life -= dt;
+        if (p.life <= 0) continue;
+        p.vy += p.gravity * dt;
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        alive.push(p);
+      }
+      this.list = alive;
+    }
+    draw(ctx) {
+      for (const p of this.list) {
+        const t = p.life / p.maxLife;
+        const size = p.size * (0.6 + 0.4 * t);
+        if (p.emoji) {
+          ctx.globalAlpha = p.alpha * t;
+          drawEmoji(ctx, p.emoji, p.x, p.y, size);
+        } else {
+          ctx.globalAlpha = p.alpha * t;
+          ctx.fillStyle = p.color || '#ffffff';
+          ctx.beginPath(); ctx.arc(p.x, p.y, size / 2, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // Прогресс-бар + подпись текущей сцены (режиссёрская подсказка).
+  function drawHUD(ctx, W, H, t, total, label, opts = {}) {
+    if (opts.label) {
+      ctx.font = `14px monospace`;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = opts.labelColor || 'rgba(255,255,255,0.85)';
+      ctx.fillText(`🎬 ${label}`, 10, 8);
+    }
+    const bw = W - 20, bh = 4;
+    const bx = 10, by = H - 12;
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(bx, by, bw, bh);
+    ctx.fillStyle = opts.barColor || 'rgba(255,255,255,0.8)';
+    ctx.fillRect(bx, by, bw * Math.min(1, t / total), bh);
+  }
+
+  // Таймлайн: сцены со стартовым {from} и окончанием {to}.
+  class Timeline {
+    constructor(scenes) { this.scenes = scenes; }
+    find(t) {
+      for (const s of this.scenes) if (t >= s.from && t < s.to) return s;
+      return null;
+    }
+  }
+
+  return { makeCanvas, drawEmoji, Particles, drawHUD, Timeline };
+})();
+</script>
+<script>/* polimuli_runtime.js
+ * Интерпретатор формата POL (Poly Animation Language) поверх движка
+ * polimuli_engine.js. Чистые данные -> живой Canvas.
+ *
+ * API:
+ *   const ctrl = Polimuli.play(data, canvasIdOrEl);
+ *   ctrl.pause(); ctrl.resume(); ctrl.stop();
+ *
+ * Плеер рисует: фон-акты с перетеканием цвета, акторы-эмодзи
+ * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
+ */
+
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
+  // ---------- helpers ----------
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function hexToRgb(hex) {
+    const h = hex.replace('#', '');
+    const n = parseInt(h.length === 3
+      ? h[0] + h[0] + h[1] + h[1] + h[2] + h[2] : h, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function rgbToCss(rgb) {
+    return `rgb(${rgb[0] | 0},${rgb[1] | 0},${rgb[2] | 0})`;
+  }
+  function lerpColor(a, b, t) {
+    const r1 = hexToRgb(a), r2 = hexToRgb(b);
+    return rgbToCss(r1.map((c, i) => lerp(c, r2[i], t)));
+  }
+
+  // ---------- предобработка данных ----------
+  function prep(data) {
+    const acts = (data.acts || []).slice().sort((a, b) => a.at - b.at);
+    const dur = data.meta && data.meta.dur ? data.meta.dur : 24;
+    const actors = (data.actors || []).map(a => {
+      const key = (a.key || a.acts || []).slice().sort((p, q) => p.at - q.at);
+      return {
+        id: a.id, emoji: a.emoji, x: a.x || 0, y: a.y || 0,
+        size: a.size || 40, bob: a.bob, sway: a.sway,
+        pulse: a.pulse, cycle: a.cycle, key, visible: a.visible,
+      };
+    });
+    const fx = (data.particles || []).map(p => ({
+      from: p.from, x: p.x, y: p.y, dx: p.dx || 0, dy: p.dy || 0,
+      emoji: p.emoji, rate: p.rate != null ? p.rate : 0.05,
+      vx: p.vx || 0, vy: p.vy != null ? p.vy : 0,
+      life: p.life != null ? p.life : 1, size: p.size || 14,
+      gravity: p.gravity || 0, alpha: p.alpha != null ? p.alpha : 1,
+    }));
+    return { data, acts, dur, actors, fx };
+  }
+
+  function atAct(acts, t) {
+    let cur = null;
+    for (const a of acts) if (t >= a.at) cur = a;
+    return cur;
+  }
+  function nextAct(acts, t) {
+    for (const a of acts) if (a.at > t) return a;
+    return null;
+  }
+
+  // ключи: возвращает значение компонента `field` в момент t или null
+  function keyVal(key, t, field, base) {
+    if (!key.length) return null;
+    if (t <= key[0].at && key[0][field] != null) return key[0][field];
+    const last = key[key.length - 1];
+    if (t >= last.at) return last[field] != null ? last[field] : null;
+    for (let i = 0; i < key.length - 1; i++) {
+      const a = key[i], b = key[i + 1];
+      if (t >= a.at && t < b.at) {
+        const f = a[field] != null ? a[field] : base;
+        const g = b[field] != null ? b[field] : base;
+        return lerp(f, g, (t - a.at) / Math.max(1e-6, b.at - a.at));
+      }
+    }
+    return null;
+  }
+
+  // ---------- плеер ----------
+  function play(data, id) {
+    const P = prep(data);
+    const CV = Polimuli.makeCanvas(id, data.canvas.w, data.canvas.h);
+    if (!CV) throw new Error('canvas not found: ' + id);
+    const ctx = CV.ctx, W = CV.W, H = CV.H;
+    const Parts = new Polimuli.Particles();
+    const st = P.data.style || {};
+    const caption = st.caption || {};
+    const hud = st.hud || {};
+
+    const ctrl = { running: true, _t: 0, _start: null };
+
+    function actorPos(a, t) {
+      let x = keyVal(a.key, t, 'x', a.x);
+      if (x == null) x = a.x;
+      let y = keyVal(a.key, t, 'y', a.y);
+      if (y == null) y = a.y;
+      let size = keyVal(a.key, t, 'size', a.size);
+      if (size == null) size = a.size;
+      if (a.sway) x += Math.sin(t * a.sway.speed) * a.sway.amp;
+      if (a.bob) y += Math.sin(t * a.bob.speed) * a.bob.amp;
+      if (a.pulse) { const k = 1 + Math.sin(t * a.pulse.speed) * a.pulse.amp; size *= k; }
+      return { x, y, size };
+    }
+    function actorEmoji(a, t) {
+      if (!a.cycle) return a.emoji;
+      const arr = a.cycle.emojis;
+      return arr[Math.floor(t / a.cycle.period) % arr.length];
+    }
+
+    function drawBg(t) {
+      const cur = atAct(P.acts, t);
+      const nxt = nextAct(P.acts, t);
+      const curBg = cur && cur.bg;
+      const nxtBg = nxt && nxt.bg;
+      if (!curBg && !nxtBg) {
+        ctx.fillStyle = '#10151f';
+        ctx.fillRect(0, 0, W, H);
+        return;
+      }
+      let k = 0;
+      if (curBg && nxtBg && nxt) {
+        const span = Math.max(1, nxt.at - cur.at);
+        k = clamp((t - cur.at) / span, 0, 1);
+      }
+      const top = nxtBg && curBg ? lerpColor(curBg.top, nxtBg.top, k)
+                : (curBg ? curBg.top : nxtBg.top);
+      const bottom = nxtBg && curBg ? lerpColor(curBg.bottom, nxtBg.bottom, k)
+                   : (curBg ? curBg.bottom : nxtBg.bottom);
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, top); g.addColorStop(1, bottom);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function drawActors(t) {
+      for (const a of P.actors) {
+        if (a.visible === false) continue;
+        if (a.visible && typeof a.visible === 'object') {
+          if (t < a.visible.from || t >= a.visible.to) continue;
+        }
+        const p = actorPos(a, t);
+        Polimuli.drawEmoji(ctx, actorEmoji(a, t), p.x, p.y, p.size);
+      }
+    }
+
+    function updateFx(t, dt) {
+      for (const f of P.fx) {
+        if (Math.random() > f.rate * dt) continue;
+        let x = f.x, y = f.y;
+        if (f.from) {
+          const src = P.actors.find(a => a.id === f.from);
+          if (src) { const p = actorPos(src, t); x = p.x; y = p.y; }
+          else continue;
+        }
+        Parts.spawn({
+          x: x + f.dx, y: y + f.dy, vx: f.vx, vy: f.vy,
+          life: f.life, size: f.size, emoji: f.emoji,
+          gravity: f.gravity, alpha: f.alpha,
+        });
+      }
+      Parts.update(dt);
+    }
+
+    function drawCaption(t) {
+      const cur = atAct(P.acts, t);
+      if (!cur || !cur.text) return;
+      ctx.font = `${caption.font || 24}px "Segoe UI", Arial, sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = caption.shadow || 'rgba(0,0,0,0.5)';
+      ctx.fillText(cur.text, W / 2 + 2, 84 + 2);
+      ctx.fillStyle = caption.color || '#f0ead8';
+      ctx.fillText(cur.text, W / 2, 84);
+    }
+
+    function frame(now) {
+      if (!ctrl.running) return;
+      if (!ctrl._start) ctrl._start = now;
+      let t = (now - ctrl._start) / 1000;
+      if (t > P.dur && P.data.meta.loop !== false) t = t % P.dur;
+      const dt = Math.min(0.05, Math.max(1e-4, t - ctrl._t));
+      ctrl._t = t;
+
+      ctx.clearRect(0, 0, W, H);
+      drawBg(t);
+      drawActors(t);
+      updateFx(t, dt);
+      Parts.draw(ctx);
+      drawCaption(t);
+
+      Polimuli.drawHUD(ctx, W, H, t, P.dur,
+        P.data.meta.title + ' · ' + ((atAct(P.acts, t) || {}).text || ''),
+        { labelColor: hud.labelColor, barColor: hud.barColor });
+
+      ctrl._raf = requestAnimationFrame(frame);
+    }
+
+    ctrl.pause = () => { if (ctrl.running) { ctrl.running = false; cancelAnimationFrame(ctrl._raf); } };
+    ctrl.resume = () => { if (!ctrl.running) { ctrl.running = true; ctrl._start = null; ctrl._raf = requestAnimationFrame(frame); } };
+    ctrl.stop = () => { ctrl.running = false; cancelAnimationFrame(ctrl._raf); };
+
+    // клик — пауза; повторный — продолжить
+    CV.cv.addEventListener('click', () => {
+      if (ctrl.running) ctrl.pause(); else ctrl.resume();
+    });
+
+    ctrl._raf = requestAnimationFrame(frame);
+    return ctrl;
+  }
+
+  return Object.assign(base, { play });
+})();</script>
+<script>
+  window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"p02","title":"Полиарт-метод: Сценарий — данные","genre":"курс «Полиарт-метод» · урок 2","dur":24,"emojis":["🧩","📋","✍️","🗂️","⚙️"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8e6f5","barColor":"#5a8fc0"},"caption":{"font":24,"color":"#eef6ff","shadow":"rgba(15,35,60,0.5)"}},"acts":[{"at":0,"text":"СЦЕНАРИЙ — ЭТО ФАЙЛ JSON","bg":{"top":"#1c2c3c","bottom":"#0d1520"}},{"at":6,"text":"ДАННЫЕ: ACTS + ACTORS + ЧАСТИЦЫ","bg":{"top":"#22384a","bottom":"#101c28"}},{"at":12,"text":"СТИЛЬ И КОМПОЗИЦИЯ — ОТДЕЛЬНЫМ КЛЮЧОМ","bg":{"top":"#26404f","bottom":"#132030"}},{"at":18,"text":"НЕТ КОДА В КАДРЕ — ТОЛЬКО ИНТЕНЦИЯ","bg":{"top":"#2a4654","bottom":"#162438"}}],"actors":[{"id":"puzzle","emoji":"🧩","x":240,"y":340,"size":64,"bob":{"amp":4,"speed":1}},{"id":"sheet","emoji":"📋","x":420,"y":320,"size":56,"pulse":{"amp":0.06,"speed":0.9}},{"id":"pen","emoji":"✍️","x":500,"y":280,"size":40,"sway":{"amp":10,"speed":1.6}},{"id":"cabinet","emoji":"🗂️","x":660,"y":380,"size":60,"pulse":{"amp":0.05,"speed":0.7}},{"id":"gear","emoji":"⚙️","x":800,"y":320,"size":50,"pulse":{"amp":0.08,"speed":1.2}},{"id":"grid","emoji":"🔲","x":160,"y":200,"size":44,"pulse":{"amp":0.1,"speed":1.4},"visible":{"from":6,"to":18}}],"particles":[{"from":"pen","dx":0,"dy":-10,"emoji":"🖋️","rate":0.07,"vx":4,"vy":-12,"life":0.9,"size":12,"alpha":0.7},{"from":"cabinet","dx":0,"dy":-14,"emoji":"📎","rate":0.06,"vx":4,"vy":-12,"life":1,"size":14,"alpha":0.6}]};
+</script>
+<script>
+  (function(){
+    var c = Polimuli.play(window.__POL_DEMO__, 'cv');
+    window.__pol_ctrl = c;
+    document.addEventListener('keydown', function(e){
+      if (e.key === ' '){ e.preventDefault(); if (c.running) c.pause(); else c.resume(); }
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "n03",
+    "title": "Невесомость №3: Парабола-комета",
+    "genre": "курс «Физика невесомости» · урок 3",
+    "dur": 24,
+    "emojis": ["✈️", "🧑‍🚀", "🥤", "💫", "📍"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8e6f0", "barColor": "#5a8fb0" },
+    "caption": { "font": 24, "color": "#eef6f8", "shadow": "rgba(15,35,50,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "САМОЛЁТ-КОМЕТА НАБИРАЕТ ГОРКУ", "bg": { "top": "#9ec8e8", "bottom": "#d8efff" } },
+    { "at": 6,  "text": "НА ВЕРШИНЕ — 25 СЕКУНД ПАРИМ", "bg": { "top": "#94c2e4", "bottom": "#d2ecff" } },
+    { "at": 12, "text": "ВСЁ ВНУТРИ ПАДАЕТ ВМЕСТЕ С КАБИНОЙ", "bg": { "top": "#8cbce0", "bottom": "#cae8ff" } },
+    { "at": 18, "text": "ВОПРОС: ПОЧЕМУ В ОБЫЧНОМ РЕЙСЕ НЕ ПАРЯТ?", "bg": { "top": "#84b8dc", "bottom": "#c6e4fc" } }
+  ],
+  "actors": [
+    { "id": "comet", "emoji": "✈️", "x": 480, "y": 300, "size": 120,
+      "key": [
+        { "at": 0,  "x": 160, "y": 420 },
+        { "at": 6,  "x": 480, "y": 180 },
+        { "at": 12, "x": 800, "y": 420 },
+        { "at": 24, "x": 240, "y": 460 }
+      ] },
+    { "id": "pilot", "emoji": "🧑‍🚀", "x": 480, "y": 210, "size": 44,
+      "key": [
+        { "at": 0,  "x": 480, "y": 360 },
+        { "at": 6,  "x": 480, "y": 140 },
+        { "at": 12, "x": 480, "y": 360 }
+      ],
+      "visible": { "from": 0, "to": 12 } },
+    { "id": "cup", "emoji": "🥤", "x": 640, "y": 200, "size": 36,
+      "bob": { "amp": 9, "speed": 1.6 },
+      "visible": { "from": 6, "to": 12 } },
+    { "id": "spark", "emoji": "💫", "x": 700, "y": 260, "size": 30,
+      "pulse": { "amp": 0.2, "speed": 2.2 },
+      "visible": { "from": 6, "to": 12 } },
+    { "id": "pin", "emoji": "📍", "x": 200, "y": 120, "size": 40,
+      "pulse": { "amp": 0.08, "speed": 0.9 } },
+    { "id": "question", "emoji": "❓", "x": 760, "y": 160, "size": 34,
+      "pulse": { "amp": 0.2, "speed": 2.0 },
+      "visible": { "from": 18, "to": 24 } }
+  ],
+  "particles": [
+    { "from": "comet", "dx": -60, "dy": -10, "emoji": "💨", "rate": 0.1,
+      "vx": -40, "vy": -6, "life": 0.8, "size": 18, "alpha": 0.6 },
+    { "from": "cup", "dx": 0, "dy": -12, "emoji": "💧", "rate": 0.08,
+      "vx": 4, "vy": -14, "life": 0.9, "size": 12, "alpha": 0.7 }
+  ]
+}

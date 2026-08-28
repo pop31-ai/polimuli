@@ -1,0 +1,43 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "p01",
+    "title": "Полиарт-метод: Идея и направление",
+    "genre": "курс «Полиарт-метод» · урок 1",
+    "dur": 24,
+    "emojis": ["💡", "📚", "🔍", "🎯", "🗺️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8e6f5", "barColor": "#5a8fc0" },
+    "caption": { "font": 24, "color": "#eef6ff", "shadow": "rgba(15,35,60,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "КУРС — ЛЕКЦИЯ НА 1.5 ЧАСА", "bg": { "top": "#1c2c3c", "bottom": "#0d1520" } },
+    { "at": 6,  "text": "ПОЛИАРТ ЖМЁТ СМЫСЛ В 24 СЕК", "bg": { "top": "#22384a", "bottom": "#101c28" } },
+    { "at": 12, "text": "ЭМОДЗИ НЕСУТ ИДЕЮ, НО СЮЖЕТ ВЕДЁТ", "bg": { "top": "#26404f", "bottom": "#132030" } },
+    { "at": 18, "text": "МЕТОД: ИДЕЯ→НАПРАВЛЕНИЕ→СЕРИЯ", "bg": { "top": "#2a4654", "bottom": "#162438" } }
+  ],
+  "actors": [
+    { "id": "idea", "emoji": "💡", "x": 240, "y": 300, "size": 72,
+      "pulse": { "amp": 0.12, "speed": 1.8 } },
+    { "id": "book", "emoji": "📚", "x": 440, "y": 340, "size": 66,
+      "bob": { "amp": 4, "speed": 1.0 } },
+    { "id": "lens", "emoji": "🔍", "x": 620, "y": 300, "size": 60,
+      "sway": { "amp": 8, "speed": 1.2 } },
+    { "id": "target", "emoji": "🎯", "x": 760, "y": 380, "size": 52,
+      "pulse": { "amp": 0.08, "speed": 0.9 } },
+    { "id": "compass", "emoji": "🗺️", "x": 180, "y": 180, "size": 56,
+      "pulse": { "amp": 0.06, "speed": 0.7 } },
+    { "id": "spark", "emoji": "✨", "x": 700, "y": 200, "size": 30,
+      "pulse": { "amp": 0.22, "speed": 2.4 },
+      "visible": { "from": 6, "to": 24 } }
+  ],
+  "particles": [
+    { "from": "idea", "dx": 0, "dy": -24, "emoji": "✨", "rate": 0.1,
+      "vx": 6, "vy": -16, "life": 1.0, "size": 12, "alpha": 0.9 },
+    { "from": "compass", "dx": 0, "dy": -14, "emoji": "🧭", "rate": 0.05,
+      "vx": 4, "vy": -12, "life": 1.1, "size": 12, "alpha": 0.7 }
+  ]
+}

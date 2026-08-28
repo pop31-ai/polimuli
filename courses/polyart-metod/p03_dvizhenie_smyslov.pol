@@ -1,0 +1,47 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "p03",
+    "title": "Полиарт-метод: Движение смыслов",
+    "genre": "курс «Полиарт-метод» · урок 3",
+    "dur": 24,
+    "emojis": ["🎯", "🌀", "➡️", "✨", "⏱️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8e6f5", "barColor": "#5a8fc0" },
+    "caption": { "font": 24, "color": "#eef6ff", "shadow": "rgba(15,35,60,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ДВИЖЕНИЕ = СМЫСЛОВОЙ АКЦЕНТ", "bg": { "top": "#1c2c3c", "bottom": "#0d1520" } },
+    { "at": 6,  "text": "KEYFRAMES ВОДЯТ ПО КАРТЕ КАДРА", "bg": { "top": "#22384a", "bottom": "#101c28" } },
+    { "at": 12, "text": "ПОКАЧИВАНИЕ, БИЕНИЕ, ВОЛНА", "bg": { "top": "#26404f", "bottom": "#132030" } },
+    { "at": 18, "text": "МЕНЬШЕ ДВИЖЕНИЯ — ЧИТАБЕЛЬНЕЕ СМЫСЛ", "bg": { "top": "#2a4654", "bottom": "#162438" } }
+  ],
+  "actors": [
+    { "id": "way", "emoji": "➡️", "x": 480, "y": 340, "size": 80,
+      "key": [
+        { "at": 0,  "x": 160 },
+        { "at": 12, "x": 800 },
+        { "at": 24, "x": 160 }
+      ] },
+    { "id": "dot", "emoji": "🔵", "x": 480, "y": 340, "size": 30,
+      "bob": { "amp": 10, "speed": 2.2 } },
+    { "id": "warp", "emoji": "🌀", "x": 640, "y": 200, "size": 56,
+      "pulse": { "amp": 0.18, "speed": 2.4 } },
+    { "id": "gear", "emoji": "⏱️", "x": 240, "y": 200, "size": 46,
+      "pulse": { "amp": 0.06, "speed": 0.8 } },
+    { "id": "star", "emoji": "✨", "x": 360, "y": 160, "size": 30,
+      "pulse": { "amp": 0.25, "speed": 2.8 } },
+    { "id": "check", "emoji": "🔍", "x": 760, "y": 380, "size": 44,
+      "sway": { "amp": 6, "speed": 1.0 },
+      "visible": { "from": 18, "to": 24 } }
+  ],
+  "particles": [
+    { "from": "way", "dx": 0, "dy": -14, "emoji": "✨", "rate": 0.1,
+      "vx": 6, "vy": -14, "life": 1.0, "size": 12, "alpha": 0.9 },
+    { "from": "gear", "dx": 6, "dy": 0, "emoji": "⏱️", "rate": 0.04,
+      "vx": 10, "vy": 0, "life": 0.9, "size": 12, "alpha": 0.6 }
+  ]
+}

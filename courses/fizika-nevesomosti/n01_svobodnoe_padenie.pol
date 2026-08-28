@@ -1,0 +1,53 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "n01",
+    "title": "Невесомость №1: Свободное падение",
+    "genre": "курс «Физика невесомости» · урок 1",
+    "dur": 24,
+    "emojis": ["🛗", "🧍", "🌍", "🪂", "❓"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8e6f0", "barColor": "#5a8fb0" },
+    "caption": { "font": 24, "color": "#eef6f8", "shadow": "rgba(15,35,50,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "НЕВЕСОМОСТЬ = ПАДЕНИЕ БЕЗ ОПОРЫ", "bg": { "top": "#1c2c3c", "bottom": "#0d1520" } },
+    { "at": 6,  "text": "ЛИФТ РВЁТ ТРОС — ПАРИШЬ ВМЕСТЕ С ПОЛОМ", "bg": { "top": "#183040", "bottom": "#0a1520" } },
+    { "at": 12, "text": "ОПОРА НЕ ДАВИТ — ВЕС ИСЧЕЗ", "bg": { "top": "#22384a", "bottom": "#101c28" } },
+    { "at": 18, "text": "ВОПРОС: ПОЧЕМУ НА СТАРТЕ ВНИЗ СТАНОВИТСЯ ЛЕГЧЕ?", "bg": { "top": "#26404f", "bottom": "#132030" } }
+  ],
+  "actors": [
+    { "id": "lift", "emoji": "🛗", "x": 480, "y": 340, "size": 110,
+      "key": [
+        { "at": 0,  "y": 180 },
+        { "at": 18, "y": 420 },
+        { "at": 24, "y": 420 }
+      ] },
+    { "id": "guy", "emoji": "🧍", "x": 480, "y": 320, "size": 60,
+      "key": [
+        { "at": 0,  "y": 160 },
+        { "at": 18, "y": 400 }
+      ],
+      "visible": { "from": 0, "to": 18 } },
+    { "id": "parachute", "emoji": "🪂", "x": 300, "y": 260, "size": 44,
+      "sway": { "amp": 8, "speed": 1.0 },
+      "visible": { "from": 6, "to": 24 } },
+    { "id": "earth", "emoji": "🌍", "x": 800, "y": 460, "size": 90,
+      "pulse": { "amp": 0.02, "speed": 0.4 } },
+    { "id": "question", "emoji": "❓", "x": 200, "y": 170, "size": 34,
+      "pulse": { "amp": 0.2, "speed": 2.0 },
+      "visible": { "from": 18, "to": 24 } },
+    { "id": "zero", "emoji": "0️⃣", "x": 660, "y": 200, "size": 40,
+      "pulse": { "amp": 0.1, "speed": 1.2 },
+      "visible": { "from": 12, "to": 18 } }
+  ],
+  "particles": [
+    { "from": "lift", "dx": 0, "dy": 30, "emoji": "💨", "rate": 0.1,
+      "vx": 0, "vy": 30, "life": 0.7, "size": 16, "alpha": 0.7 },
+    { "from": "parachute", "dx": 0, "dy": -12, "emoji": "🪶", "rate": 0.05,
+      "vx": 4, "vy": -10, "life": 1.0, "size": 12, "alpha": 0.6 }
+  ]
+}

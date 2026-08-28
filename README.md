@@ -184,6 +184,9 @@ episodes/*.html               — пилотные эпизоды №01–15
 episodes/*.pol                 — эпизоды в формате POL (данные)
 episodes/*_packed.html         — автономные сборки POL (работают из file://)
 episodes/pol_index.html        — галерея POL-эпизодов (№16–95 в формате POL)
+courses/                       — серии-курсы в формате POL (index.html → выбранный курс)
+courses/fizika-nevesomosti/    — «Физика невесомости»: 4 урока (падение, орбита, парабола, жизнь на орбите)
+courses/polyart-metod/         — «Полиарт-метод»: как делать полиарт (в разработке)
 episodes/index.html           — галерея пилотов
 cases/USER_STORIES.md         — кейсы применения / user stories
 future/FUTURE.md              — «взгляды из будущего» проекта и POL
@@ -200,6 +203,13 @@ JSON: акты (сценарий с фоном), акторы (эмодзи с k
 ```
 node pack/polimuli_pack.js episodes/16_express_strela.pol   # → *_packed.html
 ```
+
+## Курсы (серии в формате POL)
+
+Идея: 1,5-часовой вебинар дисциплины режется на модули, и каждый модуль
+получает короткий полиарт-урок (24 с) по единому шаблону
+`ТЕМА → ПРИМЕР → ПРАКТИКА → ИТОГ`. См. `courses/`. Пример-пилот:
+«Физика невесомости» (`courses/fizika-nevesomosti/`).
 
 ## Пайплайн производства
 
