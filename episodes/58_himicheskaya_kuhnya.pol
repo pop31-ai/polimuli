@@ -1,0 +1,44 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "58",
+    "title": "Химическая кухня",
+    "genre": "реакция под колпаком · POL-демо",
+    "dur": 24,
+    "emojis": ["🧪", "🔬", "💥", "🧫", "⚗️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8f0e0", "barColor": "#40a870" },
+    "caption": { "font": 24, "color": "#eafff4", "shadow": "rgba(0,50,30,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "КОЛБА ПРОГРЕВАЕТ СМЕСЬ", "bg": { "top": "#0e2c24", "bottom": "#061a16" } },
+    { "at": 6,  "text": "ЖИДКОСТЬ МЕНЯЕТ ЦВЕТ", "bg": { "top": "#123428", "bottom": "#081c18" } },
+    { "at": 12, "text": "БУРЛЕНИЕ НАБИРАЕТ РИТМ", "bg": { "top": "#163c2c", "bottom": "#0a201a" } },
+    { "at": 18, "text": "ФОРМУЛА УЛЫБАЕТСЯ", "bg": { "top": "#1a4430", "bottom": "#0c2420" } }
+  ],
+  "actors": [
+    { "id": "flask", "emoji": "🧪", "x": 300, "y": 320, "size": 70,
+      "bob": { "amp": 8, "speed": 1.8 } },
+    { "id": "tube", "emoji": "⚗️", "x": 500, "y": 340, "size": 64,
+      "pulse": { "amp": 0.06, "speed": 1.2 } },
+    { "id": "mirc", "emoji": "🔬", "x": 700, "y": 300, "size": 56,
+      "pulse": { "amp": 0.04, "speed": 0.7 } },
+    { "id": "dish", "emoji": "🧫", "x": 820, "y": 400, "size": 48,
+      "pulse": { "amp": 0.06, "speed": 0.9 } },
+    { "id": "boom", "emoji": "💥", "x": 400, "y": 200, "size": 36,
+      "pulse": { "amp": 0.3, "speed": 3.0 } },
+    { "id": "atom", "emoji": "🧬", "x": 620, "y": 200, "size": 34,
+      "pulse": { "amp": 0.12, "speed": 1.8 } },
+    { "id": "formula", "emoji": "📊", "x": 180, "y": 180, "size": 30,
+      "pulse": { "amp": 0.15, "speed": 2.2 } }
+  ],
+  "particles": [
+    { "from": "tube", "dx": 0, "dy": -26, "emoji": "🫧", "rate": 0.12,
+      "vx": 5, "vy": -28, "life": 1.2, "size": 16, "alpha": 0.8 },
+    { "from": "flask", "dx": 0, "dy": -10, "emoji": "✨", "rate": 0.08,
+      "vx": 6, "vy": -14, "life": 1.1, "size": 14, "alpha": 0.8 }
+  ]
+}

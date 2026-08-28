@@ -1,0 +1,52 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "57",
+    "title": "Квантовая лаборатория",
+    "genre": "физика чудес · POL-демо",
+    "dur": 24,
+    "emojis": ["⚛️", "🔭", "🧪", "💫", "🌀"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#c8e8ff", "barColor": "#4090c8" },
+    "caption": { "font": 24, "color": "#eaf6ff", "shadow": "rgba(0,30,70,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ЭЛЕКТРОН РИСУЕТ ОРБИТУ", "bg": { "top": "#0a1830", "bottom": "#060c18" } },
+    { "at": 6,  "text": "ТЕЛЕСКОП ЛОВИТ ФОТОН", "bg": { "top": "#0e1e3a", "bottom": "#081020" } },
+    { "at": 12, "text": "ПУЗЫРЬ СКЛАДЫВАЕТ ДВУМ", "bg": { "top": "#122242", "bottom": "#0a1428" } },
+    { "at": 18, "text": "РАЗУМ ВИДИТ СТРУНУ", "bg": { "top": "#0e1e3c", "bottom": "#060e20" } }
+  ],
+  "actors": [
+    { "id": "atom", "emoji": "⚛️", "x": 480, "y": 260, "size": 120,
+      "pulse": { "amp": 0.08, "speed": 1.2 } },
+    { "id": "telescope", "emoji": "🔭", "x": 740, "y": 300, "size": 70,
+      "sway": { "amp": 6, "speed": 0.7 } },
+    { "id": "tube", "emoji": "🧪", "x": 240, "y": 360, "size": 56,
+      "bob": { "amp": 6, "speed": 1.5 } },
+    { "id": "glow", "emoji": "💫", "x": 380, "y": 180, "size": 40,
+      "pulse": { "amp": 0.2, "speed": 2.2 } },
+    { "id": "spin", "emoji": "🌀", "x": 620, "y": 180, "size": 44,
+      "pulse": { "amp": 0.15, "speed": 2.0 } },
+    { "id": "photon", "emoji": "✨", "x": 820, "y": 140, "size": 24,
+      "key": [
+        { "at": 0,  "x": 820 },
+        { "at": 12, "x": 120 }
+      ],
+      "pulse": { "amp": 0.2, "speed": 2.6 } },
+    { "id": "orbit", "emoji": "🟣", "x": 500, "y": 120, "size": 20,
+      "key": [
+        { "at": 0,  "x": 500, "y": 120 },
+        { "at": 8,  "x": 600, "y": 200 },
+        { "at": 16, "x": 500, "y": 260 }
+      ] }
+  ],
+  "particles": [
+    { "from": "atom", "dx": 0, "dy": 0, "emoji": "⭐", "rate": 0.1,
+      "vx": 12, "vy": -8, "life": 1.2, "size": 12, "alpha": 0.8 },
+    { "from": "tube", "dx": 0, "dy": -16, "emoji": "🫧", "rate": 0.08,
+      "vx": 0, "vy": -18, "life": 1.1, "size": 14, "alpha": 0.7 }
+  ]
+}
