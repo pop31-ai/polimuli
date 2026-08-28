@@ -1,0 +1,46 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "35",
+    "title": "Пустынный караван",
+    "genre": "дорога через пески · POL-демо",
+    "dur": 24,
+    "emojis": ["🐪", "🏜️", "🌵", "⭐", "🏳️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#f0e0c8", "barColor": "#b0803a" },
+    "caption": { "font": 24, "color": "#fff8e8", "shadow": "rgba(90,50,10,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "КАРАВАН ВЫХОДИТ В ПЕСКИ", "bg": { "top": "#e0a05a", "bottom": "#6a3a18" } },
+    { "at": 6,  "text": "ДЮНЫ МЕНЯЮТ МЕСТА", "bg": { "top": "#e8a860", "bottom": "#74401c" } },
+    { "at": 12, "text": "КАКТУС-ОРИЕНТИР", "bg": { "top": "#f0ae68", "bottom": "#7c4620" } },
+    { "at": 18, "text": "ЗВЕЗДА ВЕДЁТ К НОЧЛЕГУ", "bg": { "top": "#5a4a88", "bottom": "#241838" } }
+  ],
+  "actors": [
+    { "id": "camel1", "emoji": "🐪", "x": 320, "y": 400, "size": 92,
+      "bob": { "amp": 6, "speed": 0.7 } },
+    { "id": "camel2", "emoji": "🐫", "x": 540, "y": 430, "size": 76,
+      "bob": { "amp": 6, "speed": 0.8 } },
+    { "id": "cactus", "emoji": "🌵", "x": 760, "y": 380, "size": 70,
+      "pulse": { "amp": 0.02, "speed": 0.5 } },
+    { "id": "dune1", "emoji": "🏜️", "x": 200, "y": 300, "size": 96,
+      "sway": { "amp": 6, "speed": 0.5 } },
+    { "id": "dune2", "emoji": "🏜️", "x": 660, "y": 280, "size": 84,
+      "sway": { "amp": 8, "speed": 0.4 } },
+    { "id": "flag", "emoji": "🏳️", "x": 800, "y": 330, "size": 40,
+      "sway": { "amp": 12, "speed": 0.9 },
+      "visible": { "from": 12, "to": 24 } },
+    { "id": "star", "emoji": "⭐", "x": 480, "y": 120, "size": 44,
+      "pulse": { "amp": 0.15, "speed": 1.8 },
+      "visible": { "from": 18, "to": 24 } }
+  ],
+  "particles": [
+    { "from": "camel2", "dx": -30, "dy": 20, "emoji": "🌫️", "rate": 0.06,
+      "vx": -10, "vy": 6, "life": 1.4, "size": 22, "alpha": 0.5 },
+    { "from": "star", "dx": 0, "dy": -10, "emoji": "✨", "rate": 0.1,
+      "vx": 8, "vy": -16, "life": 1.1, "size": 14, "alpha": 0.9 }
+  ]
+}

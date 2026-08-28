@@ -1,0 +1,54 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "34",
+    "title": "Горный курорт",
+    "genre": "вершины и спуски · POL-демо",
+    "dur": 24,
+    "emojis": ["🏔️", "🧗", "⛷️", "🪨", "🏕️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#e8f0f5", "barColor": "#6a90b0" },
+    "caption": { "font": 24, "color": "#f0f8ff", "shadow": "rgba(20,40,70,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ВЕРШИНА ВСТРЕЧАЕТ СМЕЛЫХ", "bg": { "top": "#8aa0c0", "bottom": "#3a4a70" } },
+    { "at": 6,  "text": "КЛИМБЕР ИДЁТ ПО СТЕНЕ", "bg": { "top": "#90a6c8", "bottom": "#425078" } },
+    { "at": 12, "text": "ЛЫЖНИК СКАЧЕТ ВНИЗ", "bg": { "top": "#98acd0", "bottom": "#4a587e" } },
+    { "at": 18, "text": "ЛАГЕРЬ В ЗАДНЕМ ДВОРЕ НЕБЕС", "bg": { "top": "#8098b8", "bottom": "#344268" } }
+  ],
+  "actors": [
+    { "id": "mountain", "emoji": "🏔️", "x": 480, "y": 300, "size": 200,
+      "pulse": { "amp": 0.01, "speed": 0.3 } },
+    { "id": "climber", "emoji": "🧗", "x": 340, "y": 340, "size": 70,
+      "key": [
+        { "at": 0,  "y": 380 },
+        { "at": 8,  "y": 260 }
+      ],
+      "sway": { "amp": 4, "speed": 1.2 } },
+    { "id": "rocks", "emoji": "🪨", "x": 700, "y": 440, "size": 44,
+      "bob": { "amp": 3, "speed": 0.7 } },
+    { "id": "skier", "emoji": "⛷️", "x": 620, "y": 380, "size": 60,
+      "key": [
+        { "at": 10, "x": 760, "y": 360 },
+        { "at": 18, "x": 500, "y": 440 }
+      ],
+      "visible": { "from": 10, "to": 24 } },
+    { "id": "tent", "emoji": "🏕️", "x": 800, "y": 440, "size": 52,
+      "visible": { "from": 18, "to": 24 } },
+    { "id": "sun", "emoji": "☀️", "x": 160, "y": 140, "size": 54,
+      "pulse": { "amp": 0.07, "speed": 0.9 } },
+    { "id": "cloud1", "emoji": "☁️", "x": 300, "y": 120, "size": 44,
+      "sway": { "amp": 30, "speed": 0.3 } },
+    { "id": "cloud2", "emoji": "☁️", "x": 700, "y": 100, "size": 38,
+      "sway": { "amp": 26, "speed": 0.4 } }
+  ],
+  "particles": [
+    { "from": "mountain", "dx": -40, "dy": 20, "emoji": "❄️", "rate": 0.06,
+      "vx": -12, "vy": -8, "life": 1.2, "size": 14, "alpha": 0.8 },
+    { "from": "skier", "dx": 0, "dy": 20, "emoji": "💨", "rate": 0.1,
+      "vx": -14, "vy": 0, "life": 0.7, "size": 16, "alpha": 0.6 }
+  ]
+}
