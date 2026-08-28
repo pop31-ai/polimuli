@@ -1,0 +1,46 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "45",
+    "title": "Музей причуд",
+    "genre": "экспонаты оживают · POL-демо",
+    "dur": 24,
+    "emojis": ["🖼️", "🗿", "🎨", "🔍", "🕰️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#e8dcc8", "barColor": "#b0905a" },
+    "caption": { "font": 24, "color": "#fff4e4", "shadow": "rgba(60,30,10,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ЗАЛ ОТКРЫВАЕТ СЕКРЕТ", "bg": { "top": "#3a2c24", "bottom": "#1a100c" } },
+    { "at": 6,  "text": "КАРТИНА ПОДМИГИВАЕТ", "bg": { "top": "#3e3028", "bottom": "#1e140e" } },
+    { "at": 12, "text": "СМОТРИТЕЛЬ ИДЁТ ПО СЛЕДУ", "bg": { "top": "#42342c", "bottom": "#221810" } },
+    { "at": 18, "text": "ЭКСПОНАТ КЛАНЯЕТСЯ", "bg": { "top": "#463830", "bottom": "#261c14" } }
+  ],
+  "actors": [
+    { "id": "picture", "emoji": "🖼️", "x": 240, "y": 280, "size": 90,
+      "pulse": { "amp": 0.04, "speed": 0.8 } },
+    { "id": "statue", "emoji": "🗿", "x": 480, "y": 340, "size": 110,
+      "sway": { "amp": 4, "speed": 0.6 } },
+    { "id": "clock", "emoji": "🕰️", "x": 720, "y": 240, "size": 64,
+      "pulse": { "amp": 0.06, "speed": 1.0 } },
+    { "id": "guide", "emoji": "🔍", "x": 620, "y": 420, "size": 56,
+      "bob": { "amp": 4, "speed": 1.1 } },
+    { "id": "palette", "emoji": "🎨", "x": 160, "y": 440, "size": 48,
+      "sway": { "amp": 6, "speed": 1.0 } },
+    { "id": "eyeball1", "emoji": "👁️", "x": 220, "y": 260, "size": 36,
+      "pulse": { "amp": 0.15, "speed": 1.6 },
+      "visible": { "from": 6, "to": 24 } },
+    { "id": "eyeball2", "emoji": "👁️", "x": 270, "y": 255, "size": 32,
+      "pulse": { "amp": 0.15, "speed": 1.4 },
+      "visible": { "from": 6, "to": 24 } }
+  ],
+  "particles": [
+    { "from": "statue", "dx": 0, "dy": -20, "emoji": "✨", "rate": 0.07,
+      "vx": 8, "vy": -16, "life": 1.2, "size": 16, "alpha": 0.8 },
+    { "from": "clock", "dx": 0, "dy": -14, "emoji": "💫", "rate": 0.07,
+      "vx": 4, "vy": -12, "life": 1.1, "size": 14, "alpha": 0.7 }
+  ]
+}

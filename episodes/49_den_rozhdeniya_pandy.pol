@@ -1,0 +1,56 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "49",
+    "title": "День рождения Панды",
+    "genre": "праздник с тортом · POL-демо",
+    "dur": 24,
+    "emojis": ["🎂", "🐼", "🎈", "🎁", "🪅"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#ffe0d8", "barColor": "#c05a70" },
+    "caption": { "font": 24, "color": "#fff0ee", "shadow": "rgba(70,20,30,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ГОСТИ СТЯГИВАЮТСЯ ПОТИХОНЬКУ", "bg": { "top": "#5a3a40", "bottom": "#2a1218" } },
+    { "at": 6,  "text": "ТОРТ ВЪЕЗЖАЕТ СО СВЕЧОЙ", "bg": { "top": "#5e3e44", "bottom": "#2c161c" } },
+    { "at": 12, "text": "ЗАГАДКА ЖЕЛАНИЯ", "bg": { "top": "#624248", "bottom": "#301a1e" } },
+    { "at": 18, "text": "ШАРЫ ЛЕТЯТ В НЕБО", "bg": { "top": "#6a464c", "bottom": "#381e22" } }
+  ],
+  "actors": [
+    { "id": "panda", "emoji": "🐼", "x": 360, "y": 360, "size": 90,
+      "bob": { "amp": 4, "speed": 1.0 } },
+    { "id": "cake", "emoji": "🎂", "x": 560, "y": 400, "size": 84,
+      "key": [
+        { "at": 0,  "x": 820 },
+        { "at": 8,  "x": 560 }
+      ] },
+    { "id": "baloon1", "emoji": "🎈", "x": 680, "y": 240, "size": 44,
+      "key": [
+        { "at": 18, "y": 240 },
+        { "at": 24, "y": 60 }
+      ] },
+    { "id": "baloon2", "emoji": "🎈", "x": 240, "y": 260, "size": 40,
+      "key": [
+        { "at": 18, "y": 260 },
+        { "at": 24, "y": 80 }
+      ] },
+    { "id": "gift", "emoji": "🎁", "x": 700, "y": 450, "size": 56,
+      "pulse": { "amp": 0.06, "speed": 0.9 } },
+    { "id": "sparkler", "emoji": "🧨", "x": 590, "y": 320, "size": 36,
+      "pulse": { "amp": 0.2, "speed": 2.4 },
+      "visible": { "from": 6, "to": 12 } },
+    { "id": "party1", "emoji": "🥳", "x": 160, "y": 460, "size": 44,
+      "bob": { "amp": 5, "speed": 1.4 } },
+    { "id": "party2", "emoji": "🪅", "x": 820, "y": 360, "size": 48,
+      "sway": { "amp": 12, "speed": 1.0 } }
+  ],
+  "particles": [
+    { "from": "cake", "dx": 0, "dy": -20, "emoji": "✨", "rate": 0.1,
+      "vx": 6, "vy": -18, "life": 1.1, "size": 14, "alpha": 0.9 },
+    { "from": "panda", "dx": 0, "dy": -8, "emoji": "💕", "rate": 0.06,
+      "vx": 4, "vy": -12, "life": 1.0, "size": 16, "alpha": 0.8 }
+  ]
+}
