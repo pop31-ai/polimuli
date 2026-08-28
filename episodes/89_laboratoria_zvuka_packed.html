@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"89","title":"Лаборатория звука","genre":"аудио-опыты · POL-демо","dur":24,"emojis":["🎙️","🎧","🏗️","📻","🎹"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#ffe8c8","barColor":"#c08830"},"caption":{"font":24,"color":"#fff6e0","shadow":"rgba(70,40,0,0.5)"}},"acts":[{"at":0,"text":"МИКРОФОН ЛОВИТ ГАММУ","bg":{"top":"#3a4a5a","bottom":"#18202c"}},{"at":6,"text":"НАУШНИКИ ПРОБУЮТ НАС","bg":{"top":"#3e5264","bottom":"#1c2430"}},{"at":12,"text":"ВОЛНА ИДЁТ ПО ЭКРАНАМ","bg":{"top":"#42586c","bottom":"#202834"}},{"at":18,"text":"АККОРД ЛЕГАЕТ НА ПРИЁМНИК","bg":{"top":"#3a5268","bottom":"#1a2434"}}],"actors":[{"id":"mic","emoji":"🎙️","x":260,"y":320,"size":56,"bob":{"amp":6,"speed":1.2}},{"id":"headphone","emoji":"🎧","x":440,"y":280,"size":64,"pulse":{"amp":0.05,"speed":1}},{"id":"radio","emoji":"📻","x":640,"y":360,"size":58,"pulse":{"amp":0.05,"speed":0.9}},{"id":"keyboard","emoji":"🎹","x":800,"y":440,"size":60,"pulse":{"amp":0.06,"speed":1.1}},{"id":"wave","emoji":"💚","x":520,"y":200,"size":34,"pulse":{"amp":0.25,"speed":2.6}},{"id":"note1","emoji":"🎵","x":180,"y":200,"size":28,"sway":{"amp":12,"speed":1.4}},{"id":"note2","emoji":"🎶","x":700,"y":180,"size":32,"sway":{"amp":14,"speed":1.1}}],"particles":[{"from":"mic","dx":0,"dy":-14,"emoji":"🎵","rate":0.09,"vx":6,"vy":-14,"life":1,"size":14,"alpha":0.8},{"from":"radio","dx":0,"dy":-10,"emoji":"📻","rate":0.05,"vx":4,"vy":-12,"life":1.1,"size":14,"alpha":0.7}]};

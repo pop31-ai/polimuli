@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"51","title":"Кибер-комната игр","genre":"игровой неон · POL-демо","dur":24,"emojis":["🕹️","🎮","👾","🖥️","🚀"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#b0ffd8","barColor":"#20c878"},"caption":{"font":24,"color":"#d0ffe8","shadow":"rgba(0,50,40,0.5)"}},"acts":[{"at":0,"text":"ЭКРАН ЗАГОРАЕТСЯ НЕОНОМ","bg":{"top":"#0a2438","bottom":"#040c18"}},{"at":6,"text":"ГЕРОЙ ПОЛУЧАЕТ ВАЙТСТИК","bg":{"top":"#0c2840","bottom":"#061022"}},{"at":12,"text":"УРОВЕНЬ ЗА УРОВНЕМ","bg":{"top":"#0e2c48","bottom":"#081226"}},{"at":18,"text":"ФИНАЛЬНЫЙ БОСС ПОБЕЖДЁН","bg":{"top":"#0c2440","bottom":"#060e20"}}],"actors":[{"id":"screen","emoji":"🖥️","x":480,"y":280,"size":150,"pulse":{"amp":0.03,"speed":0.9}},{"id":"joystick","emoji":"🕹️","x":300,"y":420,"size":70,"sway":{"amp":10,"speed":1.6}},{"id":"alien","emoji":"👾","x":480,"y":180,"size":40,"key":[{"at":0,"x":400},{"at":12,"x":560},{"at":24,"x":400}]},{"id":"rocket","emoji":"🚀","x":720,"y":260,"size":44,"bob":{"amp":6,"speed":1.2}},{"id":"pad","emoji":"🎮","x":700,"y":440,"size":52,"pulse":{"amp":0.06,"speed":1}},{"id":"coin1","emoji":"🪙","x":200,"y":300,"size":24,"pulse":{"amp":0.2,"speed":2}},{"id":"coin2","emoji":"🪙","x":760,"y":180,"size":22,"pulse":{"amp":0.2,"speed":2.4}},{"id":"heart","emoji":"❤️","x":140,"y":460,"size":36,"pulse":{"amp":0.15,"speed":1.8}}],"particles":[{"from":"screen","dx":0,"dy":-30,"emoji":"✨","rate":0.1,"vx":8,"vy":-20,"life":1.2,"size":12,"alpha":0.9},{"from":"alien","dx":0,"dy":0,"emoji":"💥","rate":0.08,"vx":10,"vy":-8,"life":0.9,"size":14,"alpha":0.8}]};

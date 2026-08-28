@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"86","title":"Солнечная ферма","genre":"энергия-сказка · POL-демо","dur":24,"emojis":["☀️","🌞","💡","⚡","🔋","🌻"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#5a3a10","barColor":"#e0942a"},"caption":{"font":24,"color":"#fff2d0","shadow":"rgba(60,30,0,0.45)"}},"acts":[{"at":0,"text":"РАССВЕТ НА ХОЛМЕ","bg":{"top":"#f7c96b","bottom":"#ffdca0"}},{"at":6,"text":"ПАНЕЛИ ЛОВЯТ СВЕТ","bg":{"top":"#bfe0ff","bottom":"#f3e6b0"}},{"at":12,"text":"БЕТА КОПИТ ДЕНЬ","bg":{"top":"#cfe9ff","bottom":"#e8d99a"}},{"at":18,"text":"ВЕСЬ ДОМ ВОСХОДИТ","bg":{"top":"#ffb877","bottom":"#f6d48a"}}],"actors":[{"id":"sun","emoji":"☀️","x":120,"y":120,"size":96,"pulse":{"amp":0.06,"speed":1},"key":[{"at":0,"x":120,"y":200},{"at":6,"x":320,"y":110},{"at":12,"x":480,"y":90},{"at":18,"x":640,"y":130},{"at":24,"x":820,"y":200}]},{"id":"panel1","emoji":"🔋","x":220,"y":420,"size":54,"bob":{"amp":2,"speed":0.8}},{"id":"panel2","emoji":"🔋","x":340,"y":420,"size":54,"bob":{"amp":2,"speed":1}},{"id":"panel3","emoji":"🔋","x":460,"y":420,"size":54,"bob":{"amp":2,"speed":0.9}},{"id":"panel4","emoji":"🔋","x":580,"y":420,"size":54,"bob":{"amp":2,"speed":1.1}},{"id":"bulb","emoji":"💡","x":740,"y":360,"size":48,"pulse":{"amp":0.18,"speed":2.4},"visible":{"from":6,"to":24}},{"id":"flower","emoji":"🌻","x":150,"y":480,"size":40,"sway":{"amp":6,"speed":1.2}},{"id":"bolt","emoji":"⚡","x":0,"y":0,"size":34,"visible":{"from":12,"to":17},"key":[{"at":12,"x":600,"y":400},{"at":17,"x":760,"y":370}]}],"particles":[{"from":"sun","dx":0,"dy":40,"emoji":"✨","rate":0.2,"vx":10,"vy":40,"life":1,"size":14,"alpha":0.85},{"from":"panel3","dx":0,"dy":-20,"emoji":"⚡","rate":0.05,"vx":40,"vy":-20,"life":0.8,"size":18,"alpha":0.7}]};

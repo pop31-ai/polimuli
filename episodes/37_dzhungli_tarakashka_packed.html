@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"37","title":"Джунгли Таракашка","genre":"зелёный приключенец · POL-демо","dur":24,"emojis":["🦎","🐜","🌴","🐒","🦜"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8f0c8","barColor":"#60a048"},"caption":{"font":24,"color":"#eeffe8","shadow":"rgba(20,60,10,0.5)"}},"acts":[{"at":0,"text":"ПАЛЬМЫ ШЕПЧУТ ЛИСТЬЯМИ","bg":{"top":"#2c7a40","bottom":"#0c3020"}},{"at":6,"text":"ТАРАКАШКА ТРОГАЕТСЯ В ПУТЬ","bg":{"top":"#328648","bottom":"#123624"}},{"at":12,"text":"СОСЕДИ СЛЕДЯТ С ВЕТОК","bg":{"top":"#36904c","bottom":"#163c28"}},{"at":18,"text":"ЛЕС ОТКРЫВАЕТ ПОЛЯНУ","bg":{"top":"#3a9a52","bottom":"#1a422c"}}],"actors":[{"id":"sky","emoji":"🦎","x":300,"y":420,"size":60,"key":[{"at":0,"x":300},{"at":20,"x":760}],"sway":{"amp":6,"speed":1.2}},{"id":"ant","emoji":"🐜","x":160,"y":470,"size":34,"bob":{"amp":3,"speed":1.6}},{"id":"palm1","emoji":"🌴","x":140,"y":300,"size":130,"sway":{"amp":6,"speed":0.5}},{"id":"palm2","emoji":"🌴","x":820,"y":320,"size":110,"sway":{"amp":8,"speed":0.4}},{"id":"monkey","emoji":"🐒","x":620,"y":260,"size":56,"sway":{"amp":10,"speed":1.4}},{"id":"parrot","emoji":"🦜","x":480,"y":200,"size":42,"sway":{"amp":16,"speed":1.8}},{"id":"butterfly","emoji":"🦋","x":700,"y":180,"size":34,"sway":{"amp":22,"speed":0.8}},{"id":"flower","emoji":"🌺","x":520,"y":460,"size":40,"pulse":{"amp":0.08,"speed":1},"visible":{"from":18,"to":24}}],"particles":[{"from":"palm1","dx":0,"dy":-30,"emoji":"🍃","rate":0.05,"vx":6,"vy":-8,"life":1.5,"size":14,"alpha":0.6},{"from":"sky","dx":0,"dy":-6,"emoji":"✨","rate":0.06,"vx":4,"vy":-10,"life":1,"size":12,"alpha":0.7}]};

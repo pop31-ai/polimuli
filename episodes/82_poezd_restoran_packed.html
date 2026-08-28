@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"82","title":"Поезд-ресторан","genre":"обед в дороге · POL-демо","dur":24,"emojis":["🚆","🍽️","🥂","🎻","🪟"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#f0e0d0","barColor":"#a08060"},"caption":{"font":24,"color":"#fff6ea","shadow":"rgba(60,30,10,0.5)"}},"acts":[{"at":0,"text":"ВАГОН-РЕСТОРАН В ПУТИ","bg":{"top":"#4a3a2a","bottom":"#241810"}},{"at":6,"text":"ОФИЦИАНТ НЕСЁТ ЗАКАЗ","bg":{"top":"#52402c","bottom":"#281c14"}},{"at":12,"text":"СТОЛ НАКРЫВАЕТСЯ СКОРОСТЬЮ","bg":{"top":"#58462e","bottom":"#2c2018"}},{"at":18,"text":"ОКНО КАЖЕТ ГОРОДА","bg":{"top":"#564234","bottom":"#2a201c"}}],"actors":[{"id":"train","emoji":"🚆","x":480,"y":360,"size":150,"key":[{"at":0,"x":360},{"at":24,"x":620}]},{"id":"waiter","emoji":"🧑‍🍳","x":360,"y":320,"size":54,"bob":{"amp":4,"speed":1.2}},{"id":"plate","emoji":"🍽️","x":480,"y":280,"size":48,"sway":{"amp":6,"speed":1}},{"id":"glasses","emoji":"🥂","x":640,"y":260,"size":44,"pulse":{"amp":0.08,"speed":1.2}},{"id":"violin","emoji":"🎻","x":720,"y":220,"size":40,"sway":{"amp":8,"speed":1.1}},{"id":"window","emoji":"🪟","x":800,"y":300,"size":56,"pulse":{"amp":0.04,"speed":0.7},"visible":{"from":18,"to":24}}],"particles":[{"from":"plate","dx":0,"dy":-8,"emoji":"🍝","rate":0.05,"vx":4,"vy":-12,"life":1,"size":14,"alpha":0.7},{"from":"train","dx":-60,"dy":30,"emoji":"💨","rate":0.07,"vx":-18,"vy":0,"life":1,"size":16,"alpha":0.6}]};

@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"74","title":"Цветочная лавка","genre":"утро в бутонах · POL-демо","dur":24,"emojis":["🌷","💐","🌻","🌹","🍃"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#ffe0e8","barColor":"#d05a90"},"caption":{"font":24,"color":"#fff0f4","shadow":"rgba(70,10,40,0.5)"}},"acts":[{"at":0,"text":"БУТОНЫ КИВАЮТ РОСЕ","bg":{"top":"#4a5a3a","bottom":"#1e2818"}},{"at":6,"text":"ФЛОРИСТ СОБИРАЕТ БУКЕТ","bg":{"top":"#4e623e","bottom":"#242e1c"}},{"at":12,"text":"СОЛНЦЕ СЧИТАЕТ ЛЕПЕСТКИ","bg":{"top":"#526842","bottom":"#283420"}},{"at":18,"text":"ЛАВКА ДАРИТ РАДОСТЬ","bg":{"top":"#566e46","bottom":"#2c3824"}}],"actors":[{"id":"tulip","emoji":"🌷","x":220,"y":380,"size":54,"sway":{"amp":10,"speed":0.8}},{"id":"rose","emoji":"🌹","x":360,"y":360,"size":56,"pulse":{"amp":0.06,"speed":1}},{"id":"bouquet","emoji":"💐","x":560,"y":340,"size":64,"key":[{"at":0,"x":560},{"at":16,"x":760}],"sway":{"amp":4,"speed":0.9}},{"id":"sunflower","emoji":"🌻","x":460,"y":280,"size":60,"pulse":{"amp":0.05,"speed":0.8}},{"id":"florist","emoji":"🧑‍🌾","x":680,"y":420,"size":58,"bob":{"amp":4,"speed":1}},{"id":"leaf","emoji":"🍃","x":800,"y":300,"size":30,"sway":{"amp":14,"speed":0.8}},{"id":"dew","emoji":"💧","x":140,"y":260,"size":16,"key":[{"at":0,"y":300},{"at":8,"y":420,"size":0}]},{"id":"sun","emoji":"☀️","x":780,"y":140,"size":52,"pulse":{"amp":0.07,"speed":0.9}}],"particles":[{"from":"bouquet","dx":0,"dy":-12,"emoji":"🌸","rate":0.07,"vx":6,"vy":-14,"life":1.2,"size":14,"alpha":0.8},{"from":"sunflower","dx":0,"dy":-10,"emoji":"✨","rate":0.05,"vx":0,"vy":-12,"life":1,"size":12,"alpha":0.7}]};

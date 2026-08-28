@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"79","title":"Школа мастеров","genre":"верстак-вдохновение · POL-демо","dur":24,"emojis":["🛠️","🧑‍🎓","📐","🔨","✨"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#f0e4d0","barColor":"#b09050"},"caption":{"font":24,"color":"#fff6e8","shadow":"rgba(70,40,10,0.5)"}},"acts":[{"at":0,"text":"ВЕРСТАК ГОТОВ К УРОКУ","bg":{"top":"#5a4a28","bottom":"#2a2010"}},{"at":6,"text":"УЧЕНИК КЛАДЁТ ПЛАН","bg":{"top":"#5e5030","bottom":"#2e2618"}},{"at":12,"text":"МОЛОТОК УТВЕРЖДАЕТ ШОВ","bg":{"top":"#625434","bottom":"#322c1c"}},{"at":18,"text":"ВЕЩЬ ГОТОВА С НУЛЯ","bg":{"top":"#665a3c","bottom":"#363020"}}],"actors":[{"id":"chest","emoji":"🛠️","x":200,"y":320,"size":62,"pulse":{"amp":0.05,"speed":0.9}},{"id":"student","emoji":"🧑‍🎓","x":380,"y":370,"size":62,"bob":{"amp":4,"speed":1}},{"id":"ruler","emoji":"📐","x":540,"y":300,"size":44,"sway":{"amp":6,"speed":1}},{"id":"hammer","emoji":"🔨","x":660,"y":340,"size":46,"key":[{"at":0,"x":660,"y":340},{"at":12,"y":280},{"at":13,"y":340},{"at":14,"y":300},{"at":15,"y":340}]},{"id":"spark","emoji":"✨","x":420,"y":240,"size":26,"pulse":{"amp":0.2,"speed":2.4},"visible":{"from":12,"to":24}},{"id":"board","emoji":"🧱","x":760,"y":440,"size":44,"bob":{"amp":3,"speed":0.8}},{"id":"sign","emoji":"🏷️","x":820,"y":280,"size":38,"pulse":{"amp":0.06,"speed":0.8},"visible":{"from":18,"to":24}}],"particles":[{"from":"hammer","dx":0,"dy":10,"emoji":"⭐","rate":0.09,"vx":8,"vy":8,"life":0.8,"size":14,"alpha":0.8},{"from":"sign","dx":0,"dy":-10,"emoji":"✨","rate":0.07,"vx":4,"vy":-12,"life":1,"size":12,"alpha":0.8}]};

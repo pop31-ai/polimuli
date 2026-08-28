@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"54","title":"Насекомые луга","genre":"полевая поэма · POL-демо","dur":24,"emojis":["🐝","🐞","🦋","🐜","🌼"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#e8f5c0","barColor":"#90b030"},"caption":{"font":24,"color":"#f2ffda","shadow":"rgba(50,70,0,0.5)"}},"acts":[{"at":0,"text":"УТРО КАПАЕТ МЁДОМ","bg":{"top":"#5aa04a","bottom":"#1c4818"}},{"at":6,"text":"ПЧЕЛА КОЛЛЕКТИРУЕТ КРУГИ","bg":{"top":"#5ea84e","bottom":"#204c1c"}},{"at":12,"text":"БОЖЬЯ КОРОВКА СЧИТАЕТ ТОЧКИ","bg":{"top":"#62b052","bottom":"#245020"}},{"at":18,"text":"БАБОЧКА ЗАКРЫВАЕТ ДЕНЬ","bg":{"top":"#4a9448","bottom":"#1a401c"}}],"actors":[{"id":"bee","emoji":"🐝","x":360,"y":260,"size":52,"sway":{"amp":24,"speed":1.4}},{"id":"ladybug","emoji":"🐞","x":560,"y":380,"size":46,"key":[{"at":0,"x":560},{"at":12,"x":740}],"bob":{"amp":4,"speed":1.1}},{"id":"butterfly","emoji":"🦋","x":700,"y":220,"size":56,"sway":{"amp":28,"speed":0.9}},{"id":"ant","emoji":"🐜","x":240,"y":470,"size":34,"bob":{"amp":3,"speed":1.6}},{"id":"flower1","emoji":"🌼","x":200,"y":420,"size":46,"pulse":{"amp":0.06,"speed":0.8}},{"id":"flower2","emoji":"🌼","x":820,"y":440,"size":42,"pulse":{"amp":0.06,"speed":1}},{"id":"grass","emoji":"🌱","x":460,"y":470,"size":30,"sway":{"amp":8,"speed":0.7}},{"id":"sun","emoji":"☀️","x":780,"y":120,"size":54,"pulse":{"amp":0.07,"speed":0.9}}],"particles":[{"from":"bee","dx":0,"dy":10,"emoji":"✨","rate":0.08,"vx":6,"vy":6,"life":0.8,"size":12,"alpha":0.7},{"from":"flower1","dx":0,"dy":-10,"emoji":"🌾","rate":0.06,"vx":4,"vy":-10,"life":1.2,"size":14,"alpha":0.6}]};

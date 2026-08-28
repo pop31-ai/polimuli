@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"40","title":"Пещера сокровищ","genre":"поиск золота · POL-демо","dur":24,"emojis":["🕵️","🗝️","💰","💎","🏺"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#fcdfb8","barColor":"#c89038"},"caption":{"font":24,"color":"#fff4e0","shadow":"rgba(60,30,0,0.5)"}},"acts":[{"at":0,"text":"В ПЕЩЕРЕ КАПАЕТ С ИСТОКА","bg":{"top":"#2a1c3a","bottom":"#0c0818"}},{"at":6,"text":"СУНДУК НАЙДЕН ГЛАЗАМИ","bg":{"top":"#302040","bottom":"#100a1c"}},{"at":12,"text":"КЛЮЧ ПОВОРАЧИВАЕТСЯ","bg":{"top":"#362446","bottom":"#140c20"}},{"at":18,"text":"СВЕТ ЗОЛОТА ЛЬЁТСЯ НАРУЖУ","bg":{"top":"#3e2a38","bottom":"#180e1c"}}],"actors":[{"id":"detective","emoji":"🕵️","x":240,"y":360,"size":64,"bob":{"amp":4,"speed":1}},{"id":"chest","emoji":"💰","x":520,"y":400,"size":80,"pulse":{"amp":0.06,"speed":1}},{"id":"key","emoji":"🗝️","x":380,"y":320,"size":44,"sway":{"amp":8,"speed":1.4}},{"id":"gem","emoji":"💎","x":700,"y":340,"size":40,"pulse":{"amp":0.15,"speed":2},"visible":{"from":18,"to":24}},{"id":"vase","emoji":"🏺","x":800,"y":450,"size":54,"pulse":{"amp":0.05,"speed":0.7},"visible":{"from":18,"to":24}},{"id":"ocean","emoji":"🌌","x":120,"y":140,"size":36,"pulse":{"amp":0.2,"speed":2.4}}],"particles":[{"from":"chest","dx":0,"dy":-20,"emoji":"🪙","rate":0.1,"vx":4,"vy":-22,"life":1,"size":16,"alpha":0.9},{"from":"gem","dx":0,"dy":-8,"emoji":"✨","rate":0.08,"vx":6,"vy":-12,"life":1.1,"size":14,"alpha":0.9}]};

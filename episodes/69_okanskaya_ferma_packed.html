@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"69","title":"Океанская ферма","genre":"подводное цветоводство · POL-демо","dur":24,"emojis":["🦪","🐟","🫧","🪸","🌿"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8ecfa","barColor":"#3a96b8"},"caption":{"font":24,"color":"#eef8ff","shadow":"rgba(0,40,70,0.5)"}},"acts":[{"at":0,"text":"ФЕРМА ВИСИТ НА ВОЛНАХ","bg":{"top":"#0e4a6a","bottom":"#06243c"}},{"at":6,"text":"РЫБКИ ПОЛИВАЮТ ГРЯДКИ","bg":{"top":"#125070","bottom":"#082840"}},{"at":12,"text":"УСТРИЦЫ ВРУЧАЮТ ЖЕМЧУГ","bg":{"top":"#165678","bottom":"#0a2c44"}},{"at":18,"text":"ЛУЧ СВЕТА БЛАГОДАРИТ ФЕРМУ","bg":{"top":"#1a5a80","bottom":"#0e3048"}}],"actors":[{"id":"oyster","emoji":"🦪","x":260,"y":360,"size":64,"pulse":{"amp":0.06,"speed":1}},{"id":"pearl","emoji":"🫧","x":300,"y":320,"size":24,"pulse":{"amp":0.2,"speed":2.4},"visible":{"from":12,"to":24}},{"id":"fish1","emoji":"🐟","x":460,"y":280,"size":40,"sway":{"amp":22,"speed":0.7}},{"id":"fish2","emoji":"🐠","x":640,"y":340,"size":38,"sway":{"amp":24,"speed":0.6}},{"id":"coral","emoji":"🪸","x":760,"y":440,"size":56,"pulse":{"amp":0.05,"speed":0.6}},{"id":"seaweed","emoji":"🌿","x":140,"y":440,"size":54,"sway":{"amp":10,"speed":0.7}},{"id":"garden","emoji":"🥬","x":560,"y":460,"size":40,"bob":{"amp":3,"speed":0.9}},{"id":"beam","emoji":"💡","x":480,"y":120,"size":48,"pulse":{"amp":0.1,"speed":1.4},"visible":{"from":18,"to":24}}],"particles":[{"from":"fish1","dx":0,"dy":-8,"emoji":"🫧","rate":0.08,"vx":0,"vy":-16,"life":1.2,"size":14,"alpha":0.7},{"from":"pearl","dx":0,"dy":-14,"emoji":"✨","rate":0.08,"vx":6,"vy":-14,"life":1.1,"size":12,"alpha":0.9}]};

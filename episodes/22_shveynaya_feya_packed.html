@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"22","title":"Швейная фея","genre":"ремесло-сказка · POL-демо","dur":24,"emojis":["🧵","🪡","✂️","👗","🧶"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#f0dfe8","barColor":"#b080a0"},"caption":{"font":24,"color":"#fff0f8","shadow":"rgba(60,20,45,0.5)"}},"acts":[{"at":0,"text":"АТЕЛЬЕ ПРОБУЖДАЕТСЯ","bg":{"top":"#3a2434","bottom":"#1c1220"}},{"at":6,"text":"НИТКА ВДЕВАЕТСЯ В ИГЛУ","bg":{"top":"#422a3c","bottom":"#221526"}},{"at":12,"text":"НОЖНИЦЫ СТРИГУТ ЛОСКУТКИ","bg":{"top":"#4a3042","bottom":"#261828"}},{"at":18,"text":"ПЛАТЬЕ ГОТОВО — БЛЕСК!","bg":{"top":"#523648","bottom":"#2c1c2c"}}],"actors":[{"id":"fairy","emoji":"🧚","x":200,"y":260,"size":60,"bob":{"amp":6,"speed":1.2}},{"id":"spool","emoji":"🧵","x":360,"y":420,"size":44,"pulse":{"amp":0.08,"speed":1.4}},{"id":"needle","emoji":"🪡","x":500,"y":380,"size":40,"sway":{"amp":8,"speed":2}},{"id":"scissors","emoji":"✂️","x":620,"y":420,"size":48,"key":[{"at":0,"x":620},{"at":12,"x":620},{"at":14,"x":700},{"at":16,"x":620}]},{"id":"dress","emoji":"👗","x":760,"y":320,"size":66,"visible":{"from":18,"to":24},"pulse":{"amp":0.08,"speed":1}},{"id":"yarn","emoji":"🧶","x":480,"y":470,"size":40,"bob":{"amp":4,"speed":0.9}},{"id":"lip","emoji":"💎","x":760,"y":220,"size":30,"pulse":{"amp":0.2,"speed":2.4},"visible":{"from":18,"to":24}},{"id":"pearl","emoji":"⚪","x":260,"y":140,"size":20,"pulse":{"amp":0.2,"speed":1.8}}],"particles":[{"from":"fairy","dx":0,"dy":20,"emoji":"✨","rate":0.12,"vx":6,"vy":-16,"life":0.9,"size":12,"alpha":0.8},{"from":"needle","dx":0,"dy":0,"emoji":"💫","rate":0.06,"vx":0,"vy":-10,"life":1,"size":14,"alpha":0.6}]};

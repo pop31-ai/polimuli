@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"73","title":"Ночная аптека звёзд","genre":"сон-лирика · POL-демо","dur":24,"emojis":["🌝","🌙","⭐","💫","💤","🛏️","🌠"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#a9c1e8","barColor":"#6f8fc0"},"caption":{"font":24,"color":"#d7e3f5","shadow":"rgba(5,10,25,0.6)"}},"acts":[{"at":0,"text":"АПТЕКА ЗВЁЗД ОТКРЫТА","bg":{"top":"#101828","bottom":"#060a14"}},{"at":6,"text":"ЛУНА ВЫПИСЫВАЕТ СНЫ","bg":{"top":"#161f36","bottom":"#0a0e1c"}},{"at":12,"text":"ПОРОЦИИ СВЕТА НА ВИТРИНЕ","bg":{"top":"#1a2440","bottom":"#0d1222"}},{"at":18,"text":"ГОРОД УКУТАН В ДРЁМУ","bg":{"top":"#0c1424","bottom":"#050810"}}],"actors":[{"id":"moon","emoji":"🌝","x":760,"y":150,"size":90,"pulse":{"amp":0.08,"speed":1.2},"bob":{"amp":5,"speed":0.6}},{"id":"crescent","emoji":"🌙","x":200,"y":120,"size":46,"bob":{"amp":8,"speed":0.4}},{"id":"star1","emoji":"⭐","x":120,"y":90,"size":20,"sway":{"amp":6,"speed":0.8}},{"id":"star2","emoji":"⭐","x":420,"y":70,"size":16,"sway":{"amp":5,"speed":1.1}},{"id":"star3","emoji":"⭐","x":600,"y":100,"size":22,"sway":{"amp":7,"speed":0.6}},{"id":"shooting","emoji":"🌠","x":-40,"y":-40,"size":30,"visible":{"from":9,"to":11},"key":[{"at":9,"x":-40,"y":-40},{"at":11,"x":600,"y":200}]},{"id":"bed","emoji":"🛏️","x":480,"y":470,"size":60,"bob":{"amp":2,"speed":0.3}},{"id":"jar","emoji":"🫙","x":330,"y":300,"size":36,"pulse":{"amp":0.12,"speed":1.6},"visible":{"from":12,"to":18}},{"id":"dream","emoji":"💫","x":620,"y":380,"size":34,"pulse":{"amp":0.15,"speed":1.8},"visible":{"from":6,"to":24}}],"particles":[{"from":"bed","dx":10,"dy":-40,"emoji":"💤","rate":0.12,"vx":8,"vy":-26,"life":1.6,"size":22,"alpha":0.75},{"from":"moon","dx":0,"dy":30,"emoji":"✨","rate":0.08,"vx":-6,"vy":6,"life":1.2,"size":12,"alpha":0.6}]};

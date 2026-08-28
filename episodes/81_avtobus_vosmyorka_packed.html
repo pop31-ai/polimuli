@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"81","title":"Автобус «Восьмёрка»","genre":"кольцевой маршрут · POL-демо","dur":24,"emojis":["🚌","🎫","🗺️","🛣️","🏁"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#ffe8c8","barColor":"#d08030"},"caption":{"font":24,"color":"#fff6e0","shadow":"rgba(80,40,0,0.5)"}},"acts":[{"at":0,"text":"ВОСЬМЁРКА НАБИРАЕТ ГАЗ","bg":{"top":"#3a5a7a","bottom":"#182a40"}},{"at":6,"text":"ОСТАНОВКА ПО ГРАФИКУ","bg":{"top":"#3e6280","bottom":"#1c3048"}},{"at":12,"text":"ЦЕНТР ПОЛОН ПАССАЖИРОВ","bg":{"top":"#426886","bottom":"#20344c"}},{"at":18,"text":"ФИНИШ ТАМ ЖЕ, ГДЕ СТАРТ","bg":{"top":"#3e6484","bottom":"#1c3048"}}],"actors":[{"id":"bus","emoji":"🚌","x":400,"y":340,"size":90,"key":[{"at":0,"x":220},{"at":6,"x":400},{"at":14,"x":200},{"at":20,"x":400}]},{"id":"ticket","emoji":"🎫","x":320,"y":240,"size":36,"bob":{"amp":6,"speed":1}},{"id":"map","emoji":"🗺️","x":680,"y":260,"size":46,"pulse":{"amp":0.05,"speed":0.8}},{"id":"road","emoji":"🛣️","x":480,"y":460,"size":110,"pulse":{"amp":0.02,"speed":0.5}},{"id":"flag","emoji":"🏁","x":820,"y":320,"size":36,"sway":{"amp":10,"speed":1}},{"id":"stop","emoji":"🛑","x":760,"y":400,"size":40,"pulse":{"amp":0.08,"speed":1.2}},{"id":"puff","emoji":"💨","x":180,"y":320,"size":34,"sway":{"amp":10,"speed":0.8}}],"particles":[{"from":"bus","dx":-50,"dy":10,"emoji":"💨","rate":0.09,"vx":-16,"vy":0,"life":0.9,"size":16,"alpha":0.6},{"from":"map","dx":0,"dy":-8,"emoji":"🧭","rate":0.05,"vx":4,"vy":-10,"life":1,"size":12,"alpha":0.7}]};

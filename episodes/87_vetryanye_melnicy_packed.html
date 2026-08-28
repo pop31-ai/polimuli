@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"87","title":"Ветряные мельницы","genre":"на высоте крыш · POL-демо","dur":24,"emojis":["🎡","💨","🌾","⚙️","🌅"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#ffe8c8","barColor":"#c09040"},"caption":{"font":24,"color":"#fff6e0","shadow":"rgba(70,40,10,0.5)"}},"acts":[{"at":0,"text":"КРЫЛЬЯ ДЕЛЯТ НЕБО","bg":{"top":"#e0b068","bottom":"#80602e"}},{"at":6,"text":"ВЕТЕР ПОЛНОГО РОСТА","bg":{"top":"#e4b46c","bottom":"#88642e"}},{"at":12,"text":"ЖЁРНОВЫ КРУТЯТ ПОЛЕ","bg":{"top":"#e8b870","bottom":"#906834"}},{"at":18,"text":"УРОЖАЙ ЛЕТИТ К ЗАХОДУ","bg":{"top":"#e0b06c","bottom":"#7c5c2c"}}],"actors":[{"id":"mill1","emoji":"🎡","x":300,"y":320,"size":140,"pulse":{"amp":0.02,"speed":0.5}},{"id":"mill2","emoji":"🎡","x":620,"y":360,"size":110,"pulse":{"amp":0.02,"speed":0.7}},{"id":"wind1","emoji":"💨","x":200,"y":200,"size":40,"sway":{"amp":20,"speed":0.9}},{"id":"wind2","emoji":"💨","x":760,"y":180,"size":34,"sway":{"amp":24,"speed":0.7}},{"id":"grain","emoji":"🌾","x":480,"y":440,"size":44,"sway":{"amp":12,"speed":0.8}},{"id":"gear","emoji":"⚙️","x":160,"y":420,"size":36,"pulse":{"amp":0.1,"speed":1.8}},{"id":"sun","emoji":"🌅","x":800,"y":260,"size":60,"pulse":{"amp":0.05,"speed":0.7}}],"particles":[{"from":"mill1","dx":0,"dy":-30,"emoji":"🍃","rate":0.07,"vx":10,"vy":-8,"life":1.3,"size":14,"alpha":0.7},{"from":"sun","dx":0,"dy":-10,"emoji":"✨","rate":0.06,"vx":4,"vy":-12,"life":1.1,"size":12,"alpha":0.7}]};

@@ -30,7 +30,7 @@
  *  - подпись-титры / прогресс-бар
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
   function makeCanvas(id, W, H) {
     const cv = document.getElementById(id);
     if (!cv) return null;
@@ -129,7 +129,8 @@ const Polimuli = (() => {
  * (bob/sway/pulse/key/cycle), частицы, заголовок акта, HUD.
  */
 
-const Polimuli = (() => {
+var Polimuli = (() => {
+  const base = (typeof Polimuli !== 'undefined' && Polimuli) || {};
   // ---------- helpers ----------
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -328,7 +329,7 @@ const Polimuli = (() => {
     return ctrl;
   }
 
-  return { play };
+  return Object.assign(base, { play });
 })();</script>
 <script>
   window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"59","title":"Лунная база «Комета»","genre":"космо-колония · POL-демо","dur":24,"emojis":["🌕","🚀","👨‍🚀","🛰️","🌱"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#c9d6f0","barColor":"#7c8fc9"},"caption":{"font":24,"color":"#eaf0ff","shadow":"rgba(0,5,25,0.6)"}},"acts":[{"at":0,"text":"РАКЕТА ТАКНЕТСЯ У БАЗЫ","bg":{"top":"#0a0f1e","bottom":"#05070f"}},{"at":6,"text":"КОСМОНАВТ ВЫХОДИТ В СКАФАНДРЕ","bg":{"top":"#0e1526","bottom":"#070a14"}},{"at":12,"text":"СПУТНИК ОТДАЁТ СИГНАЛ","bg":{"top":"#101a30","bottom":"#080c18"}},{"at":18,"text":"РАНТ РАСТЁТ В ПАРНИКЕ","bg":{"top":"#0e1a2a","bottom":"#080e18"}}],"actors":[{"id":"moon","emoji":"🌕","x":200,"y":160,"size":150,"pulse":{"amp":0.03,"speed":0.6}},{"id":"rocket","emoji":"🚀","x":120,"y":300,"size":80,"key":[{"at":0,"x":120,"y":460},{"at":4,"x":120,"y":460},{"at":8,"x":120,"y":300}]},{"id":"astronaut","emoji":"👨‍🚀","x":480,"y":420,"size":72,"bob":{"amp":6,"speed":0.5},"visible":{"from":6,"to":24}},{"id":"base","emoji":"🛰️","x":700,"y":420,"size":80,"pulse":{"amp":0.05,"speed":1.4}},{"id":"antenna","emoji":"📡","x":780,"y":380,"size":44,"sway":{"amp":4,"speed":2}},{"id":"plant","emoji":"🌱","x":560,"y":470,"size":40,"key":[{"at":0,"size":0},{"at":12,"size":0},{"at":24,"size":44}]},{"id":"star1","emoji":"⭐","x":560,"y":90,"size":16,"sway":{"amp":6,"speed":1}},{"id":"star2","emoji":"⭐","x":840,"y":140,"size":14,"sway":{"amp":5,"speed":1.4}}],"particles":[{"from":"rocket","dx":0,"dy":30,"emoji":"💨","rate":0.12,"vx":0,"vy":40,"life":0.8,"size":18,"alpha":0.7},{"from":"antenna","dx":0,"dy":-10,"emoji":"📶","rate":0.08,"vx":0,"vy":-14,"life":1.4,"size":14,"alpha":0.6}]};
