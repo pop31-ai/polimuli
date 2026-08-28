@@ -1,0 +1,44 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "64",
+    "title": "Кинофабрика «МУВ»",
+    "genre": "закулисье съёмок · POL-демо",
+    "dur": 24,
+    "emojis": ["🎬", "🎥", "🎞️", "🎙️", "🟢"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#ffdfc8", "barColor": "#c85a30" },
+    "caption": { "font": 24, "color": "#fff6ea", "shadow": "rgba(60,20,0,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ХЛОПУШКА ГОВОРИТ: КАДР 1", "bg": { "top": "#2a1c3c", "bottom": "#100a20" } },
+    { "at": 6,  "text": "КАМЕРА ЛОВИТ УЛЫБКУ", "bg": { "top": "#302040", "bottom": "#140c24" } },
+    { "at": 12, "text": "ЛУЧ ПРОЖЕКТОРА ВЬЕТ ГНЕЗДО", "bg": { "top": "#362446", "bottom": "#180e28" } },
+    { "at": 18, "text": "ДУБЛЬ ПРИНЯТ, ПЛЁНКА СПИТ", "bg": { "top": "#3a2848", "bottom": "#1a1028" } }
+  ],
+  "actors": [
+    { "id": "camera", "emoji": "🎥", "x": 260, "y": 320, "size": 66,
+      "pulse": { "amp": 0.04, "speed": 1.0 } },
+    { "id": "clapper", "emoji": "🎬", "x": 460, "y": 360, "size": 60,
+      "sway": { "amp": 8, "speed": 1.0 } },
+    { "id": "film", "emoji": "🎞️", "x": 640, "y": 260, "size": 48,
+      "sway": { "amp": 10, "speed": 0.8 } },
+    { "id": "mic", "emoji": "🎙️", "x": 780, "y": 200, "size": 42,
+      "sway": { "amp": 12, "speed": 1.1 } },
+    { "id": "board", "emoji": "🟢", "x": 160, "y": 440, "size": 56,
+      "pulse": { "amp": 0.05, "speed": 0.9 } },
+    { "id": "beam", "emoji": "💡", "x": 700, "y": 120, "size": 46,
+      "pulse": { "amp": 0.12, "speed": 1.6 } },
+    { "id": "star", "emoji": "⭐", "x": 520, "y": 180, "size": 28,
+      "pulse": { "amp": 0.2, "speed": 2.2 } }
+  ],
+  "particles": [
+    { "from": "camera", "dx": 0, "dy": -12, "emoji": "📸", "rate": 0.05,
+      "vx": 6, "vy": -12, "life": 1.0, "size": 14, "alpha": 0.8 },
+    { "from": "beam", "dx": 0, "dy": -16, "emoji": "✨", "rate": 0.08,
+      "vx": 4, "vy": -16, "life": 1.2, "size": 12, "alpha": 0.8 }
+  ]
+}
