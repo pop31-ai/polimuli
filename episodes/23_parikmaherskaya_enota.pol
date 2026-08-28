@@ -1,0 +1,47 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "23",
+    "title": "Парикмахерская енота",
+    "genre": "комедийный салон · POL-демо",
+    "dur": 24,
+    "emojis": ["🪮", "✂️", "🧴", "💇", "🪞"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#e8d8f0", "barColor": "#a080c8" },
+    "caption": { "font": 24, "color": "#fff0ff", "shadow": "rgba(60,20,80,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "САЛОН ОТКРЫЛ ПРИГЛАШАЮЩУЮ ДВЕРЬ", "bg": { "top": "#3a2a4a", "bottom": "#1c1428" } },
+    { "at": 6,  "text": "ЕНОТ СТРИЖЁТ ГРИВУ ЛЬВА", "bg": { "top": "#422e52", "bottom": "#22152e" } },
+    { "at": 12, "text": "ШАРФИК ДУЕТ НА НОС", "bg": { "top": "#4a3258", "bottom": "#261834" } },
+    { "at": 18, "text": "ЗЕРКАЛО ПОКАЗЫВАЕТ СТИЛЬ", "bg": { "top": "#523660", "bottom": "#2c1a38" } }
+  ],
+  "actors": [
+    { "id": "raccoon", "emoji": "🦝", "x": 260, "y": 380, "size": 66,
+      "bob": { "amp": 4, "speed": 1.0 } },
+    { "id": "lion", "emoji": "🦁", "x": 460, "y": 360, "size": 92,
+      "bob": { "amp": 3, "speed": 0.7 } },
+    { "id": "scissors", "emoji": "✂️", "x": 330, "y": 320, "size": 42,
+      "sway": { "amp": 10, "speed": 2.4 } },
+    { "id": "comb", "emoji": "🪮", "x": 560, "y": 320, "size": 40,
+      "sway": { "amp": 8, "speed": 1.8 } },
+    { "id": "bottle", "emoji": "🧴", "x": 180, "y": 300, "size": 36,
+      "pulse": { "amp": 0.08, "speed": 1.2 } },
+    { "id": "mirror", "emoji": "🪞", "x": 700, "y": 250, "size": 80,
+      "pulse": { "amp": 0.04, "speed": 0.6 } },
+    { "id": "spark", "emoji": "✨", "x": 700, "y": 380, "size": 26,
+      "pulse": { "amp": 0.25, "speed": 2.6 },
+      "visible": { "from": 18, "to": 24 } },
+    { "id": "scissors2", "emoji": "💇", "x": 620, "y": 430, "size": 40,
+      "bob": { "amp": 6, "speed": 1.5 } }
+  ],
+  "particles": [
+    { "from": "scissors", "dx": 0, "dy": 10, "emoji": "💈", "rate": 0.05,
+      "vx": 0, "vy": 14, "life": 0.7, "size": 14, "alpha": 0.6 },
+    { "from": "mirror", "dx": 0, "dy": -10, "emoji": "⛲", "rate": 0.06,
+      "vx": 4, "vy": -14, "life": 1.0, "size": 12, "alpha": 0.6 }
+  ]
+}

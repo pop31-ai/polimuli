@@ -1,0 +1,58 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "28",
+    "title": "Шоколадная фабрика Боба",
+    "genre": "сладкая сказка · POL-демо",
+    "dur": 24,
+    "emojis": ["🍫", "🍬", "🍩", "🍭", "🎂"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#f0dfc8", "barColor": "#a06a30" },
+    "caption": { "font": 24, "color": "#fff4e8", "shadow": "rgba(70,40,10,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ФАБРИКА ЗАШИПИТ ПАРОМ", "bg": { "top": "#4a2a18", "bottom": "#241208" } },
+    { "at": 6,  "text": "ПЛИТКИ ЕДУТ ПО КОНВЕЙЕРУ", "bg": { "top": "#54301c", "bottom": "#2a160a" } },
+    { "at": 12, "text": "БОБ СЫПЕТ САХАР", "bg": { "top": "#5c3420", "bottom": "#30180c" } },
+    { "at": 18, "text": "ТОРТ ВЕЗУТ В ГОРОД", "bg": { "top": "#643820", "bottom": "#341a0e" } }
+  ],
+  "actors": [
+    { "id": "bob", "emoji": "🧑‍🍳", "x": 200, "y": 360, "size": 76,
+      "bob": { "amp": 4, "speed": 1.1 } },
+    { "id": "cacao", "emoji": "🍫", "x": 400, "y": 400, "size": 54,
+      "key": [
+        { "at": 0,  "x": 400 },
+        { "at": 20, "x": 700 }
+      ] },
+    { "id": "cacao2", "emoji": "🍫", "x": 500, "y": 430, "size": 48,
+      "key": [
+        { "at": 2,  "x": 500 },
+        { "at": 22, "x": 760 }
+      ] },
+    { "id": "candy", "emoji": "🍬", "x": 640, "y": 260, "size": 40,
+      "bob": { "amp": 10, "speed": 1.8 } },
+    { "id": "donut", "emoji": "🍩", "x": 760, "y": 300, "size": 46,
+      "pulse": { "amp": 0.08, "speed": 1.4 } },
+    { "id": "lolly", "emoji": "🍭", "x": 600, "y": 200, "size": 42,
+      "sway": { "amp": 8, "speed": 1.2 } },
+    { "id": "steam1", "emoji": "💨", "x": 120, "y": 140, "size": 36,
+      "sway": { "amp": 12, "speed": 0.7 } },
+    { "id": "steam2", "emoji": "💨", "x": 300, "y": 110, "size": 30,
+      "sway": { "amp": 10, "speed": 0.9 } },
+    { "id": "cake", "emoji": "🎂", "x": 500, "y": 470, "size": 50,
+      "visible": { "from": 18, "to": 24 },
+      "key": [
+        { "at": 18, "x": 500 },
+        { "at": 24, "x": 820 }
+      ] }
+  ],
+  "particles": [
+    { "from": "cacao", "dx": 0, "dy": -10, "emoji": "✨", "rate": 0.08,
+      "vx": 0, "vy": -12, "life": 0.9, "size": 12, "alpha": 0.7 },
+    { "from": "cake", "dx": 0, "dy": -10, "emoji": "🎉", "rate": 0.06,
+      "vx": 6, "vy": -16, "life": 1.2, "size": 16, "alpha": 0.7 }
+  ]
+}

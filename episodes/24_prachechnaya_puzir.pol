@@ -1,0 +1,55 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "24",
+    "title": "Прачечная «Пузырь»",
+    "genre": "бытовая сказка · POL-демо",
+    "dur": 24,
+    "emojis": ["🧺", "🫧", "🧼", "👕", "🛁"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8ecf5", "barColor": "#5aa0c8" },
+    "caption": { "font": 24, "color": "#eef8ff", "shadow": "rgba(10,45,70,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "КОРЗИНА ВЪЕЗЖАЕТ В ПРАЧЕЧНУЮ", "bg": { "top": "#1c3040", "bottom": "#0e1824" } },
+    { "at": 6,  "text": "ПЕНА ПУЗЫРИТСЯ", "bg": { "top": "#22384a", "bottom": "#121e2c" } },
+    { "at": 12, "text": "МАШИНА КРУТИТ БЕЛЬЁ", "bg": { "top": "#263e52", "bottom": "#14222e" } },
+    { "at": 18, "text": "СУШКА ПАХНЕТ СВЕЖОСТЬЮ", "bg": { "top": "#2a445a", "bottom": "#182634" } }
+  ],
+  "actors": [
+    { "id": "basket", "emoji": "🧺", "x": 160, "y": 440, "size": 70,
+      "visible": { "from": 0, "to": 6 } },
+    { "id": "shirt1", "emoji": "👕", "x": 380, "y": 320, "size": 48,
+      "key": [
+        { "at": 0,  "y": 320 },
+        { "at": 12, "y": 320 },
+        { "at": 20, "y": 200 }
+      ] },
+    { "id": "shirt2", "emoji": "👕", "x": 520, "y": 320, "size": 52,
+      "key": [
+        { "at": 0,  "y": 340 },
+        { "at": 12, "y": 340 },
+        { "at": 22, "y": 180, "size": 52 }
+      ],
+      "visible": { "from": 12, "to": 24 } },
+    { "id": "soap", "emoji": "🧼", "x": 640, "y": 430, "size": 40,
+      "bob": { "amp": 10, "speed": 1.6 } },
+    { "id": "duck", "emoji": "🛁", "x": 760, "y": 440, "size": 44,
+      "sway": { "amp": 8, "speed": 0.9 } },
+    { "id": "bubble1", "emoji": "🫧", "x": 300, "y": 260, "size": 26,
+      "sway": { "amp": 14, "speed": 1.2 } },
+    { "id": "bubble2", "emoji": "🫧", "x": 600, "y": 240, "size": 30,
+      "sway": { "amp": 18, "speed": 0.9 } },
+    { "id": "bubble3", "emoji": "🫧", "x": 460, "y": 200, "size": 22,
+      "sway": { "amp": 12, "speed": 1.5 } }
+  ],
+  "particles": [
+    { "from": "shirt1", "dx": 0, "dy": -20, "emoji": "💧", "rate": 0.08,
+      "vx": 0, "vy": -16, "life": 0.9, "size": 12, "alpha": 0.6 },
+    { "from": "duck", "dx": 0, "dy": -10, "emoji": "🫧", "rate": 0.1,
+      "vx": 0, "vy": -12, "life": 1.2, "size": 14, "alpha": 0.7 }
+  ]
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>polimuli — как пользоваться полиарт-роликами</title>
+<style>
+  body { background:#0b1220; color:#cfd8e3; font-family:"Segoe UI", Arial, sans-serif; margin:0; padding:30px 22px; }
+  .wrap { max-width: 900px; margin: 0 auto; line-height:1.6; }
+  h1 { letter-spacing:2px; font-size:24px; }
+  h2 { font-size:18px; margin-top:34px; color:#e8d9c8; border-bottom:1px solid #22303e; padding-bottom:6px; }
+  h3 { font-size:15px; color:#b9a0c8; }
+  code, pre { background:#131c2a; border:1px solid #22303e; border-radius:6px; }
+  code { padding:1px 6px; font-size:13px; }
+  pre { padding:12px 14px; overflow-x:auto; font-size:13px; }
+  .box { background:#15202e; border:1px solid #22303e; border-radius:10px; padding:12px 16px; margin:14px 0; }
+  .warn { border-color:#5a3a2a; background:#241a12; }
+  .ok   { border-color:#2a5a3a; background:#12241a; }
+  table { border-collapse:collapse; margin:12px 0; }
+  th, td { border:1px solid #22303e; padding:7px 12px; font-size:13px; text-align:left; }
+  th { background:#15202e; color:#e8d9c8; }
+  a { color:#7fb8e0; }
+  .tag { display:inline-block; font-size:11px; background:#22303e; border-radius:20px; padding:2px 9px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>🎬 polimuli — инструкция «полиарт-ролик в HTML»</h1>
+
+<p>Полиарт-ролик — это мини-мульт на Canvas 2D, нарисованный эмодзи:
+фон-акты, персонажи-акторы, частицы, подписи. <b>Три способа</b>
+полут дистрибутива:</p>
+
+<table>
+  <tr><th>Способ</th><th>Что за файлы</th><th>Где лежит</th><th>Работает из file://</th></tr>
+  <tr><td>Пилоты (написаны кодом)</td><td><code>*.html</code></td><td><code>episodes/</code></td><td>✅ да</td></tr>
+  <tr><td>POL-эпизоды (данные + рантайм)</td><td><code>*.pol</code> + плеер</td><td><code>episodes/*.pol</code></td><td>через <code>?pol=</code> или сборку</td></tr>
+  <tr><td>Собранные (самодостаточные)</td><td><code>NN_*_packed.html</code></td><td><code>episodes/</code></td><td>✅ да</td></tr>
+</table>
+
+<h2>1. Самый быстрый путь — открыть галереи</h2>
+<div class="box ok">
+  <b>Пилоты 01–15:</b> открой <code>episodes/index.html</code> — каждая карточка
+  ведёт в рабочий HTML-ролик. Открывается по двойному клику, без сервера.<br>
+  <b>POL-эпизоды:</b> открой <code>episodes/pol_index.html</code> — карточки ведут
+  в <code>NN_*_packed.html</code> (движок + рантайм + данные уже внутри файла).
+</div>
+
+<h2>2. Управление роликом</h2>
+<table>
+  <tr><th>Действие</th><th>Как</th></tr>
+  <tr><td>Пауза / продолжить</td><td>клик по холсту (canvas)</td></tr>
+  <tr><td>Пауза / продолжить (сборки POL)</td><td>пробел <kbd>[Space]</kbd></td></tr>
+  <tr><td>Цикл</td><td>ролик повторяется сам (длина — <code>meta.dur</code>, по умолчанию 24&nbsp;с)</td></tr>
+  <tr><td>Перезапуск</td><td>обнови страницу (F5)</td></tr>
+</table>
+
+<h2>3. Просмотр произвольного .pol через плеер</h2>
+
+<p>Плеер — <code>player/player.html</code>. Он подключает движок и рантайм
+и читает данные из адресной строки или встроенного объекта.</p>
+
+<h3>3.1. Через HTTP (если есть локальный сервер)</h3>
+<pre>player/player.html?src=episodes/16_express_strela.pol</pre>
+<p>Плеер сделает <code>fetch</code> файла и при ошибке покажет сообщение
+(коды: <code>fetch failed</code>, <code>не формат pol</code>, <code>нет данных</code>).</p>
+
+<h3>3.2. Из file:// (без сервера) — закодированный JSON</h3>
+<p>Локальный <code>fetch</code> из <code>file://</code> в большинстве браузеров
+запрещён (CORS), поэтому для file:// данные передают прямо в URL шифрокодом:</p>
+<pre>player/player.html?pol=%7B%22format%22%3A...%7D</pre>
+<p><b>Без сервера проще всего</b> пользоваться <i>готовыми сборками</i>
+<code>NN_*_packed.html</code> — они созданы специально для file://.</p>
+
+<h3>3.3. Встроенный датасет <code>__POL_DEMO__</code></h3>
+<p>Если в странице перед плеером объявить</p>
+<pre>&lt;script&gt;window.__POL_DEMO__ = { "format":"polimuli/pol", "version":1, ... };&lt;/script&gt;</pre>
+<p>плеер проиграет эти данные без всякого сервера. Так собирает файлы упаковщик.</p>
+
+<h2>4. Упаковка .pol в самодостаточный HTML</h2>
+<p>Упаковщик — Node CLI без зависимостей. Он проверяет данные по спеке
+и кладёт движок+рантайм+JSON инлайн в одну HTML-страницу, которая
+открывается из file://.</p>
+<pre>node pack/polimuli_pack.js episodes/16_express_strela.pol
+# → создаст episodes/16_express_strela_packed.html
+
+node pack/polimuli_pack.js episodes/          # упаковать все *.pol в папке
+node pack/polimuli_pack.js a.pol -o out.html  # указать имя результата</pre>
+<table>
+  <tr><th>Код выхода</th><th>Значение</th></tr>
+  <tr><td>0</td><td>ок, файл собран (могут быть предупреждения-артефакты)</td></tr>
+  <tr><td>1</td><td>собрано, но были предупреждения проверки</td></tr>
+  <tr><td>2</td><td>ошибки валидации — файл <b>не</b> собран</td></tr>
+</table>
+
+<div class="box warn">
+  ⚠ Упаковщик проверяет: маркер <code>"format":"polimuli/pol"</code>, версию,
+  <code>canvas.w/h</code>, наличие актов, сортировку <code>acts[].at</code>,
+  ссылки <code>particles[].from</code> на существующих акторов, метраж ключей.
+  Ошибка печатается как <code>ERR : файл — причина</code>.
+</div>
+
+<h2>5. Создать свой ролик за 10 минут</h2>
+
+<p>Полная спека — <code>spec/spec-format-pol.md</code>. Минимум, чтобы ролик
+заработал (minimal viable .pol):</p>
+
+<pre>{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta":   { "id": "demo", "title": "Мой ролик", "dur": 24 },
+  "canvas": { "w": 960, "h": 540 },
+  "acts": [
+    { "at": 0,  "text": "СЦЕНА ОДНА", "bg": { "top": "#203a60", "bottom": "#0c1528" } },
+    { "at": 12, "text": "СЦЕНА ДВА", "bg": { "top": "#503020", "bottom": "#241008" } }
+  ],
+  "actors": [
+    { "id": "герой", "emoji": "🐱", "x": 480, "y": 380, "size": 80,
+      "bob": { "amp": 6, "speed": 1.2 },
+      "key": [ { "at": 0, "x": 180 }, { "at": 12, "x": 780 } ] }
+  ],
+  "particles": [
+    { "from": "герой", "dy": -30, "emoji": "✨", "rate": 0.1,
+      "vy": -20, "life": 1.2, "size": 16 }
+  ]
+}</pre>
+
+<table>
+  <tr><th>Секция</th><th>Что значит</th></tr>
+  <tr><td><code>meta.dur</code></td><td>длина ролика в секундах (цикл)</td></tr>
+  <tr><td><code>acts[]</code></td><td>сцены: <code>at</code> время старта, <code>text</code> подпись, <code>bg</code> градиент неба</td></tr>
+  <tr><td><code>actors[]</code></td><td>эмодзи-спрайты: <code>bob</code>/<code>sway</code> качание, <code>pulse</code> пульс размера, <code>cycle</code> смена эмодзи, <code>key[]</code> движение <code>x/y/size</code> по времени, <code>visible</code> <code>{from,to}</code> окно видимости</td></tr>
+  <tr><td><code>particles[]</code></td><td>частицы от актора (<code>from</code>) или точки: скорость, жизнь, размер, прозрачность</td></tr>
+  <tr><td><code>style</code></td><td>цвета HUD и подписи <code>{hud, caption}</code></td></tr>
+</table>
+
+<h3>Правила «ухо востро» (валидность данных)</h3>
+<ul>
+  <li><code>"format"</code> и <code>"version":1</code> обязательны.</li>
+  <li><code>key[]</code> задаёт только <code>x</code>, <code>y</code>, <code>size</code>.
+      Видимость — <b>только</b> на уровне актора, не внутри ключей.</li>
+  <li>Время ключей — в пределах <code>0 … meta.dur</code>.</li>
+  <li>Сортасцируй <code>acts[]</code> по <code>at</code> (или рантайм отсортирует сам).</li>
+  <li>Эмодзи должны быть обычными Юникод-эмодзи (льв, герб, символы).</li>
+  <li>Проверяй паковщиком: <code>node pack/polimuli_pack.js my.pol</code> — 0 в ответ = ок.</li>
+</ul>
+
+<h2>6. Быстрый чек-лист запуска</h2>
+<div class="box ok">
+  ✅ Открыл <code>episodes/index.html</code> — смотрю пилоты.<br>
+  ✅ Открыл <code>episodes/pol_index.html</code> — смотрю POL-сборки.<br>
+  ✅ Хочу свой файл → написал <code>my.pol</code> → упаковал → открыл <code>my_packed.html</code>.<br>
+  ✅ Хочу данные в чужом приложении → встраиваю <code>polimuli_engine.js</code> +
+     <code>polimuli_runtime.js</code> и зову <code>Polimuli.play(данные, 'id')</code>.
+</div>
+
+<h2>7. API одной строкой</h2>
+<pre>const ctrl = Polimuli.play(data, canvasIdOrEl);
+ctrl.pause();   // стоп кадра
+ctrl.resume();  // продолжить
+ctrl.stop();    // остановить</pre>
+<p>Плеер также вешает клик на холст (пауза/продолжить), а упакованные
+сборки дополнительно слушают <kbd>Space</kbd>.</p>
+
+<h2>8. Полезные ссылки</h2>
+<ul>
+  <li><a href="episodes/index.html">Галерея пилотов (01–15)</a></li>
+  <li><a href="episodes/pol_index.html">Галерея POL-эпизодов</a></li>
+  <li><a href="spec/spec-format-pol.md">Спека формата POL</a></li>
+  <li><a href="player/player.html">Плеер</a> — размер уже в файле</li>
+  <li>Статьи-сценарии: <code>articles/01…95_*.txt</code></li>
+</ul>
+
+<p style="color:#5c7089;font-size:12px;margin-top:30px">
+polimuli · полиарт-ролики в HTML · каталог, движок, рантайм, плеер, упаковщик, спека.
+</p>
+</div>
+</body>
+</html>
