@@ -1,0 +1,57 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "43",
+    "title": "Цирк Шапито",
+    "genre": "цирковая семья · POL-демо",
+    "dur": 24,
+    "emojis": ["🎪", "🤹", "🎭", "🦁", "🎈"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#ffe0b0", "barColor": "#d6336c" },
+    "caption": { "font": 24, "color": "#fff3e0", "shadow": "rgba(60,0,20,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ШАПИТО ОТКРЫВАЕТ ПОЛОСУ", "bg": { "top": "#5a1030", "bottom": "#2a0818" } },
+    { "at": 6,  "text": "ЖОНГЛЁР УХАТРИВАЕТ КРУГИ", "bg": { "top": "#7a1a40", "bottom": "#3a0e20" } },
+    { "at": 12, "text": "ЛЕВ ПОКАЗЫВАЕТ «БУМ»", "bg": { "top": "#8a2048", "bottom": "#4a1226" } },
+    { "at": 18, "text": "ШАРИКИ ЛЕТАЮТ НАД ЗРИТЕЛЯМИ", "bg": { "top": "#6a1438", "bottom": "#320a1c" } }
+  ],
+  "actors": [
+    { "id": "bigtop", "emoji": "🎪", "x": 480, "y": 210, "size": 150,
+      "pulse": { "amp": 0.03, "speed": 0.8 } },
+    { "id": "juggler", "emoji": "🤹", "x": 480, "y": 400, "size": 76,
+      "bob": { "amp": 8, "speed": 2.4 } },
+    { "id": "ball1", "emoji": "🔴", "x": 480, "y": 320, "size": 20,
+      "key": [
+        { "at": 0, "y": 330 }, { "at": 1, "y": 270 }, { "at": 2, "y": 330 }
+      ],
+      "pulse": { "amp": 0.0, "speed": 1 } },
+    { "id": "ball2", "emoji": "🟡", "x": 450, "y": 330, "size": 18,
+      "key": [
+        { "at": 0, "y": 330 }, { "at": 1.3, "y": 280 }, { "at": 2.6, "y": 330 }
+      ] },
+    { "id": "ball3", "emoji": "🔵", "x": 510, "y": 330, "size": 18,
+      "key": [
+        { "at": 0, "y": 330 }, { "at": 0.7, "y": 280 }, { "at": 2.0, "y": 330 }
+      ] },
+    { "id": "lion", "emoji": "🦁", "x": 720, "y": 400, "size": 80,
+      "bob": { "amp": 4, "speed": 1.0 } },
+    { "id": "mask", "emoji": "🎭", "x": 220, "y": 380, "size": 56,
+      "sway": { "amp": 10, "speed": 0.8 } },
+    { "id": "balloon", "emoji": "🎈", "x": 120, "y": 470, "size": 40,
+      "key": [
+        { "at": 0, "x": 120, "y": 470 },
+        { "at": 18, "x": 120, "y": 470 },
+        { "at": 22, "x": 260, "y": 120 }
+      ] }
+  ],
+  "particles": [
+    { "from": "bigtop", "dx": -120, "dy": 60, "emoji": "✨", "rate": 0.12,
+      "vx": -20, "vy": -20, "life": 1.2, "size": 14, "alpha": 0.7 },
+    { "from": "balloon", "dx": 0, "dy": 0, "emoji": "🎊", "rate": 0.05,
+      "vx": 20, "vy": -20, "life": 1.0, "size": 16, "alpha": 0.7 }
+  ]
+}

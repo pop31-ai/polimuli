@@ -1,0 +1,55 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "65",
+    "title": "Корабль «Аквилон»",
+    "genre": "мореплавание-эпос · POL-демо",
+    "dur": 24,
+    "emojis": ["⚓", "🛳️", "🌊", "🧭", "⛵"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#dfeaf0", "barColor": "#3a7ca0" },
+    "caption": { "font": 24, "color": "#f0f8ff", "shadow": "rgba(5,25,45,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "АКВИЛОН ВЫХОДИТ ИЗ ПОРТА", "bg": { "top": "#2a5678", "bottom": "#123048" } },
+    { "at": 6,  "text": "ВОЛНЫ КАЧАЮТ КОРПУС", "bg": { "top": "#2e6288", "bottom": "#153958" } },
+    { "at": 12, "text": "КОМПАС ВИДИТ НАВЕРХ", "bg": { "top": "#346e96", "bottom": "#183f60" } },
+    { "at": 18, "text": "ЗВЕЗДА ПОКАЗЫВАЕТ КУРС", "bg": { "top": "#1c3f60", "bottom": "#0d253c" } }
+  ],
+  "actors": [
+    { "id": "ship", "emoji": "🛳️", "x": 200, "y": 320, "size": 120,
+      "bob": { "amp": 8, "speed": 0.6 },
+      "key": [
+        { "at": 0,  "x": 160 },
+        { "at": 24, "x": 520 }
+      ] },
+    { "id": "sail", "emoji": "⛵", "x": 420, "y": 300, "size": 64,
+      "bob": { "amp": 6, "speed": 0.8 } },
+    { "id": "wave1", "emoji": "🌊", "x": 300, "y": 430, "size": 56,
+      "sway": { "amp": 24, "speed": 0.5 } },
+    { "id": "wave2", "emoji": "🌊", "x": 620, "y": 430, "size": 50,
+      "sway": { "amp": 20, "speed": 0.7 } },
+    { "id": "compass", "emoji": "🧭", "x": 780, "y": 300, "size": 44,
+      "pulse": { "amp": 0.08, "speed": 1.6 } },
+    { "id": "anchor", "emoji": "⚓", "x": 120, "y": 460, "size": 40,
+      "visible": { "from": 0, "to": 6 } },
+    { "id": "star", "emoji": "⭐", "x": 820, "y": 120, "size": 30,
+      "visible": { "from": 18, "to": 24 },
+      "pulse": { "amp": 0.2, "speed": 2.4 } },
+    { "id": "bird", "emoji": "🕊️", "x": 0, "y": 0, "size": 28,
+      "key": [
+        { "at": 6,  "x": -30, "y": 180 },
+        { "at": 10, "x": 480, "y": 140 }
+      ],
+      "visible": { "from": 6, "to": 11 } }
+  ],
+  "particles": [
+    { "from": "ship", "dx": -50, "dy": 30, "emoji": "💦", "rate": 0.1,
+      "vx": -16, "vy": -8, "life": 1.0, "size": 16, "alpha": 0.7 },
+    { "from": "ship", "dx": 40, "dy": 20, "emoji": "🫧", "rate": 0.08,
+      "vx": 16, "vy": -6, "life": 1.2, "size": 14, "alpha": 0.6 }
+  ]
+}
