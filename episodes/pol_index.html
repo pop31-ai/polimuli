@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>polimuli — POL-эпизоды</title>
+<style>
+  body { background:#0b1220; color:#cfd8e3; font-family:"Segoe UI", Arial, sans-serif; margin:0; padding:30px 20px; }
+  h1 { letter-spacing:2px; font-size:22px; }
+  p.lead { color:#8fa3b9; max-width:760px; line-height:1.5; }
+  .cards { display:flex; flex-wrap:wrap; gap:16px; margin-top:18px; }
+  .card { background:#15202e; border:1px solid #22303e; border-radius:12px; padding:16px;
+          width: 260px; text-decoration:none; color:#cfd8e3; transition:.15s; }
+  .card:hover { border-color:#3b5368; transform:translateY(-2px); }
+  .card .ico { font-size:34px; }
+  .card h2 { font-size:16px; margin:10px 0 6px; }
+  .card p { font-size:13px; color:#8fa3b9; margin:0; line-height:1.4; }
+  .card .tag { display:inline-block; font-size:11px; background:#22303e; border-radius:20px; padding:2px 8px; margin-top:8px; }
+  code { background:#16202e; padding:1px 6px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body>
+<h1>⚡ polimuli — эпизоды в формате POL</h1>
+<p class="lead">
+  Эти мульты описаны декларативным форматом <b>.pol</b> (Poly Animation
+  Language): акты сцены, акторы-эмодзи, частицы, стиль. Файл-данные
+  (<code>episodes/*.pol</code>) интерпретирует рантайм
+  <code>engine/polimuli_runtime.js</code>, а упаковщик
+  <code>pack/polimuli_pack.js</code> собирает из него автономный HTML —
+  открывается прямо из <code>file://</code>, без сервера.
+  Спека формата: <code>spec/spec-format-pol.md</code>.
+</p>
+<div class="cards">
+  <a class="card" href="16_express_strela_packed.html" target="_blank"><div class="ico">🚂</div><h2>Экспресс «Стрела»</h2><p>Рельсы, тоннель, пересадка, дым-частицы, табло вокзала.</p><span class="tag">№16 · .pol</span></a>
+  <a class="card" href="73_nochnaya_apteka_zvezd_packed.html" target="_blank"><div class="ico">🌝</div><h2>Ночная аптека звёзд</h2><p>Пульсирующая луна, звёзды-капли, сон-частицы, падающая звезда.</p><span class="tag">№73 · .pol</span></a>
+  <a class="card" href="86_solnechnaya_ferma_packed.html" target="_blank"><div class="ico">☀️</div><h2>Солнечная ферма</h2><p>Солнце по дуге, панели-ряды, заряд лампы, икры-энергии.</p><span class="tag">№86 · .pol</span></a>
+</div>
+<p class="lead" style="margin-top:22px">
+  Любой <code>.pol</code> откроешь в плеере:
+  <code>player/player.html?src=episodes/NN_….pol</code> (через HTTP) —
+  либо собери самодостаточный файл:
+  <code>node pack/polimuli_pack.js episodes/NN_….pol</code>.
+</p>
+</body>
+</html>

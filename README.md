@@ -179,7 +179,10 @@ player/polimuli_player.js     — загрузчик полимультов (?sr
 pack/polimuli_pack.js         — Node-упаковщик: валидация .pol и сборка
                                 автономного HTML (работает из file://)
 episodes/*.html               — пилотные эпизоды №01–15
+episodes/*.pol                 — эпизоды в формате POL (данные)
+episodes/*_packed.html         — автономные сборки POL (работают из file://)
 episodes/16_express_strela.pol — демо-эпизод в формате POL
+episodes/pol_index.html        — галерея POL-эпизодов
 episodes/index.html           — галерея пилотов
 cases/USER_STORIES.md         — кейсы применения / user stories
 future/FUTURE.md              — «взгляды из будущего» проекта и POL
