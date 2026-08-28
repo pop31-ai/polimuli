@@ -1,0 +1,51 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "16",
+    "title": "Экспресс «Стрела»",
+    "genre": "дорога-приключение · POL-демо",
+    "dur": 24,
+    "emojis": ["🚂", "🚉", "🎫", "🛤️", "🚇"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#e8d9c8", "barColor": "#d9a05a" },
+    "caption": { "font": 24, "color": "#f0ead8", "shadow": "rgba(0,0,0,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ПОЕЗД ГОТОВ К РЕЙСУ", "bg": { "top": "#1f2437", "bottom": "#0d0f17" } },
+    { "at": 6,  "text": "ТОННЕЛЬ ТЕМНОТЫ",      "bg": { "top": "#10131e", "bottom": "#06070c" } },
+    { "at": 12, "text": "ПЕРЕСАДКА — МАРШРУТ ПО ТАБЛО", "bg": { "top": "#3a4a63", "bottom": "#1a2030" } },
+    { "at": 18, "text": "ФИНИШ-ВОКЗАЛ: ВСЕ ДОМА", "bg": { "top": "#5a4630", "bottom": "#2a2119" } }
+  ],
+  "actors": [
+    { "id": "train", "emoji": "🚂", "x": 120, "y": 330, "size": 100,
+      "bob": { "amp": 7, "speed": 1.5 },
+      "key": [
+        { "at": 0,  "x": 120 },
+        { "at": 5.5, "x": 900 },
+        { "at": 6,   "x": -40, "visible": false },
+        { "at": 12,  "x": -40 },
+        { "at": 12.4, "x": 120 },
+        { "at": 17.5, "x": 900 },
+        { "at": 18,   "x": -40 },
+        { "at": 24,   "x": 120 }
+      ] },
+    { "id": "smoke", "emoji": "💨", "x": 0, "y": -100, "size": 0,
+      "visible": { "from": 12.4, "to": 17.5 } },
+    { "id": "station", "emoji": "🚉", "x": 480, "y": 180, "size": 70,
+      "cycle": { "emojis": ["🚉", "🚉", "🚉"], "period": 99 } },
+    { "id": "ticket", "emoji": "🎫", "x": 780, "y": 240, "size": 40,
+      "bob": { "amp": 10, "speed": 2.2 },
+      "visible": { "from": 11, "to": 18 } },
+    { "id": "tracks", "emoji": "🛤️", "x": 480, "y": 380, "size": 50,
+      "cycle": { "emojis": ["🛤️", "🛤️"], "period": 1 } }
+  ],
+  "particles": [
+    { "from": "train", "dx": -40, "dy": -20, "emoji": "💨", "rate": 0.1,
+      "vx": 0, "vy": -50, "life": 0.7, "size": 20, "alpha": 0.7 },
+    { "from": "station", "dx": 0, "dy": 30, "emoji": "👤", "rate": 0.02,
+      "vx": 20, "vy": 0, "life": 1.4, "size": 26, "alpha": 0.6 }
+  ]
+}
