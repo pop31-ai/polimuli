@@ -1,0 +1,44 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "91",
+    "title": "Парк аттракционов",
+    "genre": "карусельный вечер · POL-демо",
+    "dur": 24,
+    "emojis": ["🎠", "🎡", "🎢", "🍿", "🌆"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#ffe8d8", "barColor": "#d06450" },
+    "caption": { "font": 24, "color": "#fff4ec", "shadow": "rgba(70,20,20,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ПАРК ЗАЖИГАЕТ ОГНИ", "bg": { "top": "#4a3a6a", "bottom": "#1e1030" } },
+    { "at": 6,  "text": "КАРУСЕЛЬ КРУТИТ ЛОШАДОК", "bg": { "top": "#503e70", "bottom": "#241434" } },
+    { "at": 12, "text": "ГОРКА ПРОБУЕТ СМЕЛЫХ", "bg": { "top": "#544274", "bottom": "#281838" } },
+    { "at": 18, "text": "ПОПКОРН ЧЕСТНО ОДИН НА", "bg": { "top": "#5a4678", "bottom": "#2e1c3c" } }
+  ],
+  "actors": [
+    { "id": "carousel", "emoji": "🎠", "x": 280, "y": 340, "size": 120,
+      "pulse": { "amp": 0.04, "speed": 1.0 } },
+    { "id": "ferris", "emoji": "🎡", "x": 680, "y": 260, "size": 140,
+      "pulse": { "amp": 0.03, "speed": 0.8 } },
+    { "id": "roller", "emoji": "🎢", "x": 500, "y": 420, "size": 70,
+      "sway": { "amp": 8, "speed": 1.2 } },
+    { "id": "popcorn", "emoji": "🍿", "x": 160, "y": 430, "size": 48,
+      "bob": { "amp": 6, "speed": 1.4 } },
+    { "id": "lights1", "emoji": "✨", "x": 380, "y": 180, "size": 24,
+      "pulse": { "amp": 0.25, "speed": 2.4 } },
+    { "id": "lights2", "emoji": "✨", "x": 760, "y": 140, "size": 22,
+      "pulse": { "amp": 0.25, "speed": 3.0 } },
+    { "id": "sky", "emoji": "🌆", "x": 480, "y": 120, "size": 70,
+      "pulse": { "amp": 0.03, "speed": 0.6 } }
+  ],
+  "particles": [
+    { "from": "ferris", "dx": 0, "dy": -20, "emoji": "💡", "rate": 0.07,
+      "vx": 6, "vy": -14, "life": 1.1, "size": 12, "alpha": 0.8 },
+    { "from": "popcorn", "dx": 0, "dy": -16, "emoji": "🍿", "rate": 0.05,
+      "vx": 4, "vy": -16, "life": 1.0, "size": 14, "alpha": 0.8 }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "94",
+    "title": "Реставрация",
+    "genre": "время в руках · POL-демо",
+    "dur": 24,
+    "emojis": ["🏺", "🖌️", "⌛", "✨", "🛠️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#f0e0c8", "barColor": "#a07840" },
+    "caption": { "font": 24, "color": "#fff6e0", "shadow": "rgba(70,40,10,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ВАЗА ПОМНИТ ДВА ВЕКА", "bg": { "top": "#5a4630", "bottom": "#2a1e10" } },
+    { "at": 6,  "text": "СКОЛ СТАНОВИТСЯ ПОМЕТОЙ", "bg": { "top": "#5e4c34", "bottom": "#2e2214" } },
+    { "at": 12, "text": "КИСТОЧКА НАКЛАДЫВАЕТ СЛОЙ", "bg": { "top": "#62503a", "bottom": "#322618" } },
+    { "at": 18, "text": "ЗОЛОТО СВЕРКАЕТ ВНОВЬ", "bg": { "top": "#665646", "bottom": "#362c1e" } }
+  ],
+  "actors": [
+    { "id": "vase", "emoji": "🏺", "x": 480, "y": 340, "size": 110,
+      "pulse": { "amp": 0.04, "speed": 0.9 } },
+    { "id": "brush", "emoji": "🖌️", "x": 340, "y": 280, "size": 44,
+      "sway": { "amp": 8, "speed": 1.2 } },
+    { "id": "hourglass", "emoji": "⌛", "x": 700, "y": 260, "size": 52,
+      "pulse": { "amp": 0.04, "speed": 0.7 } },
+    { "id": "gold", "emoji": "✨", "x": 560, "y": 240, "size": 30,
+      "pulse": { "amp": 0.2, "speed": 2.2 },
+      "visible": { "from": 12, "to": 24 } },
+    { "id": "tool", "emoji": "🛠️", "x": 200, "y": 420, "size": 46,
+      "bob": { "amp": 3, "speed": 0.9 } },
+    { "id": "restorer", "emoji": "🧑‍🎨", "x": 680, "y": 400, "size": 60,
+      "bob": { "amp": 4, "speed": 1.0 } }
+  ],
+  "particles": [
+    { "from": "brush", "dx": 0, "dy": 10, "emoji": "🎨", "rate": 0.05,
+      "vx": 2, "vy": 8, "life": 0.9, "size": 12, "alpha": 0.7 },
+    { "from": "gold", "dx": 0, "dy": -12, "emoji": "✨", "rate": 0.08,
+      "vx": 6, "vy": -12, "life": 1.1, "size": 12, "alpha": 0.9 }
+  ]
+}

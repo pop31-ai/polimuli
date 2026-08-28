@@ -183,8 +183,7 @@ pack/polimuli_pack.js         — Node-упаковщик: валидация .p
 episodes/*.html               — пилотные эпизоды №01–15
 episodes/*.pol                 — эпизоды в формате POL (данные)
 episodes/*_packed.html         — автономные сборки POL (работают из file://)
-episodes/16_express_strela.pol — демо-эпизод в формате POL
-episodes/pol_index.html        — галерея POL-эпизодов
+episodes/pol_index.html        — галерея POL-эпизодов (№16–95 в формате POL)
 episodes/index.html           — галерея пилотов
 cases/USER_STORIES.md         — кейсы применения / user stories
 future/FUTURE.md              — «взгляды из будущего» проекта и POL
@@ -192,8 +191,8 @@ future/FUTURE.md              — «взгляды из будущего» пр�
 
 ## Формат POL
 
-Полимульт можно описать декларативно: файл `.pol` (JSON) — акты
-(сценарий с фоном), акторы (эмодзи с keyframes/покачиванием/циклами),
+Весь каталог (№16–95, 80 эпизодов) переведён на формат POL — декларативный
+JSON: акты (сценарий с фоном), акторы (эмодзи с keyframes/покачиванием/циклами),
 частицы, стиль HUD и подписей. Спека — `spec/spec-format-pol.md`.
 Просмотр: открой `player/player.html#?pol=...` или `player/player.html?src=episodes/16_express_strela.pol` —
 либо упакуй в автономный файл:

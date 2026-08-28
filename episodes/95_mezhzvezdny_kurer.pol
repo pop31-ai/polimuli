@@ -1,0 +1,56 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "95",
+    "title": "Межзвёздный курьер",
+    "genre": "посылка до Солнца · POL-демо",
+    "dur": 24,
+    "emojis": ["🚀", "📦", "🌠", "🛸", "🪐"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#e8e0ff", "barColor": "#7060c8" },
+    "caption": { "font": 24, "color": "#f0ecff", "shadow": "rgba(20,10,70,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ГРУЗ ЗАЩЁЛКНУТ В ОТСЕКЕ", "bg": { "top": "#0a0a30", "bottom": "#04041a" } },
+    { "at": 6,  "text": "КУРЬЕР ВЫХОДИТ НА МАРШРУТ", "bg": { "top": "#0e0c38", "bottom": "#06061e" } },
+    { "at": 12, "text": "ПРОЛЁТ МИМО КОЛЕЦ", "bg": { "top": "#120e40", "bottom": "#080822" } },
+    { "at": 18, "text": "ПОСЫЛКА У НУЖНОЙ ЗВЕЗДЫ", "bg": { "top": "#0e0c3a", "bottom": "#060620" } }
+  ],
+  "actors": [
+    { "id": "courier", "emoji": "🚀", "x": 480, "y": 300, "size": 80,
+      "key": [
+        { "at": 0,  "x": 480, "y": 420 },
+        { "at": 18, "x": 240, "y": 140 },
+        { "at": 24, "x": 480, "y": 420 }
+      ],
+      "bob": { "amp": 4, "speed": 1.0 } },
+    { "id": "package", "emoji": "📦", "x": 560, "y": 360, "size": 44,
+      "key": [
+        { "at": 0,  "x": 560, "y": 360 },
+        { "at": 18, "x": 240, "y": 340 },
+        { "at": 24, "x": 240, "y": 340 }
+      ] },
+    { "id": "asteroid", "emoji": "🪨", "x": 700, "y": 220, "size": 36,
+      "sway": { "amp": 8, "speed": 0.6 } },
+    { "id": "saturn", "emoji": "🪐", "x": 160, "y": 220, "size": 56,
+      "pulse": { "amp": 0.04, "speed": 0.7 } },
+    { "id": "star1", "emoji": "⭐", "x": 760, "y": 140, "size": 26,
+      "pulse": { "amp": 0.2, "speed": 2.0 } },
+    { "id": "star2", "emoji": "⭐", "x": 300, "y": 120, "size": 22,
+      "pulse": { "amp": 0.2, "speed": 2.4 } },
+    { "id": "shooting", "emoji": "🌠", "x": 640, "y": 160, "size": 30,
+      "key": [
+        { "at": 0,  "x": 640, "y": 160 },
+        { "at": 10, "x": 300, "y": 340 }
+      ] }
+  ],
+  "particles": [
+    { "from": "courier", "dx": 0, "dy": 30, "emoji": "🔥", "rate": 0.1,
+      "vx": 6, "vy": 30, "life": 0.7, "size": 16, "alpha": 0.9 },
+    { "from": "package", "dx": 0, "dy": -10, "emoji": "✨", "rate": 0.08,
+      "vx": 6, "vy": -12, "life": 1.0, "size": 12, "alpha": 0.8 }
+  ]
+}

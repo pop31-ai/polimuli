@@ -1,0 +1,44 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "90",
+    "title": "Керамическая мастерская",
+    "genre": "гончарный круг · POL-демо",
+    "dur": 24,
+    "emojis": ["🏺", "🫙", "🎨", "🔥", "⏳"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#f0e0c8", "barColor": "#a07440" },
+    "caption": { "font": 24, "color": "#fff6e0", "shadow": "rgba(70,40,10,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "КРУГ НАБИРАЕТ ОБОРОТЫ", "bg": { "top": "#5a4a2a", "bottom": "#2a2010" } },
+    { "at": 6,  "text": "ГЛИНА РАСТЁТ В БОК", "bg": { "top": "#5e5030", "bottom": "#2e2414" } },
+    { "at": 12, "text": "ПЕЧЬ ОБЖИГАЕТ ГЛАЗУРЬ", "bg": { "top": "#625434", "bottom": "#322c18" } },
+    { "at": 18, "text": "КУВШИН ЖДЁТ ВИТРИНУ", "bg": { "top": "#665a3c", "bottom": "#363220" } }
+  ],
+  "actors": [
+    { "id": "potter", "emoji": "🧑‍🎨", "x": 280, "y": 340, "size": 62,
+      "bob": { "amp": 4, "speed": 1.2 } },
+    { "id": "wheel", "emoji": "🔴", "x": 460, "y": 420, "size": 46,
+      "pulse": { "amp": 0.15, "speed": 2.6 } },
+    { "id": "vase", "emoji": "🏺", "x": 460, "y": 320, "size": 64,
+      "pulse": { "amp": 0.05, "speed": 1.0 } },
+    { "id": "jar", "emoji": "🫙", "x": 480, "y": 280, "size": 40,
+      "pulse": { "amp": 0.05, "speed": 1.2 } },
+    { "id": "glaze", "emoji": "🎨", "x": 680, "y": 360, "size": 52,
+      "pulse": { "amp": 0.06, "speed": 0.9 } },
+    { "id": "furnace", "emoji": "🔥", "x": 780, "y": 420, "size": 48,
+      "pulse": { "amp": 0.2, "speed": 2.0 } },
+    { "id": "hourglass", "emoji": "⏳", "x": 160, "y": 200, "size": 44,
+      "pulse": { "amp": 0.04, "speed": 0.6 } }
+  ],
+  "particles": [
+    { "from": "vase", "dx": 0, "dy": -14, "emoji": "✨", "rate": 0.07,
+      "vx": 6, "vy": -14, "life": 1.1, "size": 12, "alpha": 0.8 },
+    { "from": "furnace", "dx": 0, "dy": -10, "emoji": "🔥", "rate": 0.08,
+      "vx": 4, "vy": -16, "life": 1.0, "size": 14, "alpha": 0.8 }
+  ]
+}

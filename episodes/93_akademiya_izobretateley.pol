@@ -1,0 +1,44 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "93",
+    "title": "Академия изобретателей",
+    "genre": "идеям место в цехе · POL-демо",
+    "dur": 24,
+    "emojis": ["💡", "📚", "🛠️", "🚀", "🏆"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#ffe8c8", "barColor": "#d07830" },
+    "caption": { "font": 24, "color": "#fff6e0", "shadow": "rgba(70,40,0,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "АУДИТОРИЯ БУДИТ ИДЕИ", "bg": { "top": "#5a4a2a", "bottom": "#2a2210" } },
+    { "at": 6,  "text": "ЛАМПОЧКА ГОРИТ ЯРЧЕ", "bg": { "top": "#5e522c", "bottom": "#2e2614" } },
+    { "at": 12, "text": "ЧЕРТЁЖ ОЖИВАЕТ В МЕТАЛЛЕ", "bg": { "top": "#625a30", "bottom": "#322c18" } },
+    { "at": 18, "text": "ПРЯМО С ПАРТЫ В НЕБО", "bg": { "top": "#665c34", "bottom": "#36321c" } }
+  ],
+  "actors": [
+    { "id": "bulb", "emoji": "💡", "x": 480, "y": 240, "size": 70,
+      "pulse": { "amp": 0.15, "speed": 2.0 } },
+    { "id": "book", "emoji": "📚", "x": 240, "y": 400, "size": 64,
+      "pulse": { "amp": 0.04, "speed": 0.8 } },
+    { "id": "wrench", "emoji": "🛠️", "x": 680, "y": 380, "size": 48,
+      "bob": { "amp": 4, "speed": 1.1 } },
+    { "id": "rocket", "emoji": "🚀", "x": 700, "y": 160, "size": 44,
+      "bob": { "amp": 8, "speed": 1.4 },
+      "visible": { "from": 12, "to": 24 } },
+    { "id": "trophy", "emoji": "🏆", "x": 160, "y": 260, "size": 52,
+      "pulse": { "amp": 0.1, "speed": 1.4 },
+      "visible": { "from": 18, "to": 24 } },
+    { "id": "spark", "emoji": "💫", "x": 380, "y": 180, "size": 34,
+      "pulse": { "amp": 0.22, "speed": 2.2 } }
+  ],
+  "particles": [
+    { "from": "bulb", "dx": 0, "dy": -20, "emoji": "💡", "rate": 0.09,
+      "vx": 6, "vy": -16, "life": 1.0, "size": 12, "alpha": 0.9 },
+    { "from": "rocket", "dx": 0, "dy": 20, "emoji": "💨", "rate": 0.1,
+      "vx": 0, "vy": 20, "life": 0.8, "size": 16, "alpha": 0.7 }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "92",
+    "title": "Орнитологическая станция",
+    "genre": "птичий пикник · POL-демо",
+    "dur": 24,
+    "emojis": ["🔍", "🪿", "🐦", "🌾", "☁️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#e8f0d8", "barColor": "#60a070" },
+    "caption": { "font": 24, "color": "#f0ffea", "shadow": "rgba(10,60,20,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "БИНОКЛЬ СЧИТАЕТ ПЕРЬЯ", "bg": { "top": "#4a7a50", "bottom": "#1c3826" } },
+    { "at": 6,  "text": "ГУСЬ ВЕДЁТ ОТРЯД", "bg": { "top": "#4e8254", "bottom": "#203e2a" } },
+    { "at": 12, "text": "ПТИЦЫ ПРОБУЮТ ЗЕРНО", "bg": { "top": "#52885a", "bottom": "#244230" } },
+    { "at": 18, "text": "СЛЕДОВАТЕЛЬ ПИШЕТ ДНЕВНИК", "bg": { "top": "#4a8054", "bottom": "#1e3e28" } }
+  ],
+  "actors": [
+    { "id": "observer", "emoji": "🔍", "x": 240, "y": 300, "size": 60,
+      "sway": { "amp": 6, "speed": 1.0 } },
+    { "id": "goose", "emoji": "🪿", "x": 460, "y": 360, "size": 58,
+      "bob": { "amp": 5, "speed": 1.3 } },
+    { "id": "bird", "emoji": "🐦", "x": 600, "y": 320, "size": 34,
+      "key": [
+        { "at": 0,  "x": 600 },
+        { "at": 8,  "x": 420 },
+        { "at": 16, "x": 760 },
+        { "at": 24, "x": 600 }
+      ] },
+    { "id": "grain", "emoji": "🌾", "x": 720, "y": 420, "size": 38,
+      "bob": { "amp": 3, "speed": 0.9 } },
+    { "id": "cloud", "emoji": "☁️", "x": 140, "y": 140, "size": 44,
+      "sway": { "amp": 22, "speed": 0.3 } },
+    { "id": "notebook", "emoji": "📓", "x": 820, "y": 280, "size": 40,
+      "pulse": { "amp": 0.05, "speed": 0.8 },
+      "visible": { "from": 12, "to": 24 } }
+  ],
+  "particles": [
+    { "from": "goose", "dx": 0, "dy": -12, "emoji": "🪶", "rate": 0.06,
+      "vx": 6, "vy": -14, "life": 1.1, "size": 14, "alpha": 0.8 },
+    { "from": "grain", "dx": 0, "dy": -10, "emoji": "✨", "rate": 0.06,
+      "vx": 4, "vy": -12, "life": 1.0, "size": 12, "alpha": 0.7 }
+  ]
+}
