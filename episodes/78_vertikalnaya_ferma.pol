@@ -1,0 +1,50 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "78",
+    "title": "Вертикальная ферма",
+    "genre": "городские грядки · POL-демо",
+    "dur": 24,
+    "emojis": ["🌱", "🏢", "🚿", "🥬", "💡"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8f0d8", "barColor": "#50a060" },
+    "caption": { "font": 24, "color": "#eaffea", "shadow": "rgba(10,50,20,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "БАШНЯ РАСТИТ ОБЕД", "bg": { "top": "#2a5a40", "bottom": "#102820" } },
+    { "at": 6,  "text": "ПОЛКИ КРУТЯТ ПОЛЮСЫ", "bg": { "top": "#2e6244", "bottom": "#142c24" } },
+    { "at": 12, "text": "СОЛНЦЕ СВЕТИТ ЧЕРЕЗ КРЫШУ", "bg": { "top": "#326848", "bottom": "#183028" } },
+    { "at": 18, "text": "САЛАТ ЕДЕТ ВАГОНОМ К ЛЮДЯМ", "bg": { "top": "#366c4c", "bottom": "#1c342c" } }
+  ],
+  "actors": [
+    { "id": "tower", "emoji": "🏢", "x": 480, "y": 300, "size": 200,
+      "pulse": { "amp": 0.02, "speed": 0.5 } },
+    { "id": "shelf1", "emoji": "🌱", "x": 440, "y": 220, "size": 28,
+      "key": [
+        { "at": 0,  "x": 440 },
+        { "at": 18, "x": 660 }
+      ] },
+    { "id": "shelf2", "emoji": "🥬", "x": 520, "y": 360, "size": 30,
+      "key": [
+        { "at": 0,  "x": 520 },
+        { "at": 18, "x": 740 }
+      ] },
+    { "id": "can", "emoji": "🚿", "x": 700, "y": 240, "size": 40,
+      "sway": { "amp": 10, "speed": 1.2 } },
+    { "id": "lamp", "emoji": "💡", "x": 480, "y": 120, "size": 44,
+      "pulse": { "amp": 0.1, "speed": 1.4 } },
+    { "id": "wagon", "emoji": "🚚", "x": 780, "y": 420, "size": 52,
+      "bob": { "amp": 3, "speed": 0.8 } },
+    { "id": "spark", "emoji": "✨", "x": 300, "y": 260, "size": 24,
+      "pulse": { "amp": 0.2, "speed": 2.2 } }
+  ],
+  "particles": [
+    { "from": "can", "dx": 0, "dy": 40, "emoji": "💧", "rate": 0.1,
+      "vx": 6, "vy": 36, "life": 0.9, "size": 14, "alpha": 0.8 },
+    { "from": "lamp", "dx": 0, "dy": -12, "emoji": "💛", "rate": 0.08,
+      "vx": 4, "vy": -14, "life": 1.0, "size": 12, "alpha": 0.7 }
+  ]
+}

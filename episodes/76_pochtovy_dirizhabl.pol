@@ -1,0 +1,50 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "76",
+    "title": "Почтовый дирижабль",
+    "genre": "воздушная почта · POL-демо",
+    "dur": 24,
+    "emojis": ["🎈", "✉️", "📮", "🕊️", "☁️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#e8f4e0", "barColor": "#60a070" },
+    "caption": { "font": 24, "color": "#f0ffea", "shadow": "rgba(10,60,20,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ДИРИЖАБЛЬ ВЫХОДИТ НА КУРС", "bg": { "top": "#3a5a78", "bottom": "#18304c" } },
+    { "at": 6,  "text": "КОНВЕРТ ПАДАЕТ В СУМКУ", "bg": { "top": "#3e6280", "bottom": "#1c3450" } },
+    { "at": 12, "text": "ШТАМП СТАВИТ ДАТУ", "bg": { "top": "#426888", "bottom": "#203854" } },
+    { "at": 18, "text": "ГОЛУБЬ НЕСЁТ ИТОГ", "bg": { "top": "#386084", "bottom": "#183050" } }
+  ],
+  "actors": [
+    { "id": "blimp", "emoji": "🎈", "x": 460, "y": 280, "size": 110,
+      "bob": { "amp": 8, "speed": 0.7 },
+      "key": [
+        { "at": 0,  "x": 460 },
+        { "at": 20, "x": 700 }
+      ] },
+    { "id": "envelope", "emoji": "✉️", "x": 560, "y": 360, "size": 44,
+      "key": [
+        { "at": 0,  "y": 200 },
+        { "at": 6,  "y": 380 }
+      ] },
+    { "id": "mailbox", "emoji": "📮", "x": 240, "y": 420, "size": 66,
+      "pulse": { "amp": 0.05, "speed": 0.8 } },
+    { "id": "dove", "emoji": "🕊️", "x": 760, "y": 220, "size": 46,
+      "sway": { "amp": 12, "speed": 1.0 },
+      "visible": { "from": 12, "to": 24 } },
+    { "id": "cloud1", "emoji": "☁️", "x": 180, "y": 140, "size": 44,
+      "sway": { "amp": 24, "speed": 0.3 } },
+    { "id": "cloud2", "emoji": "☁️", "x": 760, "y": 120, "size": 38,
+      "sway": { "amp": 20, "speed": 0.4 } }
+  ],
+  "particles": [
+    { "from": "blimp", "dx": -30, "dy": 20, "emoji": "💨", "rate": 0.07,
+      "vx": -14, "vy": 0, "life": 1.0, "size": 16, "alpha": 0.6 },
+    { "from": "envelope", "dx": 0, "dy": 10, "emoji": "✉️", "rate": 0.06,
+      "vx": 2, "vy": 10, "life": 0.9, "size": 12, "alpha": 0.7 }
+  ]
+}

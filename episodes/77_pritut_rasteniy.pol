@@ -1,0 +1,48 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "77",
+    "title": "Приют растений",
+    "genre": "зелёное спасение · POL-демо",
+    "dur": 24,
+    "emojis": ["🪴", "🌿", "💧", "🕵️", "🌱"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#e0f0d8", "barColor": "#60a050" },
+    "caption": { "font": 24, "color": "#ecffe8", "shadow": "rgba(10,50,10,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ПОЛКА ВСТРЕЧАЕТ НОВИЧКОВ", "bg": { "top": "#2a4a34", "bottom": "#10241c" } },
+    { "at": 6,  "text": "ЛЕЙКА ПОИТ ПО ДЕЖУРСТВУ", "bg": { "top": "#2e5238", "bottom": "#142820" } },
+    { "at": 12, "text": "ДЕТЕКТИВ ИЩЕТ ПОВЯДШИЙ ЛИСТ", "bg": { "top": "#32583c", "bottom": "#182c24" } },
+    { "at": 18, "text": "ЛИСТ ТЯНЕТСЯ К СВЕТУ", "bg": { "top": "#3a6040", "bottom": "#1c3028" } }
+  ],
+  "actors": [
+    { "id": "pot", "emoji": "🪴", "x": 200, "y": 340, "size": 62,
+      "pulse": { "amp": 0.05, "speed": 0.8 } },
+    { "id": "pot2", "emoji": "🪴", "x": 360, "y": 400, "size": 54,
+      "pulse": { "amp": 0.05, "speed": 1.0 } },
+    { "id": "can", "emoji": "🚿", "x": 520, "y": 260, "size": 46,
+      "sway": { "amp": 12, "speed": 1.4 } },
+    { "id": "sprout", "emoji": "🌱", "x": 660, "y": 380, "size": 40,
+      "key": [
+        { "at": 0,  "size": 30 },
+        { "at": 18, "size": 56 }
+      ] },
+    { "id": "leaf", "emoji": "🌿", "x": 800, "y": 440, "size": 50,
+      "sway": { "amp": 8, "speed": 0.7 } },
+    { "id": "sleuth", "emoji": "🕵️", "x": 500, "y": 440, "size": 56,
+      "bob": { "amp": 4, "speed": 1.0 },
+      "visible": { "from": 12, "to": 24 } },
+    { "id": "sun", "emoji": "☀️", "x": 760, "y": 140, "size": 52,
+      "pulse": { "amp": 0.07, "speed": 0.9 } }
+  ],
+  "particles": [
+    { "from": "can", "dx": 0, "dy": 40, "emoji": "💧", "rate": 0.12,
+      "vx": 6, "vy": 36, "life": 0.9, "size": 14, "alpha": 0.8 },
+    { "from": "sprout", "dx": 0, "dy": -8, "emoji": "✨", "rate": 0.06,
+      "vx": 4, "vy": -12, "life": 1.0, "size": 12, "alpha": 0.7 }
+  ]
+}

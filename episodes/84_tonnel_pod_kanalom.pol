@@ -1,0 +1,47 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "84",
+    "title": "Тоннель под каналом",
+    "genre": "подземный переход · POL-демо",
+    "dur": 24,
+    "emojis": ["🚇", "🌊", "🔦", "🏗️", "🛶"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8ecf5", "barColor": "#5088a0" },
+    "caption": { "font": 24, "color": "#eef8ff", "shadow": "rgba(10,40,60,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "КАНАЛ НЁС ЛОДКИ НАД НАМИ", "bg": { "top": "#0e3a50", "bottom": "#061c2c" } },
+    { "at": 6,  "text": "СВЕТИЛО ОСВЕЩАЕТ ПЕТЛЮ", "bg": { "top": "#12405a", "bottom": "#082030" } },
+    { "at": 12, "text": "СПИРАЛЬ СТЕН УЖЕ ВСЬЮ", "bg": { "top": "#164460", "bottom": "#0a2434" } },
+    { "at": 18, "text": "ВЫХОД ПОКАЗЫВАЕТ НЕБО", "bg": { "top": "#2a5878", "bottom": "#143040" } }
+  ],
+  "actors": [
+    { "id": "train", "emoji": "🚇", "x": 480, "y": 300, "size": 100,
+      "key": [
+        { "at": 0,  "x": 220 },
+        { "at": 18, "x": 760 }
+      ] },
+    { "id": "wave", "emoji": "🌊", "x": 480, "y": 120, "size": 70,
+      "sway": { "amp": 16, "speed": 0.7 } },
+    { "id": "light", "emoji": "🔦", "x": 300, "y": 220, "size": 44,
+      "pulse": { "amp": 0.12, "speed": 1.6 } },
+    { "id": "lantern", "emoji": "🏮", "x": 640, "y": 240, "size": 36,
+      "pulse": { "amp": 0.15, "speed": 1.8 } },
+    { "id": "spiral", "emoji": "🌀", "x": 480, "y": 420, "size": 56,
+      "pulse": { "amp": 0.08, "speed": 1.0 } },
+    { "id": "canoe", "emoji": "🛶", "x": 700, "y": 130, "size": 48,
+      "sway": { "amp": 8, "speed": 0.8 } },
+    { "id": "crane", "emoji": "🏗️", "x": 140, "y": 200, "size": 56,
+      "pulse": { "amp": 0.04, "speed": 0.7 } }
+  ],
+  "particles": [
+    { "from": "train", "dx": 0, "dy": -10, "emoji": "💡", "rate": 0.07,
+      "vx": 4, "vy": -12, "life": 1.0, "size": 14, "alpha": 0.7 },
+    { "from": "wave", "dx": 0, "dy": 20, "emoji": "💦", "rate": 0.07,
+      "vx": 8, "vy": 8, "life": 0.9, "size": 14, "alpha": 0.6 }
+  ]
+}

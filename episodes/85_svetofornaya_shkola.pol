@@ -1,0 +1,50 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "85",
+    "title": "Светофорная школа",
+    "genre": "зебра-первоклассники · POL-демо",
+    "dur": 24,
+    "emojis": ["🚦", "🐢", "🐇", "🚸", "💡"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#ffe8c8", "barColor": "#d08020" },
+    "caption": { "font": 24, "color": "#fff6e0", "shadow": "rgba(70,40,0,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "СВЕТОФОР РАССКАЗЫВАЕТ ЦВЕТА", "bg": { "top": "#3a6a7a", "bottom": "#183038" } },
+    { "at": 6,  "text": "МЫШЬ СДАЁТ ПЕРВЫЙ ЭКЗАМЕН", "bg": { "top": "#3e7080", "bottom": "#1c343c" } },
+    { "at": 12, "text": "ЗАЯЦ ЖДЁТ ЗЕЛЁНОГО", "bg": { "top": "#427486", "bottom": "#203840" } },
+    { "at": 18, "text": "ЗЕБРА ПОЛУЧАЕТ ПЯТЁРКУ", "bg": { "top": "#46788a", "bottom": "#243c44" } }
+  ],
+  "actors": [
+    { "id": "light", "emoji": "🚦", "x": 260, "y": 300, "size": 66,
+      "pulse": { "amp": 0.06, "speed": 1.0 } },
+    { "id": "mouse", "emoji": "🐭", "x": 420, "y": 420, "size": 44,
+      "key": [
+        { "at": 0,  "x": 420 },
+        { "at": 6,  "x": 600 },
+        { "at": 10, "x": 420 }
+      ] },
+    { "id": "hare", "emoji": "🐇", "x": 640, "y": 380, "size": 52,
+      "bob": { "amp": 6, "speed": 1.4 },
+      "visible": { "from": 6, "to": 12 } },
+    { "id": "crossing", "emoji": "🚸", "x": 760, "y": 300, "size": 46,
+      "pulse": { "amp": 0.05, "speed": 0.8 } },
+    { "id": "zebra", "emoji": "🦓", "x": 540, "y": 350, "size": 48,
+      "sway": { "amp": 8, "speed": 1.0 } },
+    { "id": "bulb", "emoji": "💡", "x": 360, "y": 200, "size": 40,
+      "pulse": { "amp": 0.15, "speed": 1.8 } },
+    { "id": "star", "emoji": "⭐", "x": 220, "y": 160, "size": 26,
+      "pulse": { "amp": 0.2, "speed": 2.2 },
+      "visible": { "from": 18, "to": 24 } }
+  ],
+  "particles": [
+    { "from": "light", "dx": 0, "dy": -16, "emoji": "🟢", "rate": 0.07,
+      "vx": 4, "vy": -14, "life": 1.0, "size": 12, "alpha": 0.8 },
+    { "from": "zebra", "dx": 0, "dy": -8, "emoji": "✨", "rate": 0.05,
+      "vx": 4, "vy": -12, "life": 1.0, "size": 12, "alpha": 0.7 }
+  ]
+}
