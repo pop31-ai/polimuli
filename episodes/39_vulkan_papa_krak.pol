@@ -1,0 +1,45 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "39",
+    "title": "Вулкан Папа Крак",
+    "genre": "извержение-приключение · POL-демо",
+    "dur": 24,
+    "emojis": ["🌋", "🧙", "🪨", "💥", "🔥"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#ffead0", "barColor": "#d07020" },
+    "caption": { "font": 24, "color": "#fff6e8", "shadow": "rgba(60,20,0,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ВУЛКАН ДРЕМЛЕТ НА РАССВЕТЕ", "bg": { "top": "#3a2c4a", "bottom": "#1a1224" } },
+    { "at": 6,  "text": "ПАПА КРАК ПРОСЫПАЕТСЯ", "bg": { "top": "#4a2e3a", "bottom": "#241020" } },
+    { "at": 12, "text": "ЛАВА ИДЁТ ПО ЖЕЛОБУ", "bg": { "top": "#5a2424", "bottom": "#2a0e0e" } },
+    { "at": 18, "text": "ГЕРОЙ НАПРАВЛЯЕТ ПОТОК", "bg": { "top": "#5a2c2c", "bottom": "#2a1010" } }
+  ],
+  "actors": [
+    { "id": "volcano", "emoji": "🌋", "x": 480, "y": 340, "size": 190,
+      "pulse": { "amp": 0.08, "speed": 1.0 } },
+    { "id": "wizard", "emoji": "🧙", "x": 700, "y": 400, "size": 70,
+      "bob": { "amp": 4, "speed": 1.0 } },
+    { "id": "rock1", "emoji": "🪨", "x": 300, "y": 440, "size": 44,
+      "bob": { "amp": 3, "speed": 0.8 } },
+    { "id": "rock2", "emoji": "🪨", "x": 820, "y": 470, "size": 40,
+      "bob": { "amp": 3, "speed": 0.6 } },
+    { "id": "fire1", "emoji": "🔥", "x": 400, "y": 220, "size": 40,
+      "pulse": { "amp": 0.25, "speed": 2.6 } },
+    { "id": "fire2", "emoji": "🔥", "x": 560, "y": 240, "size": 36,
+      "pulse": { "amp": 0.25, "speed": 2.2 } },
+    { "id": "larva", "emoji": "🌊", "x": 500, "y": 430, "size": 46,
+      "visible": { "from": 12, "to": 24 },
+      "sway": { "amp": 12, "speed": 1.2 } }
+  ],
+  "particles": [
+    { "from": "volcano", "dx": 0, "dy": -40, "emoji": "💥", "rate": 0.1,
+      "vx": 6, "vy": -40, "life": 1.2, "size": 18, "alpha": 0.8 },
+    { "from": "wizard", "dx": 0, "dy": -20, "emoji": "✨", "rate": 0.06,
+      "vx": 8, "vy": -14, "life": 1.0, "size": 12, "alpha": 0.8 }
+  ]
+}

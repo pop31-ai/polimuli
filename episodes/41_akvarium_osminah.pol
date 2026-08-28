@@ -1,0 +1,46 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "41",
+    "title": "Аквариум осьминога",
+    "genre": "глубина у витрины · POL-демо",
+    "dur": 24,
+    "emojis": ["🐙", "🐠", "🫧", "🪸", "🦈"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8ecfa", "barColor": "#3a86b0" },
+    "caption": { "font": 24, "color": "#eef8ff", "shadow": "rgba(0,40,70,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "АКВАРИУМ ЖДЁТ ГОСТЕЙ", "bg": { "top": "#0e3a5c", "bottom": "#061c30" } },
+    { "at": 6,  "text": "ОСЬМИНОГ КАЧАЕТ ЩУПАЛЬЦА", "bg": { "top": "#12405f", "bottom": "#082034" } },
+    { "at": 12, "text": "РЫБКИ ОБХОДЯТ ВОДОРОСЛИ", "bg": { "top": "#164464", "bottom": "#0a2438" } },
+    { "at": 18, "text": "ВИЗИТЁР НАХОДИТ ФОРВАРД", "bg": { "top": "#1a5268", "bottom": "#0e2838" } }
+  ],
+  "actors": [
+    { "id": "octopus", "emoji": "🐙", "x": 300, "y": 340, "size": 90,
+      "bob": { "amp": 6, "speed": 0.8 } },
+    { "id": "fish1", "emoji": "🐠", "x": 520, "y": 300, "size": 42,
+      "sway": { "amp": 20, "speed": 0.8 } },
+    { "id": "fish2", "emoji": "🐟", "x": 640, "y": 380, "size": 38,
+      "sway": { "amp": 24, "speed": 0.6 } },
+    { "id": "coral", "emoji": "🪸", "x": 700, "y": 460, "size": 60,
+      "pulse": { "amp": 0.05, "speed": 0.6 } },
+    { "id": "coral2", "emoji": "🪸", "x": 180, "y": 470, "size": 50,
+      "pulse": { "amp": 0.05, "speed": 0.8 } },
+    { "id": "shark", "emoji": "🦈", "x": 840, "y": 240, "size": 52,
+      "visible": { "from": 12, "to": 24 },
+      "sway": { "amp": 14, "speed": 0.7 } },
+    { "id": "visitor", "emoji": "🧑", "x": 820, "y": 420, "size": 48,
+      "visible": { "from": 18, "to": 24 },
+      "bob": { "amp": 3, "speed": 1.0 } }
+  ],
+  "particles": [
+    { "from": "fish1", "dx": 0, "dy": -10, "emoji": "🫧", "rate": 0.1,
+      "vx": 0, "vy": -18, "life": 1.2, "size": 14, "alpha": 0.7 },
+    { "from": "octopus", "dx": 0, "dy": -14, "emoji": "🫧", "rate": 0.08,
+      "vx": 0, "vy": -16, "life": 1.4, "size": 16, "alpha": 0.6 }
+  ]
+}
