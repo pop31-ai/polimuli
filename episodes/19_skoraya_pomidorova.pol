@@ -1,0 +1,50 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "19",
+    "title": "Скорая «Помидорова»",
+    "genre": "медицинская помощь · POL-демо",
+    "dur": 24,
+    "emojis": ["🚑", "💉", "💊", "🩺", "🩹"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#f5d8d8", "barColor": "#c05a5a" },
+    "caption": { "font": 24, "color": "#fff0f0", "shadow": "rgba(60,15,15,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ВЫЗОВ ПРИНЯТ — СИРЕНА ВКЛЮЧИЛАСЬ", "bg": { "top": "#3a1a22", "bottom": "#1a0d12" } },
+    { "at": 6,  "text": "НА ВЫЗОВЕ: ОСМОТР И ЗАБОТА", "bg": { "top": "#46202c", "bottom": "#241016" } },
+    { "at": 12, "text": "ТАБЛЕТКА-ПОДМОГА ПРОСНУЛАСЬ", "bg": { "top": "#4e2430", "bottom": "#291218" } },
+    { "at": 18, "text": "ВСЁ ХОРОШО — СПОКОЙНАЯ НОЧЬ", "bg": { "top": "#3a2030", "bottom": "#1c1018" } }
+  ],
+  "actors": [
+    { "id": "ambulance", "emoji": "🚑", "x": 200, "y": 400, "size": 110,
+      "key": [
+        { "at": 0,  "x": 200 },
+        { "at": 24, "x": 600 }
+      ],
+      "bob": { "amp": 3, "speed": 0.8 } },
+    { "id": "syringe", "emoji": "💉", "x": 640, "y": 320, "size": 40,
+      "pulse": { "amp": 0.1, "speed": 1.6 } },
+    { "id": "pill", "emoji": "💊", "x": 740, "y": 340, "size": 34,
+      "bob": { "amp": 7, "speed": 2.4 },
+      "visible": { "from": 12, "to": 24 } },
+    { "id": "bandage", "emoji": "🩹", "x": 560, "y": 470, "size": 36,
+      "sway": { "amp": 4, "speed": 0.9 } },
+    { "id": "steth", "emoji": "🩺", "x": 820, "y": 430, "size": 40,
+      "sway": { "amp": 6, "speed": 1.3 } },
+    { "id": "heart", "emoji": "❤️", "x": 480, "y": 360, "size": 48,
+      "pulse": { "amp": 0.16, "speed": 2.2 },
+      "visible": { "from": 6, "to": 18 } },
+    { "id": "cross", "emoji": "➕", "x": 340, "y": 200, "size": 40,
+      "pulse": { "amp": 0.1, "speed": 1.2 } }
+  ],
+  "particles": [
+    { "from": "heart", "dx": 0, "dy": -12, "emoji": "💓", "rate": 0.05,
+      "vx": 0, "vy": -14, "life": 1.4, "size": 18, "alpha": 0.7 },
+    { "from": "ambulance", "dx": -40, "dy": 0, "emoji": "💨", "rate": 0.08,
+      "vx": -30, "vy": 0, "life": 0.8, "size": 20, "alpha": 0.6 }
+  ]
+}

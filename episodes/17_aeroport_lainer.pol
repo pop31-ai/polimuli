@@ -1,0 +1,60 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "17",
+    "title": "Аэропорт «Лайнер»",
+    "genre": "небо-комедия · POL-демо",
+    "dur": 24,
+    "emojis": ["✈️", "🛫", "🛬", "🧳", "🛩️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8e6f5", "barColor": "#5a8fc0" },
+    "caption": { "font": 24, "color": "#eef6ff", "shadow": "rgba(15,35,60,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "УТРО В АЭРОПОРТУ", "bg": { "top": "#9ec5e8", "bottom": "#dff0ff" } },
+    { "at": 6,  "text": "ТРАП ВСТРЕЧАЕТ ГОСТЕЙ", "bg": { "top": "#8fbfe0", "bottom": "#d4ecff" } },
+    { "at": 12, "text": "ЧЕМОДАНЫ ЕДУТ ПО ЛЕНТЕ", "bg": { "top": "#85b8dc", "bottom": "#cfe8fa" } },
+    { "at": 18, "text": "ЛАЙНЕР РАЗГЛЯДЫВАЕТ ПОЛОСУ", "bg": { "top": "#7fb4da", "bottom": "#c9e4f7" } }
+  ],
+  "actors": [
+    { "id": "jet", "emoji": "✈️", "x": 320, "y": 200, "size": 90,
+      "key": [
+        { "at": 0,  "x": 220, "y": 320 },
+        { "at": 10, "x": 680, "y": 200 }
+      ],
+      "visible": { "from": 8, "to": 24 } },
+    { "id": "small", "emoji": "🛩️", "x": 0, "y": 0, "size": 44,
+      "key": [
+        { "at": 0,  "x": -40, "y": 120 },
+        { "at": 20, "x": 900, "y": 90 }
+      ],
+      "visible": { "from": 12, "to": 24 } },
+    { "id": "board", "emoji": "🗓️", "x": 700, "y": 480, "size": 60,
+      "pulse": { "amp": 0.05, "speed": 1.2 } },
+    { "id": "suitcase", "emoji": "🧳", "x": 240, "y": 460, "size": 48,
+      "key": [
+        { "at": 12, "x": 240 },
+        { "at": 17, "x": 400 },
+        { "at": 22, "x": 560 }
+      ] },
+    { "id": "suitcase2", "emoji": "🧳", "x": 300, "y": 470, "size": 40,
+      "key": [
+        { "at": 12, "x": 300 },
+        { "at": 17, "x": 460 },
+        { "at": 22, "x": 620 }
+      ] },
+    { "id": "cap", "emoji": "🧑‍✈️", "x": 480, "y": 410, "size": 56,
+      "bob": { "amp": 4, "speed": 1.2 } },
+    { "id": "cloud1", "emoji": "☁️", "x": 150, "y": 90, "size": 34, "sway": { "amp": 10, "speed": 0.4 } },
+    { "id": "cloud2", "emoji": "☁️", "x": 620, "y": 60, "size": 40, "sway": { "amp": 14, "speed": 0.3 } }
+  ],
+  "particles": [
+    { "from": "jet", "dx": -60, "dy": 10, "emoji": "💨", "rate": 0.1,
+      "vx": -40, "vy": 0, "life": 0.9, "size": 20, "alpha": 0.7 },
+    { "from": "board", "dx": 0, "dy": -20, "emoji": "🔔", "rate": 0.05,
+      "vx": 0, "vy": -20, "life": 1.0, "size": 16, "alpha": 0.6 }
+  ]
+}

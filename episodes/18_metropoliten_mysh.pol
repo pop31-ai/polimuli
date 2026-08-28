@@ -1,0 +1,49 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "18",
+    "title": "Метрополитен «Мыш»",
+    "genre": "подземное приключение · POL-демо",
+    "dur": 24,
+    "emojis": ["🚇", "🚝", "🎫", "🚉", "🗺️"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8d2e8", "barColor": "#7a6a9a" },
+    "caption": { "font": 24, "color": "#efeaf8", "shadow": "rgba(20,15,40,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "ВЕСТИБЮЛЬ ПРИНИМАЕТ ПАССАЖИРОВ", "bg": { "top": "#2a2340", "bottom": "#150f26" } },
+    { "at": 6,  "text": "ЭСКАЛАТОР ПАДАЕТ ВНИЗ", "bg": { "top": "#241f3a", "bottom": "#0f0b22" } },
+    { "at": 12, "text": "ПОЕЗД ПРИБЫВАЕТ НА СТАНЦИЮ", "bg": { "top": "#2e2746", "bottom": "#161130" } },
+    { "at": 18, "text": "ПО ЖЁЛТОЙ ЛИНИИ — ВСЕ ДОМА", "bg": { "top": "#332c50", "bottom": "#181330" } }
+  ],
+  "actors": [
+    { "id": "city", "emoji": "🚇", "x": 480, "y": 480, "size": 150,
+      "pulse": { "amp": 0.02, "speed": 0.5 } },
+    { "id": "escalator", "emoji": "↘️", "x": 120, "y": 220, "size": 70,
+      "visible": { "from": 6, "to": 12 } },
+    { "id": "train", "emoji": "🚝", "x": -40, "y": 320, "size": 90,
+      "key": [
+        { "at": 0,  "x": -40 },
+        { "at": 14, "x": 480 },
+        { "at": 18, "x": 480 },
+        { "at": 24, "x": 980 }
+      ] },
+    { "id": "ticket", "emoji": "🎫", "x": 700, "y": 200, "size": 44,
+      "bob": { "amp": 8, "speed": 2.0 } },
+    { "id": "map", "emoji": "🗺️", "x": 820, "y": 420, "size": 70,
+      "sway": { "amp": 4, "speed": 0.7 } },
+    { "id": "mice", "emoji": "🐭", "x": 340, "y": 460, "size": 40,
+      "bob": { "amp": 5, "speed": 2.2 } },
+    { "id": "lamp1", "emoji": "💡", "x": 200, "y": 120, "size": 26, "pulse": { "amp": 0.15, "speed": 1.8 } },
+    { "id": "lamp2", "emoji": "💡", "x": 600, "y": 110, "size": 26, "pulse": { "amp": 0.15, "speed": 1.4 } }
+  ],
+  "particles": [
+    { "from": "train", "dx": -50, "dy": 0, "emoji": "💨", "rate": 0.12,
+      "vx": -30, "vy": 0, "life": 0.8, "size": 18, "alpha": 0.7 },
+    { "from": "city", "dx": -40, "dy": 20, "emoji": "👤", "rate": 0.04,
+      "vx": 30, "vy": 0, "life": 1.6, "size": 26, "alpha": 0.6 }
+  ]
+}
