@@ -1,0 +1,50 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "71",
+    "title": "Фабрика игрушек",
+    "genre": "игрушечный конвейер · POL-демо",
+    "dur": 24,
+    "emojis": ["🧸", "🚂", "🎠", "🧩", "🎁"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#ffe0d0", "barColor": "#c06050" },
+    "caption": { "font": 24, "color": "#fff0ec", "shadow": "rgba(70,20,30,0.5)" }
+  },
+  "acts": [
+    { "at": 0,  "text": "КОНВЕЙЕР ПРОБУЖДАЕТ ИГРЫ", "bg": { "top": "#5a3040", "bottom": "#28101c" } },
+    { "at": 6,  "text": "МИШКА КАТИТСЯ К УПАКОВЩИЦЕ", "bg": { "top": "#5e3444", "bottom": "#2c1420" } },
+    { "at": 12, "text": "ПАЗЛ СКЛАДЫВАЕТ ДВУРОК", "bg": { "top": "#643848", "bottom": "#301824" } },
+    { "at": 18, "text": "КОРОБКИ ЕДУТ В ВИТРИНУ", "bg": { "top": "#683c4c", "bottom": "#341c28" } }
+  ],
+  "actors": [
+    { "id": "bear", "emoji": "🧸", "x": 300, "y": 340, "size": 60,
+      "key": [
+        { "at": 0,  "x": 300 },
+        { "at": 10, "x": 560 }
+      ] },
+    { "id": "train", "emoji": "🚂", "x": 560, "y": 400, "size": 70,
+      "key": [
+        { "at": 0,  "x": 560 },
+        { "at": 12, "x": 780 }
+      ] },
+    { "id": "puzzle", "emoji": "🧩", "x": 720, "y": 300, "size": 48,
+      "pulse": { "amp": 0.08, "speed": 1.2 } },
+    { "id": "carousel", "emoji": "🎠", "x": 160, "y": 280, "size": 90,
+      "pulse": { "amp": 0.03, "speed": 0.7 } },
+    { "id": "gift", "emoji": "🎁", "x": 820, "y": 420, "size": 52,
+      "pulse": { "amp": 0.05, "speed": 0.9 } },
+    { "id": "worker", "emoji": "🧑‍🏭", "x": 420, "y": 360, "size": 58,
+      "bob": { "amp": 4, "speed": 1.1 } },
+    { "id": "spark", "emoji": "✨", "x": 640, "y": 220, "size": 26,
+      "pulse": { "amp": 0.2, "speed": 2.2 } }
+  ],
+  "particles": [
+    { "from": "bear", "dx": 0, "dy": -8, "emoji": "🎀", "rate": 0.07,
+      "vx": 4, "vy": -12, "life": 1.0, "size": 14, "alpha": 0.8 },
+    { "from": "gift", "dx": 0, "dy": -10, "emoji": "🎉", "rate": 0.07,
+      "vx": 8, "vy": -14, "life": 1.2, "size": 14, "alpha": 0.7 }
+  ]
+}
