@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №02 — Стройка века</title>
+<style>
+  body { background:#101820; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#cbd5e1; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,.5); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#8fa3b9; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🏗️ СТРОЙКА ВЕКА</h1>
+  <p class="sub">Полимульт №02 · производственная комедия · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+const GROUND = 470, FLOORH = 48, MAXFL = 8, BUILDX = 470, BW = 300;
+
+function drawSky(t) {
+  const g = ctx.createLinearGradient(0, 0, 0, GROUND);
+  g.addColorStop(0, '#3d7ea6'); g.addColorStop(1, '#a8d8ea');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, GROUND);
+  const sunx = 120 + 10 * Math.sin(t);
+  ctx.fillStyle = '#ffe082';
+  ctx.beginPath(); ctx.arc(sunx, 90, 34, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.fillRect(0, GROUND, W, H - GROUND);
+  ctx.fillStyle = '#d7c9a8';
+  ctx.fillRect(0, GROUND, W, 8);
+  // строительный забор спереди (штриховка черно-жёлтая)
+  const zone = Math.PI, stripes = 18, stW = W / stripes;
+  for (let i = 0; i < stripes; i++) {
+    ctx.fillStyle = i % 2 ? '#f2c200' : '#222';
+    ctx.fillRect(i * stW, GROUND + 34, stW, 36);
+  }
+  ctx.fillStyle = '#17181c'; ctx.fillRect(0, GROUND + 66, W, 4);
+}
+
+function drawCrane(t, flY) {
+  const mastX = 150, jibY = 92;
+  ctx.strokeStyle = '#20303e'; ctx.lineWidth = 10;
+  ctx.beginPath(); ctx.moveTo(mastX, GROUND); ctx.lineTo(mastX, jibY); ctx.stroke();
+  ctx.lineWidth = 8;
+  ctx.beginPath(); ctx.moveTo(mastX - 110, jibY); ctx.lineTo(mastX + 520, jibY); ctx.stroke();
+  ctx.fillStyle = '#e8c979';
+  ctx.fillRect(mastX + 500, jibY - 10, 34, 20);
+  // трос к плите
+  const u = (t % 1.6) / 1.6;
+  const swing = Math.sin(u * Math.PI * 2);
+  const troX = mastX + 100 + u * 300;
+  const trayY = u < 0.45 ? GROUND - 40 : flY - 20;
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(troX, jibY); ctx.lineTo(troX, trayY); ctx.stroke();
+  // плита
+  ctx.save();
+  ctx.translate(troX, trayY + 8);
+  ctx.rotate(swing * 0.05);
+  ctx.fillStyle = '#9aa5b1';
+  ctx.fillRect(-55, 0, 110, 16);
+  ctx.strokeStyle = '#6b7680'; ctx.lineWidth = 1;
+  for (let i = -40; i <= 40; i += 16) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 16); ctx.stroke(); }
+  ctx.restore();
+  return troX <= GROUND - 40 ? null : { x: troX, y: trayY, u };
+}
+
+function drawBuilding(fl, t) {
+  for (let k = fl - 1; k >= 0; k--) {
+    const y = GROUND - (k + 1) * FLOORH;
+    ctx.fillStyle = k === 0 ? '#b9bfc9' : '#d5dbe4';
+    ctx.fillRect(BUILDX, y, BW, FLOORH);
+    ctx.strokeStyle = '#8b95a3';
+    for (let wy = y + 12; wy < y + FLOORH - 8; wy += 22)
+      for (let wx = BUILDX + 12; wx < BUILDX + BW - 18; wx += 30) {
+        ctx.fillStyle = wx % 60 === BUILDX + 12 ? '#7fb3d5' : '#aad0ea';
+        ctx.fillRect(wx, wy, 18, 14);
+      }
+  }
+  // уровень
+  ctx.setLineDash([6, 6]);
+  ctx.strokeStyle = 'rgba(220,30,30,0.9)'; ctx.lineWidth = 2;
+  const topY = GROUND - fl * FLOORH;
+  ctx.beginPath(); ctx.moveTo(BUILDX - 50, topY); ctx.lineTo(BUILDX + BW + 50, topY); ctx.stroke();
+  ctx.setLineDash([]);
+  Polimuli.drawEmoji(ctx, '📏', BUILDX - 70, topY, 40);
+}
+
+function drawWorker(t) {
+  const bob = Math.abs(Math.sin(t * 2.2)) * 10;
+  Polimuli.drawEmoji(ctx, '👷', BUILDX - 120, GROUND - 34 - bob, 62);
+}
+
+function caption(text, color) {
+  ctx.font = '30px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.fillText(text, W / 2 + 2, 302 + 2);
+  ctx.fillStyle = color || '#fff';
+  ctx.fillText(text, W / 2, 302);
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawSky(t);
+  const fl = Math.min(MAXFL, 1 + Math.floor(t / 1.9));
+  drawBuilding(fl, t);
+  drawCrane(t, GROUND - fl * FLOORH);
+  drawWorker(t);
+  P.update(dt); P.draw(ctx);
+
+  if (t < 3.2) {
+    ctx.font = '42px "Segoe UI", Arial, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = `rgba(255,255,255,${Math.min(1, t / 1.2)})`;
+    ctx.fillText('🏗️ СТРОЙКА ВЕКА', W / 2, 200);
+    ctx.fillStyle = `rgba(255,255,255,${Math.min(1, (t - 0.6) / 1.2)})`;
+    ctx.font = '16px "Segoe UI", Arial, sans-serif';
+    ctx.fillText('этаж в смену — по кирпичику и по закону', W / 2, 244);
+  } else if (t < 16.5) {
+    caption(`⏫ ЭТАЖ ${fl} — СТАВИМ ПЛИТУ`, '#d9e92f');
+  } else if (t < 20) {
+    caption('🔺 КРОВЛЯ — УКЛОН И СНЕГОВАЯ НАГРУЗКА', '#ffb74d');
+  } else if (t < 24) {
+    caption('👷 ДОМ ГОТОВ! ОТКРЫВАЕМ 🎉', '#7ef0b0');
+    if (t > 20.9 && Math.random() < 0.35)
+      P.burst(1, () => ({ x: Math.random() * W, y: 60 + Math.random() * 320,
+        vx: (Math.random() - .5) * 60, vy: 120 + Math.random() * 120,
+        life: 2, size: 20 + Math.random() * 16,
+        emoji: ['🎉', '🎊', '🏗️', '🧱', '👷'][(Math.random() * 5) | 0], gravity: 60 }));
+  }
+  Polimuli.drawHUD(ctx, W, H, t, 24, 'Сцена: монтаж этажей');
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  if (t >= 24) { /* цикл */ }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

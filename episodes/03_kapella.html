@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №03 — Инструментальная капелла</title>
+<style>
+  body { background:#12091c; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#e0c8a8; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,.6); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#9a7fb0; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🎺 ИНСТРУМЕНТАЛЬНАЯ КАПЕЛЛА</h1>
+  <p class="sub">Полимульт №03 · анимационный мюзикл · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+const BAND = [
+  { e: '🎺', x: 250, y: 300 }, { e: '🥁', x: 360, y: 320 },
+  { e: '🎹', x: 470, y: 300 }, { e: '🎻', x: 580, y: 312 },
+  { e: '🪗', x: 690, y: 320 }, { e: '🎤', x: 800, y: 300 },
+];
+const CONDUCTOR = { e: '📻', x: W / 2, y: 430 };
+
+function beatPhase(t) { return (t * 2.4) % 1; }
+
+function drawStage(t) {
+  const grad = ctx.createRadialGradient(W / 2, 380, 60, W / 2, 380, 460);
+  grad.addColorStop(0, '#3a2050');
+  grad.addColorStop(1, '#12091c');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#5a3a20';
+  ctx.fillRect(0, 0, 40, H);
+  ctx.fillRect(W - 40, 0, 40, H);
+  for (let y = 0; y < H; y += 46) {
+    ctx.fillStyle = y % 2 ? '#7a5326' : '#6a4522';
+    ctx.fillRect(0, y, 40, 12); ctx.fillRect(W - 40, y, 40, 12);
+  }
+  ctx.strokeStyle = 'rgba(255,220,150,0.25)';
+  ctx.lineWidth = 1;
+  ctx.fillStyle = 'rgba(0,0,0,0.45)';
+  ctx.fillRect(0, 460, W, 80);
+  for (let i = 0; i < 3; i++) {
+    const sx = W / 2 + (i - 1) * 200;
+    const focus = Math.sin(t * 2.4 + i) * 12;
+    ctx.fillStyle = 'rgba(255,230,160,0.10)';
+    ctx.beginPath(); ctx.ellipse(sx, 300, 90, 160, 0, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
+function drawConductor(t) {
+  const b = beatPhase(t);
+  const pulse = Math.pow(Math.max(0, Math.sin(b * Math.PI)), 2);
+  Polimuli.drawEmoji(ctx, CONDUCTOR.e, CONDUCTOR.x, CONDUCTOR.y - pulse * 6, 64);
+  ctx.strokeStyle = '#e8d7a0'; ctx.lineWidth = 3;
+  const a = (t * 14) % 1;
+  const px = CONDUCTOR.x + Math.cos(a * Math.PI * 2) * 46;
+  const py = CONDUCTOR.y - 40 + Math.sin(a * Math.PI * 2) * 26;
+  ctx.beginPath(); ctx.moveTo(CONDUCTOR.x, CONDUCTOR.y - 26); ctx.lineTo(px, py); ctx.stroke();
+}
+
+function drawBand(t) {
+  const b = beatPhase(t);
+  const pulse = Math.pow(Math.max(0, Math.sin(b * Math.PI)), 2);
+  for (let i = 0; i < BAND.length; i++) {
+    const m = BAND[i];
+    const active = Math.floor(t * 2.4) % 4 === i % 4;
+    const lift = (active ? 1 : 0.35) * pulse;
+    Polimuli.drawEmoji(ctx, m.e, m.x, m.y - lift * 14, active ? 68 : 56);
+  }
+  if (Math.random() < 0.35)
+    P.spawn({ x: W / 2 + (Math.random() - .5) * 440, y: 150 + Math.random() * 60,
+      vx: (Math.random() - .5) * 30, vy: -30 - Math.random() * 30,
+      life: 1.4, size: 18 + Math.random() * 14,
+      emoji: ['🎵', '🎶', '♪', '♫'][(Math.random() * 4) | 0] });
+}
+
+function drawScore(t) {
+  ctx.font = '14px monospace';
+  ctx.fillStyle = 'rgba(255,220,150,0.7)';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText('♫ партитура:', 14, H - 34);
+  for (let i = 0; i < 12; i++) {
+    const x = -((t * 60 + i * 70) % (W + 80)) + W;
+    ctx.font = `${12 + Math.sin(i) * 4}px monospace`;
+    ctx.fillStyle = `rgba(255,220,150,${0.25 + 0.3 * Math.abs(Math.sin(t + i))})`;
+    ctx.fillText(i % 3 ? '♪' : '♫', x, H - 18);
+  }
+}
+
+const ACTS = [
+  [0.0, '♥ НАСТРОЙКА'],
+  [5.0, '🎷 ДЖАЗ — СЭМ ИМПРОВИЗИРУЕТ'],
+  [10.5, '🥁 МАРШ — БОРЯ ДЕРЖИТ РИТМ'],
+  [15.5, '🎻 ВАЛЬС — 1, 2, 3'],
+  [20.5, '💥 РОК-БАЛЛАДА — ШОК И МИР'],
+  [25.5, '🎉 СЮИТА ДРУЖБЫ'],
+];
+function actOf(t) {
+  let a = '🎵 КАПЕЛЛА';
+  for (const [from, name] of ACTS) if (t >= from) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawStage(t);
+  drawConductor(t);
+  drawBand(t);
+  drawScore(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '22px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
+  ctx.fillText(actOf(t), W / 2 + 2, 82 + 2);
+  ctx.fillStyle = '#f3dc9a';
+  ctx.fillText(actOf(t), W / 2, 82);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 30) / 30), 1, 'Сцена: репетиция', { labelColor: '#f3dc9a' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №05 — Офисный Зоопарк</title>
+<style>
+  body { background:#e8ecf1; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#22303c; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(20,40,60,.35); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#5c6b7a; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>📎 ОФИСНЫЙ ЗООПАРК</h1>
+  <p class="sub">Полимульт №05 · офис-комедия · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+function drawOffice(t) {
+  ctx.fillStyle = '#f4f6f9';
+  ctx.fillRect(0, 0, W, H);
+  // пол и ковровая дорожка
+  ctx.fillStyle = '#dfe5ec'; ctx.fillRect(0, 420, W, H - 420);
+  ctx.fillStyle = '#cfd8e3'; ctx.fillRect(0, 452, W, 8);
+  // окно справа
+  ctx.fillStyle = '#cfe3f2'; ctx.fillRect(700, 30, 220, 120);
+  ctx.strokeStyle = '#aabcc9'; ctx.lineWidth = 6;
+  ctx.strokeRect(700, 30, 220, 120);
+  ctx.beginPath(); ctx.moveTo(810, 30); ctx.lineTo(810, 150); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(700, 90); ctx.lineTo(920, 90); ctx.stroke();
+  // растения
+  Polimuli.drawEmoji(ctx, '🪴', 80, 405, 58);
+  Polimuli.drawEmoji(ctx, '🪴', 900, 405, 58);
+  // календарь на стене
+  ctx.fillStyle = '#fff'; ctx.fillRect(60, 60, 150, 110);
+  ctx.strokeStyle = '#c3cdd7'; ctx.strokeRect(60, 60, 150, 110);
+  ctx.fillStyle = '#222'; ctx.font = '16px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('📅 СЕН 2026', 135, 85);
+  for (let i = 0; i < 15; i++) {
+    const x = 72 + (i % 5) * 26, y = 100 + Math.floor(i / 5) * 22;
+    ctx.fillStyle = i === 8 ? '#e25545' : (i % 3 ? '#dfe5ec' : '#f2c14e');
+    ctx.fillRect(x, y, 20, 16);
+    ctx.fillStyle = '#333'; ctx.font = '11px Arial';
+    ctx.fillText(String(i + 1), x + 10, y + 12);
+  }
+}
+
+const desks = [{ x: 200 }, { x: 420 }, { x: 640 }];
+function drawDesks(t) {
+  for (const d of desks) {
+    ctx.fillStyle = '#e9a678';
+    ctx.fillRect(d.x - 80, 385, 160, 10);
+    ctx.fillStyle = '#b98a63';
+    ctx.fillRect(d.x - 84, 395, 168, 6);
+    ctx.fillStyle = '#6a7c8c';
+    ctx.fillRect(d.x - 70, 300, 30, 40);
+    ctx.fillStyle = '#39475a';
+    ctx.fillRect(d.x - 66, 314, 22, 10);
+    Polimuli.drawEmoji(ctx, '🖥️', d.x + 6, 304, 40);
+    Polimuli.drawEmoji(ctx, '🪑', d.x - 90, 300, 46);
+  }
+}
+
+const crew = [
+  { e: '📎', x: 0, y: 0, st: 'run' },   // Скай
+  { e: '🗂️', x: 0, y: 0, st: 'sit' },
+  { e: '✂️', x: 0, y: 0, st: 'sit' },
+  { e: '☕', x: 0, y: 0, st: 'sit' },
+  { e: '📌', x: 0, y: 0, st: 'sit' },
+];
+function placeCrew(t) {
+  for (let i = 0; i < crew.length; i++) {
+    const d = desks[(i + 1) % 3];
+    const wob = Math.sin(t * 2 + i) * 4;
+    crew[i].x = d.x + (i - 1) * 24;
+    crew[i].y = 316 + wob;
+  }
+  // Скай бегает по офису
+  const sk = crew[0];
+  sk.x = 60 + (t * 70) % (W - 120);
+  sk.y = 330 + Math.sin(t * 9) * 16;
+}
+function drawCrew() {
+  for (const c of crew) Polimuli.drawEmoji(ctx, c.e, c.x, c.y, 46);
+}
+
+const papers = [];
+let paperTimer = 0;
+function officeParticles(dt, t) {
+  // пар от кофе
+  if (Math.random() < 0.25)
+    P.spawn({ x: 120 + (Math.random() - .5) * 10, y: 320, vx: 0, vy: -40 - Math.random() * 20,
+              life: 0.9, size: 14, emoji: '💨', gravity: -2 });
+  // принтер выдаёт листы
+  paperTimer -= dt;
+  if (paperTimer <= 0) {
+    paperTimer = 0.9;
+    papers.push({ x: 850, y: 250, vx: -30 - Math.random() * 60, vy: 40 + Math.random() * 30,
+                  rot: 0, vr: 3, life: 3 });
+  }
+  for (let i = papers.length - 1; i >= 0; i--) {
+    const p = papers[i];
+    p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt; p.life -= dt;
+    if (p.life <= 0) papers.splice(i, 1);
+  }
+}
+function drawPapers(t) {
+  for (const p of papers) {
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+    ctx.fillStyle = '#fff'; ctx.fillRect(-20, -14, 40, 28);
+    ctx.strokeStyle = '#c3cdd7'; ctx.strokeRect(-20, -14, 40, 28);
+    ctx.fillStyle = '#8fa3b9'; ctx.font = '10px Arial';
+    ctx.fillText('📄', -5, 2);
+    ctx.restore();
+  }
+}
+
+function drawPrinter() {
+  ctx.fillStyle = '#445566'; ctx.fillRect(816, 230, 74, 60);
+  ctx.fillStyle = '#39495a'; ctx.fillRect(826, 210, 54, 22);
+  ctx.fillStyle = '#e25545'; ctx.fillRect(836, 216, 34, 10);
+  Polimuli.drawEmoji(ctx, '🖨️', 853, 290, 40);
+}
+
+function caption(text, color, y) {
+  ctx.font = '28px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.fillText(text, W / 2 + 2, (y || 150) + 2);
+  ctx.fillStyle = color || '#22303c';
+  ctx.fillText(text, W / 2, y || 150);
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawOffice(t);
+  drawDesks(t);
+  placeCrew(t);
+  drawCrew();
+  drawPrinter();
+  officeParticles(dt, t);
+  drawPapers(t);
+  P.update(dt); P.draw(ctx);
+
+  if (t < 3.5) {
+    ctx.font = '40px "Segoe UI", Arial, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = `rgba(34,48,60,${Math.min(1, t / 1.2)})`;
+    ctx.fillText('📎 ОФИСНЫЙ ЗООПАРК', W / 2, 180);
+    ctx.font = '15px "Segoe UI", Arial, sans-serif';
+    ctx.fillText('кафетерий · совещания · дедлайн · звери', W / 2, 224);
+  } else if (t < 11) {
+    caption('☕ Утро: кофе — топливо зоопарка', '#39475a');
+  } else if (t < 19) {
+    caption('📅 Совещание без повестки', '#39475a');
+    P.burst(1, () => ({ x: W / 2 + (Math.random() - .5) * 300, y: 200 + Math.random() * 40,
+      vx: (Math.random() - .5) * 60, vy: -60 - Math.random() * 40,
+      life: 1, size: 20, emoji: ['💭', '🗒️', '💬'][(Math.random() * 3) | 0] }));
+  } else if (t < 26) {
+    const secs = Math.max(0, 128 - (t - 19) * 20);
+    caption(`🏃 ДЕДЛАЙН! ${String(Math.floor(secs / 60)).padStart(2, '0')}:${String(Math.floor(secs % 60)).padStart(2, '0')}`, '#e25545');
+  } else if (t < 34) {
+    caption('✅ ОТЧЁТ СДАН! ПРИНТЕР ГУРУ ЛИКУЕТ', '#2c7a5a');
+    if (t > 27 && Math.random() < 0.3)
+      P.burst(1, () => ({ x: Math.random() * W, y: 120 + Math.random() * 260,
+        vx: (Math.random() - .5) * 60, vy: -80 - Math.random() * 60,
+        life: 1.6, size: 22 + Math.random() * 14,
+        emoji: ['🎉', '📄', '⭐', '📎'][(Math.random() * 4) | 0] }));
+  }
+  Polimuli.drawHUD(ctx, W, H, t, 34, 'Сцена: рабочий день', { labelColor: '#22303c', barColor: '#39475a' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

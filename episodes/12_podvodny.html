@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №12 — Подводный почтальон</title>
+<style>
+  body { background:#04121f; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#a8d8f0; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,60,120,.4); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#55a8cc; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🐙 ПОДВОДНЫЙ ПОЧТАЛЬОН</h1>
+  <p class="sub">Полимульт №12 · океанское приключение · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+const LIGHTS = Array.from({ length: 40 }, () => ({
+  x: Math.random() * W, y: Math.random() * H, ph: Math.random() * 7, s: Math.random() * 3 + 1
+}));
+
+function drawSea(t) {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#1f6f9e'); g.addColorStop(0.5, '#0d3a5c'); g.addColorStop(1, '#04121f');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(180,240,255,0.7)';
+  for (const l of LIGHTS) {
+    ctx.globalAlpha = 0.3 + 0.5 * Math.abs(Math.sin(t * 0.7 + l.ph));
+    ctx.beginPath(); ctx.arc(l.x, l.y, l.s, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawCoral(t) {
+  Polimuli.drawEmoji(ctx, '🪸', 840, 470 + Math.sin(t * 0.8) * 6, 66);
+  Polimuli.drawEmoji(ctx, '🐚', 900, 500, 44);
+  Polimuli.drawEmoji(ctx, '🪬', 60, 480, 56);
+}
+
+function drawOctopus(t) {
+  const x = 480 + Math.sin(t * 0.4) * 60;
+  const y = 300 + Math.sin(t * 1.3) * 10;
+  Polimuli.drawEmoji(ctx, '🐙', x, y, 150);
+  Polimuli.drawEmoji(ctx, '📮', x - 60, y + 30 + Math.sin(t * 1.8) * 10, 46);
+  Polimuli.drawEmoji(ctx, '✉️', x + 60, y - 30, 40);
+  P.burst(Math.random() < 0.2 ? 1 : 0, () => ({ x: x + (Math.random() - .5) * 60,
+    y: y + (Math.random() - .5) * 60, vx: (Math.random() - .5) * 20, vy: -30 - Math.random() * 20,
+    life: 1.4, size: 14, emoji: '🫧' }));
+}
+
+function drawLetters(t) {
+  const phase = (t % 10) / 10;
+  for (let i = 0; i < 3; i++) {
+    const k = phase + i / 3;
+    const u = k % 1;
+    const x = 90 + u * (W - 180);
+    const y = 380 - Math.sin(u * Math.PI) * 220;
+    Polimuli.drawEmoji(ctx, '✉️', x, y, 30);
+    if (u < 0.07)
+      P.spawn({ x: x + 20, y: y + 10, vx: 60, vy: (Math.random() - .5) * 20, life: 0.6, size: 10, emoji: '✨' });
+  }
+}
+
+function drawFish(t) {
+  const tx = (t * 80) % (W + 200) - 100;
+  Polimuli.drawEmoji(ctx, '🐠', tx, 150, 40);
+  Polimuli.drawEmoji(ctx, '🐠', tx + 60, 170, 32);
+  Polimuli.drawEmoji(ctx, '🐳', 180 + Math.sin(t * 0.2) * 30, 100 + Math.sin(t * 0.5) * 10, 90);
+}
+
+const ACTS = [
+  [0, 'ПЕРВОЕ ПИСЬМО 📮'],
+  [4, 'ПОСЫЛКА КИТУ 🐳'],
+  [8, 'СОКРОВИЩЕ В БУТЫЛКЕ'],
+  [12, 'РАЗБИТАЯ ЖЕМЧУЖИНА'],
+  [16, 'ШТОРМ! 🌊'],
+  [20, 'ВСЕ ПИСЬМА ДОМА 🐚'],
+];
+function actOf(t) {
+  let a = '🐚 ПОЧТА РИФА';
+  for (const [from, name] of ACTS) if (t >= from % 24) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawSea(t);
+  drawCoral(t);
+  drawFish(t);
+  drawOctopus(t);
+  drawLetters(t);
+  drawCoral(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '22px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,10,20,0.55)';
+  ctx.fillText(actOf(t), W / 2 + 2, 84 + 2);
+  ctx.fillStyle = '#e6f7ff';
+  ctx.fillText(actOf(t), W / 2, 84);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: риф', { labelColor: '#a8d8f0', barColor: '#7fc8e8' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

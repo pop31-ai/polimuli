@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №08 — Космический мусорщик</title>
+<style>
+  body { background:#0a0f2a; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#bfd0f2; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(80,40,120,.5); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#8a7fc0; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🛰️ КОСМИЧЕСКИЙ МУСОРЩИК</h1>
+  <p class="sub">Полимульт №08 · экология орбиты · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+const STARS = Array.from({ length: 90 }, () => ({
+  x: Math.random() * W, y: Math.random() * H, s: Math.random() * 2 + 0.6, ph: Math.random() * 7
+}));
+const DEBRIS = ['🛰️', '🧯', '🪟', '🗑️', '🛞'];
+const wastes = Array.from({ length: 7 }, (_, i) => ({
+  e: DEBRIS[i % DEBRIS.length], a: i * 1.1, d: 120 + (i % 4) * 40, sp: 0.1 + (i % 3) * 0.05
+}));
+
+function drawSpace(t) {
+  ctx.fillStyle = '#0a0f2a'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0e1a3f'; ctx.beginPath(); ctx.arc(W / 2, H, 720, Math.PI, 0); ctx.fill();
+  ctx.strokeStyle = 'rgba(120,200,255,0.4)'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(W / 2, 520, 270, Math.PI, 0); ctx.stroke();
+  ctx.fillStyle = '#cfe3ff';
+  for (const s of STARS) {
+    ctx.globalAlpha = 0.4 + 0.6 * Math.abs(Math.sin(t * 0.8 + s.ph));
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = 'rgba(120,200,255,0.5)';
+  ctx.beginPath(); ctx.arc(W / 2, 810, 60, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawOrbit(t) {
+  for (const w of wastes) {
+    const a = w.a + t * w.sp;
+    const x = W / 2 + Math.cos(a) * w.d * 2.3;
+    const y = 420 - Math.sin(a) * w.d;
+    Polimuli.drawEmoji(ctx, w.e, x, y, 30);
+  }
+}
+
+function drawRobot(t) {
+  const phase = (t % 12) / 12;
+  const rx = W / 2 + Math.sin(phase * Math.PI * 2) * 230;
+  const ry = 340 + Math.sin(t * 2.4) * 14;
+  Polimuli.drawEmoji(ctx, '🤖', rx, ry, 64);
+  ctx.strokeStyle = '#8fd0ff'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx + Math.cos(phase * Math.PI * 2) * 90, ry - 70); ctx.stroke();
+  Polimuli.drawEmoji(ctx, '🧲', rx + Math.cos(phase * Math.PI * 2) * 90, ry - 70, 34);
+  if (Math.random() < 0.1)
+    P.spawn({ x: rx - 30, y: ry + 18, vx: -80, vy: (Math.random() - .5) * 30,
+      life: 0.5, size: 10, emoji: '💨' });
+}
+
+function drawMeteor(t) {
+  const mt = (t * 0.6) % 1;
+  const x = W - mt * (W + 200) + 100;
+  const y = 60 + mt * 260;
+  ctx.strokeStyle = '#ffd28f'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(x + 60, y); ctx.lineTo(x - 60, y + 40); ctx.stroke();
+  Polimuli.drawEmoji(ctx, '☄️', x, y, 54);
+}
+
+const ACTS = [
+  [0, 'УБОРКА ОРБИТЫ'],
+  [4, 'ЧТО ТАКОЕ ОРБИТА'],
+  [8, 'ТОЧКА ЛАГРАНЖА'],
+  [12, 'СПУТНИК В КАПКАНЕ'],
+  [16, 'ГРАВИТАЦИЯ-ДОНОР'],
+  [20, 'ВОЗВРАЩЕНИЕ ДОМОЙ 🌍'],
+];
+function actOf(t) {
+  let a = '🛰️ ОРБИТА';
+  for (const [from, name] of ACTS) if (t >= from % 24) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawSpace(t);
+  drawOrbit(t);
+  drawRobot(t);
+  drawMeteor(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '22px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(10,10,40,0.6)';
+  ctx.fillText(actOf(t), W / 2 + 2, 92 + 2);
+  ctx.fillStyle = '#d8e6ff';
+  ctx.fillText(actOf(t), W / 2, 92);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: орбита', { labelColor: '#bfd0f2' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

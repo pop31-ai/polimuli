@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №14 — Библиотечный дракон</title>
+<style>
+  body { background:#241510; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#ecd5b8; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,.6); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#b08f6a; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🐉 БИБЛИОТЕЧНЫЙ ДРАКОН</h1>
+  <p class="sub">Полимульт №14 · тёмное фэнтези о книгах · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+function drawHall(t) {
+  const g = ctx.createRadialGradient(W / 2, 250, 40, W / 2, 250, 520);
+  g.addColorStop(0, '#5a3d22'); g.addColorStop(1, '#241510');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#1a0f0a'; ctx.fillRect(0, 470, W, 70);
+  ctx.strokeStyle = 'rgba(236,213,184,0.15)'; ctx.lineWidth = 2;
+  for (let i = 0; i < 5; i++) {
+    const sx = 60 + i * 210;
+    ctx.strokeRect(sx, 100, 160, 300);
+    for (let r = 0; r < 6; r++)
+      for (let c = 0; c < 3; c++) {
+        Polimuli.drawEmoji(ctx, ['📕', '📗', '📘', '📙'][(i * 7 + r + c) % 4], sx + 24 + c * 34, 130 + r * 46, 24);
+      }
+  }
+}
+
+function drawCandle(t) {
+  const x = W / 2, y = 180;
+  const tw = 0.75 + 0.25 * Math.sin(t * 9) * Math.sin(t * 4.3);
+  ctx.fillStyle = '#c98f4a'; ctx.fillRect(x - 15, y, 30, 70);
+  const rg = ctx.createRadialGradient(x, y, 4, x, y, 240);
+  rg.addColorStop(0, `rgba(255,210,120,${tw})`);
+  rg.addColorStop(1, 'rgba(255,210,120,0)');
+  ctx.fillStyle = rg;
+  ctx.beginPath(); ctx.arc(x, y, 240, 0, Math.PI * 2); ctx.fill();
+  if (Math.random() < 0.25)
+    P.spawn({ x: x + (Math.random() - .5) * 8, y, vx: (Math.random() - .5) * 12,
+      vy: -30 - Math.random() * 20, life: 0.9, size: 9, emoji: '🕯️' });
+}
+
+function drawDragon(t) {
+  const x = 480 + Math.sin(t * 0.3) * 30, y = 330 + Math.sin(t) * 8;
+  Polimuli.drawEmoji(ctx, '🐉', x, y, 170);
+  if (Math.random() < 0.1) {
+    const a = t * 4;
+    P.spawn({ x: x + 40 + Math.cos(a) * 16, y: y - 60, vx: 30 + (Math.random() - .5) * 20,
+      vy: -20, life: 1.2, size: 16, emoji: '🔥' });
+  }
+  if (Math.random() < 0.12)
+    P.spawn({ x: x + 60, y: y - 90, vx: (Math.random() - .5) * 60, vy: -10 - Math.random() * 20,
+      life: 1.6, size: 16, emoji: '📖' });
+}
+
+function drawExtras(t) {
+  Polimuli.drawEmoji(ctx, '🪶', 120, 120 + Math.sin(t * 1.2) * 12, 48);
+  Polimuli.drawEmoji(ctx, '🗝️', 860, 150 + Math.sin(t * 0.9) * 14, 52);
+  if (Math.random() < 0.3)
+    P.spawn({ x: 860, y: 150, vx: (Math.random() - .5) * 10, vy: -8,
+      life: 0.8, size: 8, emoji: '✨' });
+  Polimuli.drawEmoji(ctx, '📜', 860, 430 + Math.sin(t * 0.7) * 6, 52);
+}
+
+const ACTS = [
+  [0, 'ПОТЕРЯННАЯ ГЛАВА'],
+  [4, 'ТОМ В СКАЗКЕ'],
+  [8, 'СОКРОВИЩА КАРТЫ'],
+  [12, 'ДРАКОНЫ ПИШУТ'],
+  [16, 'ТИШИНА ВАЖНЕЕ ГРОМА'],
+  [20, 'ЧИТАТЕЛЬ ПРИШЁЛ ✨'],
+];
+function actOf(t) {
+  let a = '📚 БИБЛИОТЕКА';
+  for (const [from, name] of ACTS) if (t >= from % 24) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawHall(t);
+  drawCandle(t);
+  drawExtras(t);
+  drawDragon(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '24px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(20,8,4,0.6)';
+  ctx.fillText(actOf(t), W / 2 + 2, 80 + 2);
+  ctx.fillStyle = '#f7e3c4';
+  ctx.fillText(actOf(t), W / 2, 80);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: читальный зал', { labelColor: '#ecd5b8', barColor: '#d9a05a' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

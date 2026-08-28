@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №06 — Кассир Почемучка</title>
+<style>
+  body { background:#f2f5f8; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#22303c; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(20,40,60,.25); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#5c6b7a; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🛒 КАССИР ПОЧЕМУЧКА</h1>
+  <p class="sub">Полимульт №06 · финансовая грамотность · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+function drawStore(t) {
+  ctx.fillStyle = '#e9edf2'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#c9d3de';
+  for (let x = 0; x < W; x += 64)
+    for (let y = 430; y < H; y += 64) { ctx.fillStyle = ((x + y) / 64) % 2 ? '#c9d3de' : '#d7dfe8'; ctx.fillRect(x, y, 64, 64); }
+  ctx.fillStyle = '#8f5f3a';
+  ctx.fillRect(0, 428, W, 10);
+  ctx.fillStyle = '#6e4526';
+  for (let x = 0; x < W; x += 8) ctx.fillRect(x, 438, 4, 10);
+}
+
+function drawShelf(t) {
+  const sx = 90, sy = 180;
+  ctx.fillStyle = '#7b8d9d';
+  ctx.fillRect(sx - 14, sy - 130, 8, 220);
+  ctx.fillRect(sx + 210, sy - 130, 8, 220);
+  for (let i = 0; i < 4; i++) { ctx.fillStyle = '#a8b6c1'; ctx.fillRect(sx - 6, sy - 130 + i * 56, 208, 6); }
+  const goods = ['🥛', '🍞', '🍎', '🧀', '🥚', '🍌'];
+  for (let i = 0; i < goods.length; i++) {
+    const gx = sx + 16 + i * 32;
+    const gy = sy - 102 - Math.floor(i / 6) * 56 + Math.sin(t * 2 + i) * 2;
+    Polimuli.drawEmoji(ctx, goods[i], gx, gy, 34);
+    Polimuli.drawEmoji(ctx, '🏷️', gx + 16, gy + 26, 16);
+  }
+}
+
+function countUp(n) { return String(n); }
+
+function drawRegister(t) {
+  const rx = 700, ry = 300;
+  ctx.fillStyle = '#3c4b5a'; ctx.fillRect(rx - 130, ry, 260, 90);
+  ctx.fillStyle = '#2c3947'; ctx.fillRect(rx - 140, ry + 76, 280, 14);
+  ctx.fillStyle = '#eef3f8'; ctx.fillRect(rx - 100, ry - 34, 84, 40);
+  Polimuli.drawEmoji(ctx, '💳', rx - 58, ry + 10, 30);
+  for (let i = 0; i < 6; i++) {
+    const key = rx - 100 + (i % 3) * 46;
+    const ky = ry + 16 + Math.floor(i / 3) * 34;
+    ctx.fillStyle = '#8496a6';
+    ctx.fillRect(key, ky, 38, 22);
+    ctx.fillStyle = '#fff'; ctx.font = '15px Arial'; ctx.textAlign = 'center';
+    ctx.fillText(['1', '2', '3', '4', '5', '6'][i], key + 19, ky + 16);
+  }
+  Polimuli.drawEmoji(ctx, '🛒', 420 + Math.sin(t * 0.4) * 30, 470 + Math.sin(t * 1.1) * 4, 60);
+}
+
+function drawDog(t) {
+  const bob = Math.sin(t * 2.4) * 4;
+  Polimuli.drawEmoji(ctx, '🐕', 680, 395 + bob, 70);
+}
+
+const RECEIPT = [
+  'хлеб 45₽', 'молоко 80₽', 'яблоко 30₽', 'СУММА 155₽',
+  'дано 200₽', 'СДАЧА 45₽', 'скидка -30%', 'ИТОГО 108₽',
+];
+function drawReceipt(t) {
+  const shown = Math.min(RECEIPT.length, Math.floor(t / 2.2) + 1);
+  ctx.font = '15px monospace';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.fillRect(30, H - 130, 300, 122);
+  ctx.strokeStyle = '#c3cdd7'; ctx.strokeRect(30, H - 130, 300, 122);
+  ctx.fillStyle = '#223';
+  ctx.fillText('--- чек ' + String(Math.floor(t)).padStart(4, '0') + ' ---', 40, H - 122);
+  for (let i = 0; i < shown; i++)
+    ctx.fillText(RECEIPT[i], 40, H - 98 + i * 17);
+  ctx.fillStyle = '#e25545'; ctx.font = 'bold 15px monospace';
+  ctx.fillText('💰 ГДЕ СДАЧА?', 40, H - 28);
+}
+
+function drawCount(t) {
+  const phase = (t % 12) / 12;
+  ctx.font = 'bold 34px Arial'; ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(0,0,0,0.2)';
+  ctx.fillText('100 − 37 = ?', W / 2 + 2, 152 + 2);
+  ctx.fillStyle = '#1c4c3c';
+  ctx.fillText('100 − 37 = ?', W / 2, 152);
+  if (phase > 0.45) {
+    ctx.font = 'bold 44px Arial';
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillText('63 ✨', W / 2 + 2, 210 + 2);
+    ctx.fillStyle = '#e25545';
+    ctx.fillText('63 ✨', W / 2, 210);
+  }
+  if (Math.random() < 0.06)
+    P.burst(3, () => ({ x: W / 2 + (Math.random() - .5) * 160, y: 150 + Math.random() * 60,
+      vx: (Math.random() - .5) * 40, vy: -30 - Math.random() * 20, life: 1, size: 16,
+      emoji: '🪙' }));
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawStore(t);
+  drawShelf(t);
+  drawCount(t);
+  drawRegister(t);
+  drawDog(t);
+  drawReceipt(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '20px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.fillText('ДЕНЬГИ — ЭТО ЗАГАДКА, А НЕ СТРАХ', W / 2 + 2, 96 + 2);
+  ctx.fillStyle = '#1c4c3c';
+  ctx.fillText('ДЕНЬГИ — ЭТО ЗАГАДКА, А НЕ СТРАХ', W / 2, 96);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: касса', { labelColor: '#22303c', barColor: '#1c4c3c' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №09 — Форматик</title>
+<style>
+  body { background:#1c3b2a; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#e8f5ec; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,.4); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#9fc9ad; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>📐 ФОРМАТИК</h1>
+  <p class="sub">Полимульт №09 · математика для детей · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+function drawBoard(t) {
+  ctx.fillStyle = '#2c5748'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#24483a';
+  ctx.fillRect(0, 0, W, 16); ctx.fillRect(0, H - 16, W, 16);
+  ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 48) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 48) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+}
+
+function chalk(text, x, y, size, color) {
+  ctx.font = `bold ${size}px "Segoe UI", Arial, sans-serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = color || '#f2f6ee';
+  ctx.fillText(text, x, y);
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1;
+  ctx.strokeText(text, x, y);
+}
+
+function drawPizza(t) {
+  const phase = (t % 12) / 12;
+  const cx = 300, cy = 300, r = 110;
+  ctx.beginPath(); ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + phase * Math.PI * 2);
+  ctx.closePath();
+  ctx.fillStyle = '#e2994a'; ctx.fill();
+  ctx.strokeStyle = '#b97a30'; ctx.lineWidth = 4; ctx.stroke();
+  for (let i = 0; i < 8; i++) {
+    const a = -Math.PI / 2 + i * (Math.PI / 4);
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); ctx.stroke();
+  }
+  Polimuli.drawEmoji(ctx, '🍕', cx, cy - 20, 60);
+  chalk(`= ${Math.max(1, Math.floor(phase * 8))}/8`, cx, cy + 90, 30, '#ffe9c9');
+  if (Math.random() < 0.05)
+    P.spawn({ x: cx + (Math.random() - .5) * r, y: cy + (Math.random() - .5) * r,
+      vx: (Math.random() - .5) * 40, vy: -20 - Math.random() * 20, life: 1, size: 12, emoji: '🧀' });
+}
+
+function drawRainPercent(t) {
+  const phase = (t % 12) / 12;
+  ctx.fillStyle = '#8fd0ff';
+  for (let i = 0; i < 40; i++) {
+    const x = (i * 73 + t * 320) % W;
+    const y = ((i * 47) % 240) + phase * 200 - 120;
+    if (y > 0 && y < 340) ctx.fillRect(x, y, 4, 14);
+  }
+  chalk('100% дождя =', 690, 220, 30);
+  chalk('скидка 30% →', 690, 270, 30);
+  chalk('берём 30 из 100 💧', 690, 320, 26, '#ffe9c9');
+}
+
+function drawShapes(t) {
+  const phase = (t % 12) / 12;
+  const shapes = ['🟦', '🟥', '⬜', '🟨', '🟩'];
+  for (let i = 0; i < shapes.length; i++) {
+    const a = i + Math.sin(phase * Math.PI * 2 + i) * 0.5;
+    const x = 180 + a * 90;
+    const y = 130 + (i % 3) * 46 + Math.sin(t * 2.4 + i) * 6;
+    Polimuli.drawEmoji(ctx, shapes[i], x, y, 34);
+  }
+  Polimuli.drawEmoji(ctx, '+', 120, 200 + Math.sin(t * 2) * 8, 30);
+  Polimuli.drawEmoji(ctx, '=', 500, 205, 30);
+  chalk('углы углы углы', 600, 205, 22, '#cfe8d8');
+  chalk('Форматик решает:', 210, 60, 26, '#cfe8d8');
+}
+
+function drawFormatik(t) {
+  const x = 240 + Math.sin(t * 0.9) * 120;
+  const y = 420 + Math.sin(t * 3) * 8;
+  Polimuli.drawEmoji(ctx, '📐', x, y, 52, true);
+  if (Math.random() < 0.08)
+    P.spawn({ x: x + (Math.random() - .5) * 20, y: y + (Math.random() - .5) * 20,
+      vx: (Math.random() - .5) * 20, vy: -30, life: 0.8, size: 8, emoji: '✏️' });
+}
+
+const ACTS = [
+  [0, 'ДРОБИ — ПИЦЦА 🍕'],
+  [4, 'ПРОЦЕНТЫ — ДОЖДЬ 💧'],
+  [8, 'ГЕОМЕТРИЯ ДВОРА'],
+  [12, 'СТЕПЕНИ-ЛЕСТНИЦА'],
+  [16, 'СИММЕТРИЯ-ЗЕРКАЛО'],
+  [20, 'ФОРМУЛЫ-ДРУЗЬЯ'],
+];
+function actOf(t) {
+  let a = '🧮 МАТЕМАТИКА';
+  for (const [from, name] of ACTS) if (t >= from) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawBoard(t);
+  drawPizza(t);
+  drawRainPercent(t);
+  drawShapes(t);
+  drawFormatik(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '22px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
+  ctx.fillText(actOf(t), W / 2 + 2, 88 + 2);
+  ctx.fillStyle = '#f2f6ee';
+  ctx.fillText(actOf(t), W / 2, 88);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: тетрадь', { labelColor: '#e8f5ec', barColor: '#9fc9ad' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

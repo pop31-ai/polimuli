@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №10 — Арена Викинга</title>
+<style>
+  body { background:#1a1515; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#e8d9c8; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,.6); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#a88a68; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🏋️ АРЕНА ВИКИНГА</h1>
+  <p class="sub">Полимульт №10 · спортивный экшн · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+const LANES = [3, 4, 5, 6].map(m => ({ l: 360 + m * 46, w: 40 + Math.random() * 30 }));
+
+function drawArena(t) {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#2a1f18'); g.addColorStop(1, '#0e0a08');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#54381f';
+  ctx.fillRect(0, 460, W, 80);
+  ctx.fillStyle = '#402b17';
+  for (let x = 0; x < W; x += 60) { ctx.fillRect(x, 460, 30, 6); }
+  ctx.fillStyle = '#6b4a25';
+  ctx.fillRect(0, 520, W, 20);
+  ctx.fillStyle = 'rgba(255,255,255,0.08)';
+  for (let i = 0; i < 20; i++) {
+    const x = (i * 91) % W;
+    for (let y = 60 + (i % 5) * 80; y < 460; y += 90) ctx.fillRect(x, y, 40, 30);
+  }
+}
+
+function drawTrack(t) {
+  const phase = (t % 14) / 14;
+  for (let i = 0; i < 4; i++) {
+    const y = 350 + i * 48;
+    ctx.strokeStyle = '#8a6a44'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(80, y); ctx.lineTo(W - 80, y); ctx.stroke();
+    ctx.setLineDash([10, 8]);
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(80, y + 24); ctx.lineTo(W - 80, y + 24); ctx.stroke();
+    ctx.setLineDash([]);
+    const speed = LANES[i].w;
+    const x = 100 + (phase * speed) % (W - 200);
+    Polimuli.drawEmoji(ctx, '🏃', x, y - 14 + Math.sin(t * 6 + i) * 4, 44);
+    if (Math.random() < 0.05)
+      P.spawn({ x, y: y - 6, vx: -20, vy: (Math.random() - .5) * 30, life: 0.5, size: 10, emoji: '💨' });
+  }
+}
+
+function drawLifter(t) {
+  const press = Math.pow(Math.max(0, Math.sin((t % 3) * (Math.PI / 1.6))), 1.2);
+  const x = 820, y = 300 + Math.sin(t * 2) * 4;
+  Polimuli.drawEmoji(ctx, '🏋️', x, y - press * 20, 66);
+  if (Math.random() < 0.08)
+    P.spawn({ x, y: y - 30, vx: (Math.random() - .5) * 30, vy: -20 - Math.random() * 20,
+      life: 0.7, size: 12, emoji: '💪' });
+}
+
+function drawScoreboard(t) {
+  ctx.fillStyle = '#0d0d0d'; ctx.fillRect(W / 2 - 190, 40, 380, 70);
+  ctx.strokeStyle = '#3a3a3a'; ctx.strokeRect(W / 2 - 190, 40, 380, 70);
+  const score = Math.floor(t * 3) % 100;
+  ctx.fillStyle = '#ff3b30';
+  ctx.font = '52px "Courier New", monospace';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(String(score).padStart(3, '0'), W / 2 - 40, 76);
+  ctx.font = '18px Arial'; ctx.fillStyle = '#888';
+  ctx.fillText('ВСЕМИРНЫЕ ИГРЫ', W / 2 - 40, 100);
+}
+
+function drawMedal(t) {
+  const tw = 0.6 + 0.4 * Math.sin(t * 3);
+  Polimuli.drawEmoji(ctx, '🥇', 150, 120 + Math.sin(t * 2) * 6, 56 * tw + 20);
+  if (Math.random() < 0.1)
+    P.spawn({ x: 150, y: 110, vx: (Math.random() - .5) * 40, vy: -20 - Math.random() * 20,
+      life: 0.7, size: 12, emoji: '✨' });
+}
+
+const ACTS = [
+  [0, 'РАЗМИНКА — 5 МИНУТ ПЕРЕД СТАРТОМ'],
+  [4, 'БЕГ НА 100 М — ДОРОЖКИ ГОТОВЫ'],
+  [8, 'ТЯЖЁЛАЯ АТЛЕТИКА — СИГР ЖМЁТ'],
+  [12, 'ГИМНАСТИКА — ДОСКА И ЛЕНТА'],
+  [16, 'КОМАНДНАЯ ИГРА — ПАС!'],
+  [20, 'МЕДАЛЬ — ДОСТОЙНАЯ НАГРАДА'],
+];
+function actOf(t) {
+  let a = '🏟️ ИГРЫ';
+  for (const [from, name] of ACTS) if (t >= from % 24) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawArena(t);
+  drawTrack(t);
+  drawLifter(t);
+  drawMedal(t);
+  drawScoreboard(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '22px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.fillText(actOf(t), W / 2 + 2, 150 + 2);
+  ctx.fillStyle = '#f2d9b8';
+  ctx.fillText(actOf(t), W / 2, 150);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: арена', { labelColor: '#e8d9c8', barColor: '#d9a05a' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

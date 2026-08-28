@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №01 — Светофорная симфония</title>
+<style>
+  body { background:#0b1220; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#cfd8e3; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,.5); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#8fa3b9; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🚦 СВЕТОФОРНАЯ СИМФОНИЯ</h1>
+  <p class="sub">Полимульт №01 · дорожный эдьютейнмент · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+if (!CV) throw new Error('canvas not found');
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+// --- фон: ночной город ---
+const blds = (() => {
+  let x = -20, arr = [];
+  while (x < W + 20) {
+    const bw = 70 + Math.random() * 80;
+    const bh = 60 + Math.random() * 200;
+    arr.push({ x, y: 360 - bh, w: bw, h: bh, win: Math.random() < 0.6 });
+    x += bw + 3;
+  }
+  return arr;
+})();
+
+function drawBackdrop(t) {
+  const g = ctx.createLinearGradient(0, 0, 0, 360);
+  g.addColorStop(0, '#0d1b3a'); g.addColorStop(1, '#1b2f5c');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, 360);
+  ctx.fillStyle = 'rgba(140,170,220,0.5)';
+  ctx.fillRect(0, 352, W, 14);       // тротуар
+  ctx.fillStyle = '#0a0f1e';
+  ctx.fillRect(0, 366, W, H - 366);  // дорога
+  for (const b of blds) {
+    ctx.fillStyle = '#18213a';
+    ctx.fillRect(b.x, b.y, b.w, b.h);
+    if (b.win) {
+      ctx.fillStyle = 'rgba(255,220,140,0.55)';
+      for (let wy = b.y + 14; wy < 352; wy += 26)
+        for (let wx = b.x + 10; wx < b.x + b.w - 14; wx += 28)
+          if ((wx + wy) % 2 === 0) ctx.fillRect(wx, wy, 8, 10);
+    }
+  }
+  ctx.fillStyle = '#d8e2f0';
+  ctx.beginPath(); ctx.arc(840, 70, 26, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#0d1b3a';
+  ctx.beginPath(); ctx.arc(832, 62, 22, 0, Math.PI * 2); ctx.fill();
+  // разметка дороги
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  for (let x = 0; x < W; x += 54) ctx.fillRect(x, 452, 28, 4);
+}
+
+function drawZebra() {
+  for (let i = 0; i < 6; i++) {
+    ctx.fillStyle = i % 2 ? '#a9b6cf' : 'rgba(0,0,0,0.9)';
+    ctx.fillRect(400 + i * 26, 372, 26, 80);
+  }
+}
+
+// Светофор: состояния red/amber/green, длительности в секундах
+const SEQ = [
+  { c: 'red',   d: 3.0 },
+  { c: 'amber', d: 1.5 },
+  { c: 'green', d: 3.0 },
+  { c: 'amber', d: 1.5 },
+];
+function lightState(t) {
+  let acc = 0;
+  for (const s of SEQ) {
+    if (t < acc + s.d) return s;
+    acc += s.d;
+  }
+  return SEQ[0];
+}
+function cycleLen() { return SEQ.reduce((a, s) => a + s.d, 0); }
+
+function drawLight(t) {
+  const x = 700, base = 366;
+  ctx.fillStyle = '#0d1320';
+  ctx.fillRect(x - 6, 120, 12, base - 120);
+  ctx.fillRect(x - 40, 120, 80, 8);
+  const st = lightState(t);
+  const lamps = [{ y: 142, c: 'red', on: st.c === 'red' },
+                 { y: 190, c: 'amber', on: st.c === 'amber' },
+                 { y: 238, c: 'green', on: st.c === 'green' }];
+  ctx.fillStyle = '#223';
+  ctx.fillRect(x - 34, 128, 68, 128);
+  for (const l of lamps) {
+    ctx.beginPath(); ctx.arc(x, l.y, 22, 0, Math.PI * 2);
+    ctx.fillStyle = l.on ? l.c : '#233040';
+    ctx.fill();
+    if (l.on) { ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                ctx.beginPath(); ctx.arc(x - 6, l.y - 7, 6, 0, Math.PI * 2); ctx.fill(); }
+  }
+  return st;
+}
+
+function drawSign() {
+  Polimuli.drawEmoji(ctx, '🚸', 505, 320, 46);
+}
+
+// --- машины ---
+const cars = [];
+function spawnCar() {
+  const dir = Math.random() < 0.5 ? 1 : -1;
+  const glyphs = ['🚗', '🚙', '🚕', '🚌', '🚚', '🛵', '🚲'];
+  cars.push({ g: glyphs[(Math.random() * glyphs.length) | 0],
+              x: dir > 0 ? -70 : W + 70, dir, v: 40 + Math.random() * 30,
+              y: dir > 0 ? 392 : 470 });
+}
+function moveCars(dt, st) {
+  const stopX = 400;
+  for (let i = cars.length - 1; i >= 0; i--) {
+    const c = cars[i];
+    let blocked = false;
+    if (st.c === 'red') {
+      if (c.dir > 0 && c.x < stopX && c.x > stopX - 60) { c.x = stopX - 62; blocked = true; }
+      if (c.dir < 0 && c.x > stopX && c.x < stopX + 60) { c.x = stopX + 62; blocked = true; }
+    }
+    if (!blocked) c.x += c.v * c.dir * dt;
+    if (c.x > W + 90 || c.x < -90) cars.splice(i, 1);
+  }
+}
+function drawCars() {
+  for (const c of cars) Polimuli.drawEmoji(ctx, c.g, c.x, c.y, 52);
+}
+
+// --- пешеход ---
+let ped = { x: 505, crossing: false };
+function movePed(dt, st) {
+  if (st.c === 'green') { ped.crossing = true; }
+  else if (ped.crossing && st.c === 'red') { ped.crossing = false; ped.x = 505; }
+  if (ped.crossing) {
+    ped.x += 60 * dt;
+    if (ped.x > 560) { ped.crossing = false; ped.x = 505; }
+  }
+}
+function drawPed() {
+  Polimuli.drawEmoji(ctx, '🚶', ped.x, 378, 44);
+}
+
+// --- заголовок ---
+function drawTitle(t, fade) {
+  if (t > fade) return;
+  const a = Math.min(1, t / 1.2);
+  ctx.globalAlpha = a;
+  ctx.font = '42px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#fff';
+  ctx.fillText('🚦 СВЕТОФОРНАЯ СИМФОНИЯ', W / 2, 190);
+  ctx.fillStyle = '#8fa3b9';
+  ctx.font = '16px "Segoe UI", Arial, sans-serif';
+  ctx.fillText('красный — фуга · жёлтый — джаз · зелёный — марш', W / 2, 235);
+  ctx.globalAlpha = 1;
+}
+
+function caption(text, y) {
+  ctx.font = '30px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.fillText(text, W / 2, y);
+}
+
+let lastState = null;
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawBackdrop(t);
+  drawZebra();
+  drawSign();
+
+  const st = drawLight(t);
+  moveCars(dt, st);
+  drawCars();
+  movePed(dt, st);
+  drawPed();
+
+  if (lastState && lastState !== st.c) {
+    const col = st.c;
+    P.burst(14, (i) => ({ x: 700 + (Math.random() - .5) * 120, y: 150 + Math.random() * 200,
+      vx: (Math.random() - .5) * 90, vy: (Math.random() - .5) * 90,
+      life: 0.9 + Math.random(), size: 16 + Math.random() * 10,
+      emoji: col === 'green' ? '✅' : col === 'red' ? '⛔' : '⚠️', gravity: 40 }));
+  }
+  lastState = st.c;
+
+  // бегущий капитён-таймер снизу подсказывает музыку такта
+  P.update(dt); P.draw(ctx);
+
+  if (t < 4.5) drawTitle(t, 4.5);
+  else if (t < 6) caption('🔁 сигнал меняется — слышишь такт?', 320);
+  if (st.c === 'red') caption('⛔ СТОЙ', 300);
+  if (st.c === 'amber') caption('⚠️ ГОТОВЬСЯ', 300);
+  if (st.c === 'green') caption('✅ ИДИ', 300);
+
+  Polimuli.drawHUD(ctx, W, H, t, 42, 'Сцена: перекрёсток');
+}
+
+let lastT = 0;
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  if (Math.random() < 0.02) spawnCar();
+  requestAnimationFrame(loop);
+}
+const startT = performance.now();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

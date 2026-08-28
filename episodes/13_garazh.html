@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №13 — Хроники гаража</title>
+<style>
+  body { background:#191511; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#e0cfb0; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,.6); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#a08a62; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🚗 ХРОНИКИ ГАРАЖА</h1>
+  <p class="sub">Полимульт №13 · гранж-комедия · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+function drawGarage(t) {
+  ctx.fillStyle = '#2b241d'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#1f1a14';
+  ctx.fillRect(0, 0, W, 100); ctx.fillRect(0, H - 90, W, 90);
+  ctx.fillStyle = '#3a2f24'; ctx.fillRect(0, 470, W, 30);
+  ctx.fillStyle = 'rgba(255,220,130,0.15)';
+  ctx.beginPath(); ctx.ellipse(120, 80, 60, 6, 0, 0, Math.PI * 2); ctx.fill();
+  Polimuli.drawEmoji(ctx, '💡', 120, 60, 44);
+  for (let i = 0; i < 6; i++) {
+    const sx = 460 + i * 16, sy = 300 + i * 20;
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.beginPath(); ctx.ellipse(sx, sy, 30 + i * 4, 6, 0, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
+function drawPegboard(t) {
+  ctx.fillStyle = '#4a3c2c'; ctx.fillRect(40, 130, 160, 200);
+  ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+  for (let i = 0; i < 40; i++) {
+    const x = 50 + (i % 8) * 20, y = 140 + Math.floor(i / 8) * 24;
+    ctx.beginPath(); ctx.arc(x, y, 1.5, 0, Math.PI * 2); ctx.stroke();
+  }
+  const tools = ['🧰', '🔧', '🪛', '🔩', '🛠️', '🗜️'];
+  for (let i = 0; i < tools.length; i++) {
+    const tx = 60 + (i % 2) * 60, ty = 160 + Math.floor(i / 2) * 66;
+    Polimuli.drawEmoji(ctx, tools[i], tx, ty + Math.sin(t * 1.5 + i) * 3, 40);
+  }
+  ctx.fillStyle = '#e0cfb0'; ctx.font = '14px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('схема', 120, 322);
+  ctx.strokeStyle = '#766a52';
+  ctx.strokeRect(60, 330, 120, 40);
+}
+
+function drawCar(t) {
+  const lift = Math.sin(t * 0.4) * 1;
+  const x = 620, y = 360 + lift * 40;
+  ctx.fillStyle = '#141210'; ctx.fillRect(x - 150, y + 40, 300, 16);
+  ctx.fillStyle = '#555'; ctx.fillRect(x - 130, y + 20, 40, 100);
+  ctx.fillRect(x + 90, y + 20, 40, 100);
+  Polimuli.drawEmoji(ctx, '🚗', x, y, 130);
+  Polimuli.drawEmoji(ctx, '🛞', x - 120, y + 34, 34);
+  Polimuli.drawEmoji(ctx, '🛞', x + 120, y + 34, 34);
+  const wOffset = Math.sin(t * 6) > 0.4;
+  Polimuli.drawEmoji(ctx, wOffset ? '🔧' : '🪛', x + 60, y - 40 + Math.sin(t * 5) * 8, 34);
+  if (Math.random() < 0.15)
+    P.spawn({ x: x + 60, y: y - 40, vx: 0, vy: -20 - Math.random() * 20, life: 0.4, size: 12, emoji: '✨' });
+}
+
+function drawMechanic(t) {
+  const x = 380 + Math.sin(t * 1.1) * 20;
+  Polimuli.drawEmoji(ctx, '🦺', x, 420 + Math.sin(t * 2.6) * 4, 56);
+  Polimuli.drawEmoji(ctx, '🛢️', 300, 430, 44);
+}
+
+function drawTire(t) {
+  const y = 300 + Math.sin(t * 4) * 26;
+  Polimuli.drawEmoji(ctx, '🛞', 900, y, 46);
+  if (Math.random() < 0.05)
+    P.spawn({ x: 900, y, vx: 0, vy: -20, life: 0.5, size: 10, emoji: '💨' });
+}
+
+const ACTS = [
+  [0, 'ДИАГНОСТИКА — СЛУШАЕМ МОТОР'],
+  [4, 'АККУМУЛЯТОР СЕЛ — ПРИКУРИВАЕМ'],
+  [8, 'ТОРМОЗА ВАЖНЕЕ ВСЕГО'],
+  [12, 'МАСЛО — КРОВЬ МАШИНЫ'],
+  [16, 'КУЗОВ И РЖАВЧИНА'],
+  [20, 'ТЕСТ-ДРАЙВ!'],
+];
+function actOf(t) {
+  let a = '🛠️ ГАРАЖ';
+  for (const [from, name] of ACTS) if (t >= from % 24) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawGarage(t);
+  drawPegboard(t);
+  drawCar(t);
+  drawMechanic(t);
+  drawTire(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '22px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.fillText(actOf(t), W / 2 + 2, 82 + 2);
+  ctx.fillStyle = '#f0dfbe';
+  ctx.fillText(actOf(t), W / 2, 82);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: гараж', { labelColor: '#e0cfb0', barColor: '#d9a05a' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №04 — Кот в уреме</title>
+<style>
+  body { background:#0e2a33; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#cfe8ef; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,.5); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#7fb0bf; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🐈 КОТ В УРЕМЕ</h1>
+  <p class="sub">Полимульт №04 · речная фэнтези · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+const BANK = 290;
+
+function drawScene(t) {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#bfe3ec');
+  g.addColorStop(0.45, '#8fd0e0');
+  g.addColorStop(1, '#17506a');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#2f7d46';
+  ctx.fillRect(0, BANK - 14, W, 40);
+  ctx.fillStyle = '#235c34';
+  ctx.fillRect(0, BANK + 18, W, 26);
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.beginPath(); ctx.arc(120, 60, 26, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#cfe3ec';
+  ctx.beginPath(); ctx.arc(215, 70, 18, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(245, 58, 14, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawReeds(t) {
+  ctx.strokeStyle = '#1c4a20'; ctx.lineWidth = 3;
+  for (let i = 0; i < 8; i++) {
+    const x = 60 + Math.sin(t * 0.7 + i) * 4;
+    const bx = i * 18 + 30;
+    ctx.beginPath(); ctx.moveTo(bx, BANK + 26); ctx.quadraticCurveTo(bx + 8, BANK - 90, x, BANK - 130 - (i % 3) * 16); ctx.stroke();
+    Polimuli.drawEmoji(ctx, '🪷', bx + (i % 3 === 0 ? 10 : -6), BANK - 96 - (i % 3) * 12, i % 3 === 0 ? 30 : 22);
+  }
+}
+
+function drawLogAndCat(t) {
+  const bob = Math.sin(t * 1.4) * 5;
+  const x = 520 + Math.sin(t * 0.3) * 16;
+  const y = BANK + 46 + bob;
+  ctx.strokeStyle = '#5a4020'; ctx.lineWidth = 22; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.arc(x, y, 26, -1.1, 1.1); ctx.stroke();
+  ctx.lineWidth = 8;
+  ctx.beginPath(); ctx.arc(x - 8, y - 26, 12, -1.2, 1.2); ctx.stroke();
+  Polimuli.drawEmoji(ctx, '🐈', x, y - 40 - Math.sin(t * 2) * 3, 58);
+  ctx.strokeStyle = '#5a4020'; ctx.lineWidth = 2;
+  const tipX = x + (Math.sin(t * 0.25) > 0.4 ? 46 : -40 + Math.sin(t * 1.2) * 26);
+  ctx.beginPath(); ctx.moveTo(x, y - 30); ctx.lineTo(tipX, y - 44); ctx.stroke();
+  if (Math.sin(t * 0.25) > 0.4 && Math.random() < 0.12) {
+    P.spawn({ x: tipX, y: y - 44, vx: 0, vy: -20 - Math.random() * 20,
+      life: 0.7, size: 16, emoji: '💦' });
+  }
+}
+
+function drawRiver(t) {
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  for (let i = 0; i < 7; i++) {
+    const y = BANK + 60 + i * 32;
+    const w = 60 + Math.sin(t + i * 1.3) * 20;
+    ctx.beginPath(); ctx.ellipse(W / 2 + (i % 2 ? 90 : -70), y, w, 5, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  Polimuli.drawEmoji(ctx, '🦆', 240 + Math.sin(t * 0.4) * 40, BANK + 96 + Math.sin(t * 3) * 4, 42);
+  Polimuli.drawEmoji(ctx, '🦫', 830, BANK + 10 + Math.sin(t * 1.6) * 4, 52);
+  Polimuli.drawEmoji(ctx, '🪵', 760, BANK + 24, 34);
+  Polimuli.drawEmoji(ctx, '🛶', 130 + Math.sin(t * 0.35) * 26, BANK + 150 + Math.sin(t * 1.1) * 8, 56);
+}
+
+function drawCatches(t) {
+  if (Math.random() < 0.05)
+    P.spawn({ x: 520 + (Math.random() - .5) * 300, y: BANK + 40 + Math.random() * 80,
+      vx: (Math.random() - .5) * 20, vy: -20 - Math.random() * 16,
+      life: 1.8, size: 20 + Math.random() * 16,
+      emoji: ['🐟', '🐸', '🪶', '💧'][(Math.random() * 4) | 0], gravity: 60 });
+  if (Math.random() < 0.08)
+    P.spawn({ x: Math.random() * W, y: -40, vx: 20 + Math.random() * 30, vy: 40 + Math.random() * 30,
+      life: 4, size: 22 + Math.random() * 14, emoji: ['🍂', '🌿'][(+Math.random() < 0.5) | 0], gravity: 120 });
+}
+
+const ACTS = [
+  [0.0, 'ПОЛОВОДЬЕ'],
+  [4.0, 'МОСТИК ИЗ ХВОРОСТА'],
+  [8.0, 'ПИСЬМО ЧЕРЕПАХИ'],
+  [12.0, 'ВОДА ИВАНОВНА ПРОСНУЛАСЬ'],
+  [16.0, 'ЗВЁЗДНАЯ НОЧЬ'],
+  [20.0, 'МАТРОССКИЙ ВОРОТНИК'],
+];
+function actOf(t) {
+  let a = '🌊 УРЕМЬ';
+  for (const [from, name] of ACTS) if (t >= from) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawScene(t);
+  drawReeds(t);
+  drawRiver(t);
+  drawLogAndCat(t);
+  drawCatches(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '22px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,20,30,0.5)';
+  ctx.fillText(actOf(t), W / 2 + 2, 84 + 2);
+  ctx.fillStyle = '#f0f8fa';
+  ctx.fillText(actOf(t), W / 2, 84);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: уремь', { labelColor: '#cfe8ef' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

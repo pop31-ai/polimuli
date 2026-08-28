@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полимульт №11 — Метеостанция деда Сина</title>
+<style>
+  body { background:#0e2840; margin:0; display:flex; flex-direction:column; align-items:center;
+         font-family: "Segoe UI", Arial, sans-serif; color:#cfe6f7; }
+  #wrap { max-width: 960px; width:100%; }
+  canvas { width:100%; height:auto; display:block; border-radius:10px; box-shadow:0 10px 40px rgba(0,30,60,.5); }
+  h1 { font-size:20px; letter-spacing:2px; margin:14px 6px 4px; }
+  .sub { font-size:13px; color:#7fb2d0; margin:0 6px 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>⛅ МЕТЕОСТАНЦИЯ ДЕДА СИНА</h1>
+  <p class="sub">Полимульт №11 · фантастика о погоде · pilot</p>
+  <canvas id="cv" width="960" height="540"></canvas>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script>
+const CV = Polimuli.makeCanvas('cv', 960, 540);
+const W = CV.W, H = CV.H, ctx = CV.ctx;
+const P = new Polimuli.Particles();
+
+const WEATHER = ['☀️', '⛅', '🌧️', '⛈️', '🌪️', '🌈'];
+
+function drawMap(t) {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#1b4a6b'); g.addColorStop(1, '#0e2840');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = 'rgba(180,220,255,0.18)'; ctx.lineWidth = 2;
+  for (let i = 0; i < 8; i++) {
+    ctx.beginPath();
+    const y0 = 60 + i * 54;
+    ctx.moveTo(-20, y0);
+    for (let x = 0; x <= W; x += 60) ctx.lineTo(x, y0 + Math.sin(x / 160 + i * 1.7) * 22);
+    ctx.stroke();
+  }
+}
+
+function drawWeather(t) {
+  const period = 4.2;
+  const idx = Math.floor(t / period) % WEATHER.length;
+  const sym = WEATHER[idx];
+  const cx = 480, cy = 210;
+  const scale = 1 + 0.08 * Math.sin(t * 2);
+  ctx.font = `${Math.floor(110 * scale)}px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(sym, cx, cy);
+  if (sym === '🌧️' || sym === '⛈️')
+    if (Math.random() < 0.4) P.spawn({ x: cx + (Math.random() - .5) * 140, y: cy, vx: 10, vy: 120,
+      life: 1, size: 14, emoji: '💧' });
+  if (sym === '🌪️') {
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 3;
+    for (let i = 0; i < 4; i++) {
+      ctx.beginPath(); ctx.arc(cx, cy - 90 + i * 24, 40 - i * 6, 0, Math.PI * 2); ctx.stroke();
+    }
+  }
+  Polimuli.drawEmoji(ctx, '🧙', 130, 120 + Math.sin(t * 0.6) * 8, 74);
+  Polimuli.drawEmoji(ctx, '🧭', 850, 140, 50);
+  const cloudX = (t * 30) % (W + 200) - 100;
+  Polimuli.drawEmoji(ctx, '☁️', cloudX, 430 + Math.sin(t) * 10, 60);
+}
+
+function drawTicker(t) {
+  ctx.fillStyle = '#0a1c2c'; ctx.fillRect(0, H - 34, W, 34);
+  const msgs = ['⛅ ЗАВТРА ПЕРЕМЕННАЯ ОБЛАЧНОСТЬ', '🌈 ПОСЛЕ ДОЖДЯ — РАДУГА', '💧 ВЕТЕР ВИТЯ ТРУДИТСЯ',
+    '❄️ МОРОЗКА ФРОСЯ — ДЕЖУРИТ', '⚡ ГРОХОТ КОПЫТАМИ НЕ ЗДЕСЬ'];
+  ctx.font = '16px monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  for (let i = 0; i < 2; i++) {
+    const x = W - ((t * 120 + i * 460) % (W + 460));
+    ctx.fillStyle = i === 0 ? '#fff' : 'rgba(255,255,255,0.35)';
+    ctx.fillText(msgs[Math.floor(t / 6) % msgs.length], x, H - 16);
+  }
+}
+
+const ACTS = [
+  [0, 'ОТКУДА ДОЖДЬ 💧'],
+  [4, 'СНЕГОПАД ❄️'],
+  [8, 'ГРОЗА ⚡'],
+  [12, 'РАДУГА ПОСЛЕ ДОЖДЯ'],
+  [16, 'ВЕТЕР 🌀'],
+  [20, 'КЛИМАТ-ПАУЗА 🌍'],
+];
+function actOf(t) {
+  let a = '🌤️ ПРОГНОЗ';
+  for (const [from, name] of ACTS) if (t >= from % 24) a = name;
+  return a;
+}
+
+function frame(t, dt) {
+  ctx.clearRect(0, 0, W, H);
+  drawMap(t);
+  drawWeather(t);
+  drawTicker(t);
+  P.update(dt); P.draw(ctx);
+
+  ctx.font = '24px "Segoe UI", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(0,10,25,0.5)';
+  ctx.fillText(actOf(t), W / 2 + 2, 88 + 2);
+  ctx.fillStyle = '#e6f4ff';
+  ctx.fillText(actOf(t), W / 2, 88);
+
+  Polimuli.drawHUD(ctx, W, H, ((t % 24) / 24), 1, 'Сцена: станция', { labelColor: '#cfe6f7', barColor: '#8fd0ff' });
+}
+
+let lastT = 0;
+const startT = performance.now();
+function loop(now) {
+  const t = (now - startT) / 1000;
+  const dt = Math.min(0.05, t - lastT);
+  lastT = t;
+  frame(t, dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
