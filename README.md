@@ -194,7 +194,7 @@ future/FUTURE.md              — «взгляды из будущего» пр�
 Весь каталог (№16–95, 80 эпизодов) переведён на формат POL — декларативный
 JSON: акты (сценарий с фоном), акторы (эмодзи с keyframes/покачиванием/циклами),
 частицы, стиль HUD и подписей. Спека — `spec/spec-format-pol.md`.
-Просмотр: открой `player/player.html#?pol=...` или `player/player.html?src=episodes/16_express_strela.pol` —
+Просмотр: открой `player/player.html#?pol=...` или `player/player.html?src=/episodes/16_express_strela.pol` —
 либо упакуй в автономный файл:
 
 ```

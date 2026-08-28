@@ -7,13 +7,23 @@
   const query = new URLSearchParams(location.search);
   const DEMO = window.__POL_DEMO__ || null;
 
+  async function fetchPol(src) {
+    const candidates = [src];
+    if (!/^(\/|https?:|\.{1,2}\/)/.test(src)) {
+      candidates.push('/' + src, '../' + src);
+    }
+    for (const c of candidates) {
+      try {
+        const r = await fetch(c);
+        if (r.ok) return await r.json();
+      } catch (e) { /* пробуем следующий кандидат */ }
+    }
+    throw new Error('fetch failed: ' + src);
+  }
+
   async function loadData() {
     const src = query.get('src');
-    if (src) {
-      const r = await fetch(src);
-      if (!r.ok) throw new Error('fetch failed: ' + src);
-      return r.json();
-    }
+    if (src) return fetchPol(src);
     const pol = query.get('pol');
     if (pol) return JSON.parse(decodeURIComponent(pol));
     if (DEMO) return DEMO;
