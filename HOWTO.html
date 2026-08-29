@@ -129,10 +129,34 @@ node pack/polimuli_pack.js a.pol -o out.html  # указать имя резул
   <tr><th>Секция</th><th>Что значит</th></tr>
   <tr><td><code>meta.dur</code></td><td>длина ролика в секундах (цикл)</td></tr>
   <tr><td><code>acts[]</code></td><td>сцены: <code>at</code> время старта, <code>text</code> подпись, <code>bg</code> градиент неба</td></tr>
+  <tr><td><code>acts[].board</code></td><td>доска конспекта: строки появляются «мелом» одна за другой (лекция)</td></tr>
   <tr><td><code>actors[]</code></td><td>эмодзи-спрайты: <code>bob</code>/<code>sway</code> качание, <code>pulse</code> пульс размера, <code>cycle</code> смена эмодзи, <code>key[]</code> движение <code>x/y/size</code> по времени, <code>visible</code> <code>{from,to}</code> окно видимости</td></tr>
   <tr><td><code>particles[]</code></td><td>частицы от актора (<code>from</code>) или точки: скорость, жизнь, размер, прозрачность</td></tr>
-  <tr><td><code>style</code></td><td>цвета HUD и подписи <code>{hud, caption}</code></td></tr>
+  <tr><td><code>style</code></td><td>цвета HUD и подписи <code>{hud, caption}</code>, геометрия доски <code>{board}</code></td></tr>
 </table>
+
+<h3>5.1. Доска лектора (конспект строкой за строкой)</h3>
+<p>Для лекций курсов: лектор 🧑‍🏫 набрасывает материал на доску, строки
+пишутся мелом по очереди. Геометрия и цвета — в <code>style.board</code>,
+строки — в каждом акте:</p>
+
+<pre>{
+  "style": {
+    "board": { "x": 640, "y": 120, "w": 300, "h": 270, "bg": "#2e4632",
+               "frame": "#8a5a2a", "text": "#f2e6c8", "font": 18, "step": 1.4 }
+  },
+  "acts": [
+    { "at": 0, "text": "ТЕМА", "board": ["СТРОКА 1", "СТРОКА 2"] }
+  ],
+  "actors": [
+    { "id": "lecturer", "emoji": "🧑‍🏫", "x": 120, "y": 440, "size": 68,
+      "bob": { "amp": 4, "speed": 1.0 } },
+    { "id": "podium", "emoji": "🎤", "x": 120, "y": 480, "size": 30,
+      "pulse": { "amp": 0.1, "speed": 1.6 } }
+  ]
+}</pre>
+<p>Строка <code>i</code> доски появляется при <code>t ≥ at + i·step</code> —
+так лекция «записывается» последовательно, как на уроке.</p>
 
 <h3>Правила «ухо востро» (валидность данных)</h3>
 <ul>
@@ -145,7 +169,27 @@ node pack/polimuli_pack.js a.pol -o out.html  # указать имя резул
   <li>Проверяй паковщиком: <code>node pack/polimuli_pack.js my.pol</code> — 0 в ответ = ок.</li>
 </ul>
 
-<h2>6. Быстрый чек-лист запуска</h2>
+<h2>6. Курсы и семестровый плеер</h2>
+
+<p>Курсы в формате POL — серии коротких уроков (24&nbsp;с): каждый модуль =
+ТЕМА → ПРИМЕР → ПРАКТИКА → ИТОГ, ведёт лектор-профессор с доской.
+Готовые серии — в <code>courses/</code>: «Физика невесомости» (n01–n04),
+«Математика-инженер» (m01–m04), «Полиарт-метод» (p01–p05).</p>
+<div class="box ok">
+  <b>Семестровый плеер</b> — <code>player/semestr_player.html?course=ИД</code>.
+  Лекции курса <b>доступны списком, но маркированы как последовательность</b>:
+  номер модуля, недели, статус («доступно / текущая / пройдено»), автопереход
+  на следующий урок (галочка «авто-следующий»), прогресс сохраняется
+  в localStorage. ИД курса — папка курса:
+</div>
+<pre>player/semestr_player.html?course=matematika-inzhener
+player/semestr_player.html?course=fizika-nevesomosti
+player/semestr_player.html?course=polyart-metod</pre>
+<p>Манифест последовательности — <code>courses/&lt;курс&gt;/semestr.json</code>:
+список модулей с порядковым номером, неделями и ссылкой на <code>.pol</code>
+каждого урока. Кнопки «Семестровый плеер» стоят в индексах курсов.</p>
+
+<h2>7. Быстрый чек-лист запуска</h2>
 <div class="box ok">
   ✅ Открыл <code>episodes/index.html</code> — смотрю пилоты.<br>
   ✅ Открыл <code>episodes/pol_index.html</code> — смотрю POL-сборки.<br>
@@ -154,7 +198,7 @@ node pack/polimuli_pack.js a.pol -o out.html  # указать имя резул
      <code>polimuli_runtime.js</code> и зову <code>Polimuli.play(данные, 'id')</code>.
 </div>
 
-<h2>7. API одной строкой</h2>
+<h2>8. API одной строкой</h2>
 <pre>const ctrl = Polimuli.play(data, canvasIdOrEl);
 ctrl.pause();   // стоп кадра
 ctrl.resume();  // продолжить
@@ -162,12 +206,14 @@ ctrl.stop();    // остановить</pre>
 <p>Плеер также вешает клик на холст (пауза/продолжить), а упакованные
 сборки дополнительно слушают <kbd>Space</kbd>.</p>
 
-<h2>8. Полезные ссылки</h2>
+<h2>9. Полезные ссылки</h2>
 <ul>
   <li><a href="episodes/index.html">Галерея пилотов (01–15)</a></li>
   <li><a href="episodes/pol_index.html">Галерея POL-эпизодов</a></li>
+  <li><a href="courses/index.html">Курсы (серии в формате POL)</a></li>
   <li><a href="spec/spec-format-pol.md">Спека формата POL</a></li>
   <li><a href="player/player.html">Плеер</a> — размер уже в файле</li>
+  <li><a href="player/semestr_player.html">Семестровый плеер</a> — курс по графику</li>
   <li>Статьи-сценарии: <code>articles/01…95_*.txt</code></li>
 </ul>
 

@@ -178,6 +178,9 @@ engine/polimuli_engine.js     — мини-движок (холст, таймл�
 engine/polimuli_runtime.js    — интерпретатор .pol поверх движка
 player/player.html            — страница-плеер
 player/polimuli_player.js     — загрузчик полимультов (?src=, ?pol=, __POL_DEMO__)
+player/semestr_player.html    — семестровый плеер: курс по графику (?course=ИД)
+player/polimuli_semestr_player.js — логика семестрового плеера (манифест semestr.json,
+                                  автопереход по последовательности модулей)
 pack/polimuli_pack.js         — Node-упаковщик: валидация .pol и сборка
                                 автономного HTML (работает из file://)
 episodes/*.html               — пилотные эпизоды №01–15
@@ -187,6 +190,9 @@ episodes/pol_index.html        — галерея POL-эпизодов (№16–
 courses/                       — серии-курсы в формате POL (index.html → выбранный курс)
 courses/fizika-nevesomosti/    — «Физика невесомости»: 4 урока (падение, орбита, парабола, жизнь на орбите)
 courses/polyart-metod/         — «Полиарт-метод»: как делать полиарт (5 уроков)
+courses/matematika-inzhener/   — «Математика-инженер»: 4 урока (предел, производная, интеграл, модель движения)
+courses/*/semestr.json         — манифест последовательности: модули с номерами и неделями
+                                 (используется семестровым плеером)
 university/                    — «Университет полиарта»: регламент обучения от зачисления
                                  до выпуска, программа семестра/года, метод (txt/md/pdf)
 episodes/index.html           — галерея пилотов

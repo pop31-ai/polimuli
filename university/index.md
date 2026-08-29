@@ -21,7 +21,10 @@
 ## Готовые серии курсов
 
 - 🧑🚀 [Физика невесомости](../courses/fizika-nevesomosti/index.html) — 4 урока.
+- 📐 [Математика-инженер](../courses/matematika-inzhener/index.html) — 4 урока.
 - 💡 [Полиарт-метод](../courses/polyart-metod/index.html) — 5 уроков.
+- 🎓 [Семестровый плеер: курс по графику](../player/semestr_player.html) —
+  лекции доступны списком, но идут строго маркированной последовательностью.
 - [Все курсы](../courses/index.html) · [Галерея эпизодов](../episodes/pol_index.html) ·
   [Плеер](../player/player.html)
 
