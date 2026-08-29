@@ -1,0 +1,18 @@
+{
+  "format": "polimuli/course",
+  "version": 1,
+  "meta": {
+    "id": "polyart-metod",
+    "title": "Полиарт-метод",
+    "emoji": "💡",
+    "weeks": "недели 1–16",
+    "after": 2
+  },
+  "modules": [
+    { "id": "p01", "title": "Идея и направление", "weeks": "недели 1–3", "dur": 24, "src": "courses/polyart-metod/p01_ideya_i_napravlenie.pol" },
+    { "id": "p02", "title": "Сценарий-данные", "weeks": "недели 4–6", "dur": 24, "src": "courses/polyart-metod/p02_scenariy_dannye.pol" },
+    { "id": "p03", "title": "Движение смыслов", "weeks": "недели 7–9", "dur": 24, "src": "courses/polyart-metod/p03_dvizhenie_smyslov.pol" },
+    { "id": "p04", "title": "Серия и модуль", "weeks": "недели 10–12", "dur": 24, "src": "courses/polyart-metod/p04_seriya_i_modul.pol" },
+    { "id": "p05", "title": "Упаковка и запуск", "weeks": "недели 13–16", "dur": 24, "src": "courses/polyart-metod/p05_upakovka_i_zapusk.pol" }
+  ]
+}

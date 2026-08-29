@@ -1,0 +1,17 @@
+{
+  "format": "polimuli/course",
+  "version": 1,
+  "meta": {
+    "id": "matematika-inzhener",
+    "title": "Математика-инженер",
+    "emoji": "📐",
+    "weeks": "недели 1–16",
+    "after": 2
+  },
+  "modules": [
+    { "id": "m01", "title": "Предел", "weeks": "недели 1–4", "dur": 24, "src": "courses/matematika-inzhener/m01_predel.pol" },
+    { "id": "m02", "title": "Производная", "weeks": "недели 5–8", "dur": 24, "src": "courses/matematika-inzhener/m02_proizvodnaya.pol" },
+    { "id": "m03", "title": "Интеграл", "weeks": "недели 9–12", "dur": 24, "src": "courses/matematika-inzhener/m03_integral.pol" },
+    { "id": "m04", "title": "Модель движения", "weeks": "недели 13–16", "dur": 24, "src": "courses/matematika-inzhener/m04_model_dvizheniya.pol" }
+  ]
+}

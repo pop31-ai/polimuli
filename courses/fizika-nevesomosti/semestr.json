@@ -1,0 +1,17 @@
+{
+  "format": "polimuli/course",
+  "version": 1,
+  "meta": {
+    "id": "fizika-nevesomosti",
+    "title": "Физика невесомости",
+    "emoji": "🧑‍🚀",
+    "weeks": "недели 1–16",
+    "after": 2
+  },
+  "modules": [
+    { "id": "n01", "title": "Свободное падение", "weeks": "недели 1–4", "dur": 24, "src": "courses/fizika-nevesomosti/n01_svobodnoe_padenie.pol" },
+    { "id": "n02", "title": "Орбита — вечное падение", "weeks": "недели 5–8", "dur": 24, "src": "courses/fizika-nevesomosti/n02_orbita_vechnoe_padenie.pol" },
+    { "id": "n03", "title": "Парабола-комета", "weeks": "недели 9–12", "dur": 24, "src": "courses/fizika-nevesomosti/n03_parabola_kometa.pol" },
+    { "id": "n04", "title": "Жизнь на орбите", "weeks": "недели 13–16", "dur": 24, "src": "courses/fizika-nevesomosti/n04_zhizn_na_orbite.pol" }
+  ]
+}

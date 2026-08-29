@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Семестровый плеер · polimuli</title>
+<style>
+  body { background:#0b1220; color:#cfd8e3; margin:0;
+         font-family:"Segoe UI", Arial, sans-serif; }
+  .wrap { max-width: 1180px; margin:0 auto; padding:18px 16px 50px; }
+  header { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  h1 { font-size:19px; letter-spacing:2px; margin:0; }
+  #course { font-size:14px; color:#8fa3b9; }
+  .progbar { height:6px; border-radius:3px; background:#16202e; margin:10px 0 14px; overflow:hidden; }
+  #progfill { height:100%; background:#5a8fc0; width:0%; transition:width .3s; }
+  #proglabel { color:#8fa3b9; font-size:12px; margin-bottom:6px; }
+  .layout { display:grid; grid-template-columns: 1fr 340px; gap:16px; }
+  @media (max-width: 900px){ .layout{ grid-template-columns:1fr; } }
+  #stage canvas { width:100%; height:auto; border-radius:10px;
+                  box-shadow:0 10px 40px rgba(0,0,0,.55); background:#000; }
+  .controls { display:flex; align-items:center; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .btn { background:#16202e; color:#cfd8e3; border:1px solid #2a3a4a;
+         border-radius:8px; padding:7px 12px; cursor:pointer; font-size:13px; }
+  .btn:hover { border-color:#5a8fc0; }
+  .btn:disabled { opacity:.35; cursor:default; }
+  .btn.primary { background:#1e3a52; border-color:#3a6a8a; }
+  .check { display:flex; align-items:center; gap:6px; color:#8fa3b9; font-size:13px; }
+  #panel { background:#101a26; border:1px solid #24404f; border-radius:10px;
+           padding:12px; }
+  #panel h2 { font-size:13px; letter-spacing:1px; margin:0 0 10px; color:#8fa3b9; }
+  .mod { display:flex; align-items:center; gap:10px; padding:8px 10px;
+         border-radius:8px; margin-bottom:6px; cursor:pointer;
+         border:1px solid transparent; }
+  .mod:hover { background:#14242f; }
+  .mod.active { background:#1e3a52; border-color:#3a6a8a; }
+  .num { flex:0 0 30px; height:30px; border-radius:8px; background:#16202e;
+         display:flex; align-items:center; justify-content:center;
+         font-weight:bold; color:#8fa3b9; font-size:13px; }
+  .mod.done .num { background:#2d4a38; color:#a9e0b8; }
+  .mod.active .num { background:#5a8fc0; color:#0b1220; }
+  .tinfo { flex:1; min-width:0; }
+  .ttl { font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .wk { font-size:11px; color:#5c7089; }
+  .st { font-size:13px; }
+  .mod.done .st { color:#a9e0b8; }
+  .mod.active .st { color:#aad0e8; }
+  #err { color:#ffb3a0; background:#2a1216; border:1px solid #5a2430;
+         border-radius:8px; padding:10px 14px; display:none; margin-top:12px; }
+  code { background:#16202e; padding:1px 6px; border-radius:4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🎓 СЕМЕСТРОВЫЙ ПЛЕЕР</h1>
+    <span id="course">курс …</span>
+  </header>
+  <div id="proglabel">загрузка…</div>
+  <div class="progbar"><div id="progfill"></div></div>
+  <div id="err">⚠</div>
+  <div class="layout">
+    <div>
+      <div id="stage"><canvas id="cv" width="960" height="540"></canvas></div>
+      <div class="controls">
+        <button id="bPrev" class="btn">⏮ предыдущий</button>
+        <button id="bPlay" class="btn primary">⏸ пауза</button>
+        <button id="bNext" class="btn">следующий ⏭</button>
+        <label class="check"><input type="checkbox" id="auto" checked> авто-следующий</label>
+      </div>
+      <p style="color:#5c7089; font-size:12px; margin-top:10px;">
+        Маршрут — последовательность модулей курса: каждая лекция доступна,
+        но помечена номером и идёт по порядку. Клик по модулю справа играет лекцию.
+      </p>
+    </div>
+    <div id="panel"><h2>ПОСЛЕДОВАТЕЛЬНОСТЬ МОДУЛЕЙ</h2><div id="mods"></div></div>
+  </div>
+</div>
+<script src="../engine/polimuli_engine.js"></script>
+<script src="../engine/polimuli_runtime.js"></script>
+<script></script>
+<script src="polimuli_semestr_player.js"></script>
+</body>
+</html>
