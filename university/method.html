@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Полиарт-метод</title>
+<style>
+  body{font-family:"Segoe UI",Arial,sans-serif;font-size:13pt;color:#111;
+       line-height:1.45;max-width:820px;margin:24px auto;padding:0 24px;}
+  h1{font-size:20pt;border-bottom:2px solid #333;padding-bottom:6px;}
+  h2{font-size:15pt;margin-top:22px;}
+  code{background:#f2f2f2;padding:1px 5px;border-radius:4px;font-size:11pt;}
+  table{border-collapse:collapse;margin:12px 0;}
+  td,th{border:1px solid #999;padding:5px 10px;text-align:left;}
+  pre{background:#f2f2f2;padding:8px;border-radius:4px;font-size:10pt;}
+  .small{color:#666;font-size:10pt;margin-top:26px;}
+</style>
+</head>
+<body>
+<h1>ПОЛИАРТ-МЕТОД · Описание (vers. 1)</h1>
+<p>Полиарт — способ переложить лекцию/курс на серию коротких эмодзи-эпизодов
+(формат POL). Движение материала: <b>СМЫСЛ → КАДР</b>.</p>
+
+<h2>1. Ядро метода</h2>
+<ul>
+  <li>1 курс = 1 исходный видеоролик (лекция ≈1.5 ч).</li>
+  <li>Курс режется на <b>модули</b> (по неделям семестра).</li>
+  <li>Каждый модуль = один полиарт-урок (24 с) по шаблону:
+    <code>ТЕМА (0) → ПРИМЕР (6) → ПРАКТИКА ❓ (12) → ИТОГ (18)</code>.</li>
+  <li>Подача части: лекция с лектором-профессором + доска для конспекта
+    → полиарт-урок → семинар → конспект студента → проверка.</li>
+</ul>
+
+<h2>2. Формат данных POL (JSON)</h2>
+<ul>
+  <li>Эпизод: <code>duration</code>, <code>style</code> (hud/доска), <code>acts[]</code>, <code>actors[]</code>.</li>
+  <li>Акты: <code>{ at, text, bg, board[] }</code> — заголовок, фон, строки доски.</li>
+  <li>Акторы: <code>{ id, emoji, x, y, size, key[] (at/x/y/size), visible, эффекты }</code>.</li>
+  <li>Эффекты: <code>bob</code> (покачивание), <code>sway</code> (волна), <code>pulse</code> (биение).</li>
+  <li><code>visible</code> — только на уровне актора: <code>true/false/{from,to}</code>.</li>
+  <li><b>Доска</b>: <code>style.board {x,y,w,h,bg,frame,text,font,step}</code> +
+    <code>act.board</code> = массив строк (запись мелом строкой за строкой).</li>
+  <li>Кадр: canvas <b>960×540</b>.</li>
+</ul>
+
+<h2>3. Конвейер производства курса (7 шагов)</h2>
+<ol>
+  <li><b>ИДЕЯ</b> — логлайн, жанр, аудитория.</li>
+  <li><b>ЭМОДЗИ-НАПРАВЛЕНИЕ</b> — словарь значков темы.</li>
+  <li><b>СТИЛЬ</b> — палитра, эффекты, доска.</li>
+  <li><b>ПЕРСОНАЖИ</b> — лектор 🧑🏫 и фишки серии (пюпитр 🎤).</li>
+  <li><b>СЕРИИ</b> — структура модулей, тайминг (акты 0/6/12/18).</li>
+  <li><b>РЕЖИССУРА</b> — темп, ритм, вопросы-практика.</li>
+  <li><b>ПРОДЮСИРОВАНИЕ</b> — валидация (exit 0/1/2), упаковка <code>_packed.html</code>, публикация в индекс курса.</li>
+</ol>
+
+<h2>4. Проверка и сборка</h2>
+<ul>
+  <li><code>node pack/polimuli_pack.js &lt;file.pol|dir&gt;</code> — exit <code>0</code> ok / <code>1</code> warn / <code>2</code> error.</li>
+  <li>Сборка автономна: engine + runtime + JSON инлайн, работает из <code>file://</code>.</li>
+  <li>Плеер: <code>player/player.html?src=/episodes/….pol</code> или <code>?pol=&lt;json&gt;</code>.</li>
+  <li>Пауза: клик по холсту или пробел. Камера: <code>ctrl.pause/resume/stop</code>.</li>
+</ul>
+
+<h2>5. Роли</h2>
+<p>Лектор-профессор (ведёт серию), семинарист (практика), куратор потока,
+методист (резка курса на модули), инженер POL (движок/упаковка/валидация).</p>
+
+<p class="small">Проект polymuli · полиарт-метод · университет: см. kuhnya-obucheniya.txt
+<br>Автономная печатная версия: method.md / method.txt / method.pdf</p>
+</body>
+</html>

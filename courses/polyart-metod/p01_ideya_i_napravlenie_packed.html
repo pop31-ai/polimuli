@@ -208,6 +208,11 @@ var Polimuli = (() => {
     const st = P.data.style || {};
     const caption = st.caption || {};
     const hud = st.hud || {};
+    const board = Object.assign({
+      x: 640, y: 130, w: 300, h: 260,
+      bg: '#2e4632', frame: '#8a5a2a', text: '#f2e6c8',
+      font: 18, step: 1.4,
+    }, st.board || {});
 
     const ctrl = { running: true, _t: 0, _start: null };
 
@@ -294,6 +299,23 @@ var Polimuli = (() => {
       ctx.fillText(cur.text, W / 2, 84);
     }
 
+    function drawBoard(t) {
+      const cur = atAct(P.acts, t);
+      const lines = cur && Array.isArray(cur.board) ? cur.board : null;
+      if (!lines || lines.length < 1) return;
+      ctx.fillStyle = board.frame;
+      ctx.fillRect(board.x, board.y, board.w, board.h);
+      ctx.fillStyle = board.bg;
+      ctx.fillRect(board.x + 6, board.y + 6, board.w - 12, board.h - 12);
+      ctx.font = `${board.font}px "Segoe UI", Arial, sans-serif`;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = board.text;
+      for (let i = 0; i < lines.length; i++) {
+        if (t < cur.at + i * board.step) break;
+        ctx.fillText(lines[i], board.x + 16, board.y + 14 + i * (board.font + 10));
+      }
+    }
+
     function frame(now) {
       if (!ctrl.running) return;
       if (!ctrl._start) ctrl._start = now;
@@ -307,6 +329,7 @@ var Polimuli = (() => {
       drawActors(t);
       updateFx(t, dt);
       Parts.draw(ctx);
+      drawBoard(t);
       drawCaption(t);
 
       Polimuli.drawHUD(ctx, W, H, t, P.dur,
@@ -332,7 +355,7 @@ var Polimuli = (() => {
   return Object.assign(base, { play });
 })();</script>
 <script>
-  window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"p01","title":"Полиарт-метод: Идея и направление","genre":"курс «Полиарт-метод» · урок 1","dur":24,"emojis":["💡","📚","🔍","🎯","🗺️"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8e6f5","barColor":"#5a8fc0"},"caption":{"font":24,"color":"#eef6ff","shadow":"rgba(15,35,60,0.5)"}},"acts":[{"at":0,"text":"КУРС — ЛЕКЦИЯ НА 1.5 ЧАСА","bg":{"top":"#1c2c3c","bottom":"#0d1520"}},{"at":6,"text":"ПОЛИАРТ ЖМЁТ СМЫСЛ В 24 СЕК","bg":{"top":"#22384a","bottom":"#101c28"}},{"at":12,"text":"ЭМОДЗИ НЕСУТ ИДЕЮ, НО СЮЖЕТ ВЕДЁТ","bg":{"top":"#26404f","bottom":"#132030"}},{"at":18,"text":"МЕТОД: ИДЕЯ→НАПРАВЛЕНИЕ→СЕРИЯ","bg":{"top":"#2a4654","bottom":"#162438"}}],"actors":[{"id":"idea","emoji":"💡","x":240,"y":300,"size":72,"pulse":{"amp":0.12,"speed":1.8}},{"id":"book","emoji":"📚","x":440,"y":340,"size":66,"bob":{"amp":4,"speed":1}},{"id":"lens","emoji":"🔍","x":620,"y":300,"size":60,"sway":{"amp":8,"speed":1.2}},{"id":"target","emoji":"🎯","x":760,"y":380,"size":52,"pulse":{"amp":0.08,"speed":0.9}},{"id":"compass","emoji":"🗺️","x":180,"y":180,"size":56,"pulse":{"amp":0.06,"speed":0.7}},{"id":"spark","emoji":"✨","x":700,"y":200,"size":30,"pulse":{"amp":0.22,"speed":2.4},"visible":{"from":6,"to":24}}],"particles":[{"from":"idea","dx":0,"dy":-24,"emoji":"✨","rate":0.1,"vx":6,"vy":-16,"life":1,"size":12,"alpha":0.9},{"from":"compass","dx":0,"dy":-14,"emoji":"🧭","rate":0.05,"vx":4,"vy":-12,"life":1.1,"size":12,"alpha":0.7}]};
+  window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"p01","title":"Полиарт-метод: Идея и направление","genre":"курс «Полиарт-метод» · урок 1","dur":24,"emojis":["💡","📚","🔍","🎯","🗺️"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8e6f5","barColor":"#5a8fc0"},"caption":{"font":24,"color":"#eef6ff","shadow":"rgba(15,35,60,0.5)"}},"acts":[{"at":0,"text":"КУРС — ЛЕКЦИЯ НА 1.5 ЧАСА","bg":{"top":"#1c2c3c","bottom":"#0d1520"},"board":["КУРС = ОДНА ИДЕЯ","ФОРМАТ: ЛЕКЦИЯ 1.5 Ч"]},{"at":6,"text":"ПОЛИАРТ ЖМЁТ СМЫСЛ В 24 СЕК","bg":{"top":"#22384a","bottom":"#101c28"},"board":["24 СЕК = ОДИН СМЫСЛ","ЭМОДЗИ = СЛОВАРЬ ИДЕЙ"]},{"at":12,"text":"ЭМОДЗИ НЕСУТ ИДЕЮ, НО СЮЖЕТ ВЕДЁТ","bg":{"top":"#26404f","bottom":"#132030"},"board":["СЮЖЕТ ВЕДЁТ КАДР","НЕ ПЕРЕГРУЖАЙ ЭКРАН"]},{"at":18,"text":"МЕТОД: ИДЕЯ→НАПРАВЛЕНИЕ→СЕРИЯ","bg":{"top":"#2a4654","bottom":"#162438"},"board":["ИДЕЯ→НАПРАВЛЕНИЕ","СТИЛЬ→СЕРИЯ"]}],"actors":[{"id":"idea","emoji":"💡","x":240,"y":300,"size":72,"pulse":{"amp":0.12,"speed":1.8}},{"id":"book","emoji":"📚","x":440,"y":340,"size":66,"bob":{"amp":4,"speed":1}},{"id":"lens","emoji":"🔍","x":620,"y":300,"size":60,"sway":{"amp":8,"speed":1.2}},{"id":"target","emoji":"🎯","x":760,"y":380,"size":52,"pulse":{"amp":0.08,"speed":0.9}},{"id":"compass","emoji":"🗺️","x":180,"y":180,"size":56,"pulse":{"amp":0.06,"speed":0.7}},{"id":"spark","emoji":"✨","x":700,"y":200,"size":30,"pulse":{"amp":0.22,"speed":2.4},"visible":{"from":6,"to":24}},{"id":"lecturer","emoji":"🧑‍🏫","x":120,"y":440,"size":68,"bob":{"amp":4,"speed":1}},{"id":"podium","emoji":"🎤","x":120,"y":480,"size":30,"pulse":{"amp":0.1,"speed":1.6}}],"particles":[{"from":"idea","dx":0,"dy":-24,"emoji":"✨","rate":0.1,"vx":6,"vy":-16,"life":1,"size":12,"alpha":0.9},{"from":"compass","dx":0,"dy":-14,"emoji":"🧭","rate":0.05,"vx":4,"vy":-12,"life":1.1,"size":12,"alpha":0.7}]};
 </script>
 <script>
   (function(){

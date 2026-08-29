@@ -208,6 +208,11 @@ var Polimuli = (() => {
     const st = P.data.style || {};
     const caption = st.caption || {};
     const hud = st.hud || {};
+    const board = Object.assign({
+      x: 640, y: 130, w: 300, h: 260,
+      bg: '#2e4632', frame: '#8a5a2a', text: '#f2e6c8',
+      font: 18, step: 1.4,
+    }, st.board || {});
 
     const ctrl = { running: true, _t: 0, _start: null };
 
@@ -294,6 +299,23 @@ var Polimuli = (() => {
       ctx.fillText(cur.text, W / 2, 84);
     }
 
+    function drawBoard(t) {
+      const cur = atAct(P.acts, t);
+      const lines = cur && Array.isArray(cur.board) ? cur.board : null;
+      if (!lines || lines.length < 1) return;
+      ctx.fillStyle = board.frame;
+      ctx.fillRect(board.x, board.y, board.w, board.h);
+      ctx.fillStyle = board.bg;
+      ctx.fillRect(board.x + 6, board.y + 6, board.w - 12, board.h - 12);
+      ctx.font = `${board.font}px "Segoe UI", Arial, sans-serif`;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = board.text;
+      for (let i = 0; i < lines.length; i++) {
+        if (t < cur.at + i * board.step) break;
+        ctx.fillText(lines[i], board.x + 16, board.y + 14 + i * (board.font + 10));
+      }
+    }
+
     function frame(now) {
       if (!ctrl.running) return;
       if (!ctrl._start) ctrl._start = now;
@@ -307,6 +329,7 @@ var Polimuli = (() => {
       drawActors(t);
       updateFx(t, dt);
       Parts.draw(ctx);
+      drawBoard(t);
       drawCaption(t);
 
       Polimuli.drawHUD(ctx, W, H, t, P.dur,

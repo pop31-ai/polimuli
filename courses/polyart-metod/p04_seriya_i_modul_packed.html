@@ -1,4 +1,123 @@
-/* polimuli_runtime.js
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>POL · Полиарт-метод: Серия и модуль</title>
+<style>
+  body{background:#0b1220;color:#cfd8e3;margin:0;display:flex;flex-direction:column;align-items:center;
+       font-family:"Segoe UI",Arial,sans-serif}
+  .wrap{max-width:980px;width:100%;padding:16px}
+  h1{font-size:18px;letter-spacing:2px;margin:0 0 4px}
+  #info{color:#8fa3b9;font-size:13px;margin-bottom:10px}
+  #stage canvas{width:100%;height:auto;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.55)}
+  #err{color:#ffb3a0;background:#2a1216;border:1px solid #5a2430;border-radius:8px;padding:10px 14px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>▶ Полиарт-метод: Серия и модуль</h1>
+  <div id="info">курс «Полиарт-метод» · урок 4 · упаковано pack v1 · клик = пауза</div>
+  <div id="err">⚠</div>
+  <div id="stage"><canvas id="cv" width="960" height="540"></canvas></div>
+</div>
+<script>/* polimuli_engine.js
+ * Мини-движок для полиарт-мультфильмов (Canvas 2D).
+ * Без зависимостей. Предоставляет:
+ *  - холст с автопультом размеров
+ *  - «сценарный таймлайн»: сцены {'from','to','draw'}
+ *  - системy частиц (эмодзи-спрайты, серый цвет по умолчанию)
+ *  - эмодзи-спрайт-рендер (тень для «тёмных» сцен)
+ *  - подпись-титры / прогресс-бар
+ */
+
+var Polimuli = (() => {
+  function makeCanvas(id, W, H) {
+    const cv = document.getElementById(id);
+    if (!cv) return null;
+    cv.width = W; cv.height = H;
+    const ctx = cv.getContext('2d');
+    return { cv, ctx, W, H };
+  }
+
+  // Эмодзи можно рисовать либо <canvas> (если есть эмодзи-фонт), либо
+  // заполнять стандартным emoji-шрифтом браузера.
+  function drawEmoji(ctx, emoji, x, y, size, alignCenter = true) {
+    ctx.font = `${size}px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emoji, x, y);
+  }
+
+  // Система частиц. Каждая частица: {x,y,vx,vy,life,maxLife,size,emoji|color,gravity}
+  class Particles {
+    constructor() { this.list = []; }
+    spawn(o) {
+      this.list.push({
+        x: o.x, y: o.y, vx: o.vx || 0, vy: o.vy || 0,
+        life: o.life || 1, maxLife: o.life || 1,
+        size: o.size || 16, emoji: o.emoji || null,
+        color: o.color || null, gravity: o.gravity || 0,
+        alpha: o.alpha != null ? o.alpha : 1,
+      });
+    }
+    burst(n, make) { for (let i = 0; i < n; i++) this.spawn(make(i)); }
+    update(dt) {
+      const alive = [];
+      for (const p of this.list) {
+        p.life -= dt;
+        if (p.life <= 0) continue;
+        p.vy += p.gravity * dt;
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        alive.push(p);
+      }
+      this.list = alive;
+    }
+    draw(ctx) {
+      for (const p of this.list) {
+        const t = p.life / p.maxLife;
+        const size = p.size * (0.6 + 0.4 * t);
+        if (p.emoji) {
+          ctx.globalAlpha = p.alpha * t;
+          drawEmoji(ctx, p.emoji, p.x, p.y, size);
+        } else {
+          ctx.globalAlpha = p.alpha * t;
+          ctx.fillStyle = p.color || '#ffffff';
+          ctx.beginPath(); ctx.arc(p.x, p.y, size / 2, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // Прогресс-бар + подпись текущей сцены (режиссёрская подсказка).
+  function drawHUD(ctx, W, H, t, total, label, opts = {}) {
+    if (opts.label) {
+      ctx.font = `14px monospace`;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = opts.labelColor || 'rgba(255,255,255,0.85)';
+      ctx.fillText(`🎬 ${label}`, 10, 8);
+    }
+    const bw = W - 20, bh = 4;
+    const bx = 10, by = H - 12;
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(bx, by, bw, bh);
+    ctx.fillStyle = opts.barColor || 'rgba(255,255,255,0.8)';
+    ctx.fillRect(bx, by, bw * Math.min(1, t / total), bh);
+  }
+
+  // Таймлайн: сцены со стартовым {from} и окончанием {to}.
+  class Timeline {
+    constructor(scenes) { this.scenes = scenes; }
+    find(t) {
+      for (const s of this.scenes) if (t >= s.from && t < s.to) return s;
+      return null;
+    }
+  }
+
+  return { makeCanvas, drawEmoji, Particles, drawHUD, Timeline };
+})();
+</script>
+<script>/* polimuli_runtime.js
  * Интерпретатор формата POL (Poly Animation Language) поверх движка
  * polimuli_engine.js. Чистые данные -> живой Canvas.
  *
@@ -234,4 +353,18 @@ var Polimuli = (() => {
   }
 
   return Object.assign(base, { play });
-})();
+})();</script>
+<script>
+  window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"p04","title":"Полиарт-метод: Серия и модуль","genre":"курс «Полиарт-метод» · урок 4","dur":24,"emojis":["🎞️","🧭","🗂️","🔗","🎓"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8e6f5","barColor":"#5a8fc0"},"caption":{"font":24,"color":"#eef6ff","shadow":"rgba(15,35,60,0.5)"}},"acts":[{"at":0,"text":"ВЕБИНАР 1.5Ч → МОДУЛИ","bg":{"top":"#1c2c3c","bottom":"#0d1520"},"board":["1 ЛЕКЦИЯ → N МОДУЛЕЙ"]},{"at":6,"text":"МОДУЛЬ = ОДИН ПОЛИАРТ-УРОК","bg":{"top":"#22384a","bottom":"#101c28"},"board":["МОДУЛЬ = 1 УРОК"]},{"at":12,"text":"ШАБЛОН: ТЕМА→ПРИМЕР→ПРАКТИКА→ИТОГ","bg":{"top":"#26404f","bottom":"#132030"},"board":["ШАБЛОН: 4 АКТА","ТЕМА→ПРИМЕР→ПРАКТИКА→ИТОГ"]},{"at":18,"text":"ЭПИЗОДЫ ЦЕПЛЯЮТСЯ: СЕРИЯ = КУРС","bg":{"top":"#2a4654","bottom":"#162438"},"board":["СЕРИЯ = КУРС","ЕДИНЫЙ ЛЕКТОР"]}],"actors":[{"id":"reel","emoji":"🎞️","x":220,"y":320,"size":76,"pulse":{"amp":0.06,"speed":0.9}},{"id":"compass","emoji":"🧭","x":400,"y":300,"size":54,"sway":{"amp":6,"speed":1}},{"id":"folder","emoji":"🗂️","x":580,"y":340,"size":58,"bob":{"amp":4,"speed":1.1}},{"id":"link","emoji":"🔗","x":740,"y":300,"size":48,"pulse":{"amp":0.08,"speed":1.2}},{"id":"grad","emoji":"🎓","x":500,"y":180,"size":64,"bob":{"amp":5,"speed":1}},{"id":"build","emoji":"🏗️","x":160,"y":200,"size":46,"pulse":{"amp":0.1,"speed":1.6}},{"id":"lecturer","emoji":"🧑‍🏫","x":120,"y":440,"size":68,"bob":{"amp":4,"speed":1}},{"id":"podium","emoji":"🎤","x":120,"y":480,"size":30,"pulse":{"amp":0.1,"speed":1.6}}],"particles":[{"from":"link","dx":0,"dy":-14,"emoji":"🔗","rate":0.07,"vx":4,"vy":-12,"life":1,"size":12,"alpha":0.7},{"from":"grad","dx":0,"dy":-12,"emoji":"✨","rate":0.08,"vx":4,"vy":-14,"life":0.9,"size":12,"alpha":0.8}]};
+</script>
+<script>
+  (function(){
+    var c = Polimuli.play(window.__POL_DEMO__, 'cv');
+    window.__pol_ctrl = c;
+    document.addEventListener('keydown', function(e){
+      if (e.key === ' '){ e.preventDefault(); if (c.running) c.pause(); else c.resume(); }
+    });
+  })();
+</script>
+</body>
+</html>
