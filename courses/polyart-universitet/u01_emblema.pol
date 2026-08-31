@@ -1,0 +1,58 @@
+{
+  "format": "polimuli/pol",
+  "version": 1,
+  "meta": {
+    "id": "u01",
+    "title": "Университет · Эмблема и Кодекс",
+    "genre": "университет · ролик · товарищ профессор Полиартова",
+    "dur": 40,
+    "emojis": ["🧑‍🏫", "🎓", "📜", "🏛️", "🪬", "✨", "⚜️", "🖍️", "🎯", "📐", "🕯️", "💡"]
+  },
+  "canvas": { "w": 960, "h": 540 },
+  "style": {
+    "hud": { "labelColor": "#d8e6f5", "barColor": "#5a8fc0" },
+    "caption": { "font": 24, "color": "#f4ecd8", "shadow": "rgba(10,20,35,0.6)" },
+    "board": {
+      "x": 600, "y": 120, "w": 330, "h": 300,
+      "bg": "#2e4632", "frame": "#8a5a2a", "text": "#f2e6c8", "font": 18, "step": 1.8
+    }
+  },
+  "acts": [
+    { "at": 0,  "text": "УНИВЕРСИТЕТ ПОЛИАРТА · ЭМБЛЕМА", "bg": { "top": "#1d2b3a", "bottom": "#0c1420" }, "board": ["КАФЕДРА ПОЛИАРТА", "УРОК 1 · ЭМБЛЕМА"] },
+    { "at": 9,  "text": "КОДЕКС: СВОБОДА И ЦЕЛИ", "bg": { "top": "#24384a", "bottom": "#111c2a" }, "board": ["КОДЕКС = СВОБОДА И ЦЕЛИ", "НЕВЕЖДЫ → ОБРАЗОВАННЫЕ"] },
+    { "at": 18, "text": "СВЕЧА ЗНАНИЙ ГОРИТ ВЕЧНО", "bg": { "top": "#29404f", "bottom": "#14202e" }, "board": ["СТУДЕНТ → ПРОФЕССОР", "ПЕТЛЯ ПРОСВЕЩЕНИЯ"] },
+    { "at": 27, "text": "ДОСКА ЖИВЁТ · ПОЛИАРТ, НЕ ВИДЕО", "bg": { "top": "#2e4654", "bottom": "#182636" }, "board": ["ДОСКА = БЕСКОНЕЧНАЯ ЛЕНТА", "ТЕМП ×0.25…×16"] },
+    { "at": 35, "text": "ДОБРО ПОЖАЛОВАТЬ · ПРИВЕТ!", "bg": { "top": "#33506a", "bottom": "#1a2b3a" }, "board": ["ТОВАРИЩ ПРОФЕССОР ПОЛИАРТОВА", "ВЕДЁТ ИДЕЮ В ДАЛЬ"] }
+  ],
+  "actors": [
+    { "id": "seal_center", "emoji": "🎓", "x": 480, "y": 210, "size": 100,
+      "pulse": { "amp": 0.10, "speed": 1.4 } },
+    { "id": "seal_n", "emoji": "⚜️", "x": 480, "y": 66, "size": 32 },
+    { "id": "seal_s", "emoji": "📜", "x": 480, "y": 358, "size": 32 },
+    { "id": "seal_e", "emoji": "🏛️", "x": 642, "y": 210, "size": 42 },
+    { "id": "seal_w", "emoji": "🪬", "x": 318, "y": 210, "size": 36 },
+    { "id": "seal_ne", "emoji": "✨", "x": 616, "y": 98, "size": 28,
+      "pulse": { "amp": 0.3, "speed": 2.0 } },
+    { "id": "seal_nw", "emoji": "🖍️", "x": 344, "y": 98, "size": 28 },
+    { "id": "seal_se", "emoji": "🎯", "x": 616, "y": 322, "size": 28 },
+    { "id": "seal_sw", "emoji": "📐", "x": 344, "y": 322, "size": 28 },
+    { "id": "professor", "emoji": "🧑‍🏫", "x": 160, "y": 400, "size": 86,
+      "bob": { "amp": 5, "speed": 1.1 } },
+    { "id": "podium", "emoji": "🎤", "x": 160, "y": 462, "size": 32,
+      "pulse": { "amp": 0.1, "speed": 1.5 } },
+    { "id": "lightbulb", "emoji": "💡", "x": 300, "y": 120, "size": 44,
+      "visible": { "from": 9, "to": 40 },
+      "pulse": { "amp": 0.12, "speed": 1.3 } },
+    { "id": "flame1", "emoji": "🕯️", "x": 660, "y": 120, "size": 44,
+      "visible": { "from": 18, "to": 40 },
+      "bob": { "amp": 5, "speed": 1.6 } }
+  ],
+  "particles": [
+    { "from": "seal_center", "dx": 0, "dy": -32, "emoji": "✨", "rate": 0.12,
+      "vx": 8, "vy": -18, "life": 1.1, "size": 14, "alpha": 0.9 },
+    { "from": "professor", "dx": 22, "dy": -40, "emoji": "💬", "rate": 0.04,
+      "vx": 12, "vy": -10, "life": 0.8, "size": 20, "alpha": 0.6 },
+    { "from": "lightbulb", "dx": 0, "dy": -8, "emoji": "✨", "rate": 0.06,
+      "vx": 4, "vy": -12, "life": 0.9, "size": 12, "alpha": 0.7 }
+  ]
+}
