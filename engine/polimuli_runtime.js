@@ -30,6 +30,49 @@ var Polimuli = (() => {
     return rgbToCss(r1.map((c, i) => lerp(c, r2[i], t)));
   }
 
+  // Deterministic pseudo-random (hash), чтобы зерно мела не дрожало по кадрам.
+  function chalkRand(seed) {
+    let x = (seed | 0) || 1;
+    return () => {
+      x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
+      return ((x < 0 ? ~x + 1 : x) % 10000) / 10000;
+    };
+  }
+
+  // Меловой след: текст рисуется от руки шероховатым «мелом» — несколько
+  // полупрозрачных проходов с микро-смещениями + зернистые точки поверх.
+  // font ДОЛЖЕН быть установлен до вызова. Возвращает ширину текста.
+  function chalkTextWidth(ctx, txt, fontPx) {
+    ctx.font = `${fontPx}px "Segoe UI", Arial, sans-serif`;
+    return ctx.measureText(txt).width;
+  }
+  function drawChalkText(ctx, txt, x, y, fontPx, color, seed, alpha = 1) {
+    ctx.font = `${fontPx}px "Segoe UI", Arial, sans-serif`;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    const rnd = chalkRand(seed);
+    // основной след чуть приглушённый
+    ctx.globalAlpha = alpha * 0.82;
+    ctx.fillStyle = color;
+    ctx.fillText(txt, x, y);
+    // «труд»: неровные наложения мела — микродрожание руки
+    for (let n = 0; n < 4; n++) {
+      ctx.globalAlpha = alpha * (0.15 + 0.12 * rnd());
+      ctx.fillText(txt,
+        x + (rnd() - 0.5) * 1.4,
+        y + (rnd() - 0.5) * 1.4);
+    }
+    // зернистость мела — меловые точки по низу букв
+    const w = ctx.measureText(txt).width;
+    const grains = Math.round(w * fontPx * 0.004);
+    ctx.globalAlpha = alpha * 0.5;
+    for (let g = 0; g < grains; g++) {
+      const gx = x + rnd() * w;
+      const gy = y + rnd() * (fontPx * 0.95);
+      ctx.fillRect(gx, gy, 1, 1);
+    }
+    ctx.globalAlpha = 1;
+  }
+
   // ---------- предобработка данных ----------
   function prep(data) {
     const acts = (data.acts || []).slice().sort((a, b) => a.at - b.at);
@@ -98,6 +141,9 @@ var Polimuli = (() => {
       gutter: 6,        // толщина рамки
       padX: 16, padY: 14,
       rowH: 34,         // шаг строки
+      pen: '✍️',        // пишущая рука/мел
+      rep: '',          // представитель (аватар лектора) у доски, '' = выкл
+      repSize: 44,      // размер представителя
     }, st.board || {});
     // Индексы стилей ролей (плашки подсветки)
     const ROLE = {
@@ -221,9 +267,8 @@ var Polimuli = (() => {
       }
 
       for (let i = 0; i < lines.length; i++) {
-        const rel = Math.max(0, (t - cur.at - i * board.step) / Math.max(0.0001, board.step * 0.55));
-        if (t < cur.at + i * board.step) break;
-        const k = clamp(rel, 0, 1);
+        const lineStart = cur.at + i * board.step;
+        if (t < lineStart) break;
         const item = lines[i];
         const txt = typeof item === 'string' ? item : (item && item.t != null ? item.t : '');
         if (!txt) continue;
@@ -232,6 +277,11 @@ var Polimuli = (() => {
         const indent = (item && typeof item.indent === 'number') ? item.indent : 0;
         const rowY = rowTop(i);
         const fontPx = (item && item.font) ? item.font : board.font;
+        const textX = board.x + board.padX + indent;
+
+        // доля «письма от руки»: строка пишется слева направо в окне board.step
+        const handW = Math.max(0.6, board.step * 0.85);
+        const f = clamp((t - lineStart) / handW, 0, 1);
 
         // плашка подсветки по роли
         if (st.fill) {
@@ -240,21 +290,61 @@ var Polimuli = (() => {
                        board.w - 2 * board.padX + 8, board.rowH - 4);
         }
 
-        ctx.font = `${fontPx}px "Segoe UI", Arial, sans-serif`;
-        ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-        ctx.fillStyle = (item && item.color) ? item.color : st.color;
-        ctx.globalAlpha = 0.35 + 0.65 * k;
-        ctx.fillText(txt, board.x + board.padX + indent, rowY);
+        // перо/рука у доски: старание — пишущая рука ведёт по строке
+        const chalkColor = (item && item.color) ? item.color : st.color;
+        const txtW = Math.max(2, chalkTextWidth(ctx, txt, fontPx));
+        const reveal = f * txtW;
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(textX - 2, rowY - 3, reveal + 4, board.rowH);
+        ctx.clip();
+        // «труд»: меловой след пишется от руки по доске в окне раскрытия
+        drawChalkText(ctx, txt, textX, rowY, fontPx, chalkColor, i + 1, 1);
+        ctx.restore();
 
         // маркер-буллет для role != note
         if (role !== 'note') {
           ctx.fillStyle = st.color;
-          ctx.globalAlpha = k;
           ctx.font = `${Math.round(fontPx * 0.9)}px "Segoe UI Emoji", sans-serif`;
           const bullet = role === 'result' ? '▸' : (role === 'diagram' ? '·' : '▪');
-          ctx.fillText(bullet, board.x + board.padX - (bullet === '▸' ? 16 : 12), rowY + 1);
+          ctx.fillText(bullet, textX - (bullet === '▸' ? 16 : 12), rowY + 1);
         }
-        ctx.globalAlpha = 1;
+
+        // Представитель / аватар лектора у доски — виден во время письма:
+        // он реально «трудится»: стоит у пишущей строки, наклоняется к доске
+        // и ведёт рукой-мелом по строке (старание, а не типографский вывод).
+        if (board.rep && f > 0 && f < 1) {
+          const repX = board.x + board.w - board.repSize * 0.6;
+          const repY = rowY + board.rowH / 2 + Math.sin(t * 7) * 2;
+          ctx.save();
+          ctx.globalAlpha = 0.92;
+          ctx.font = `${board.repSize}px "Segoe UI Emoji", sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          // лёгкий наклон к доске в сторону пишущей строки
+          ctx.translate(repX, repY);
+          ctx.rotate(0.10 * (textX < board.x + board.w / 2 ? 1 : -1));
+          ctx.fillText(board.rep, 0, 0);
+          ctx.restore();
+        }
+
+        // пишущая рука/карандаш — видна, пока рука ведёт «чернило»
+        if (f > 0 && f < 1) {
+          const penX = textX + reveal;
+          ctx.globalAlpha = 0.95;
+          ctx.font = `${Math.round(fontPx * 0.95)}px "Segoe UI Emoji", sans-serif`;
+          ctx.fillText(board.pen || '✍️', penX + 6, rowY);
+          // меловая крошка из-под руки — настоящий «труд» (пыль с доски)
+          if (Math.random() < 0.6) {
+            Parts.spawn({
+              x: penX + 4, y: rowY + fontPx * 0.8,
+              vx: (Math.random() - 0.5) * 30, vy: -10 - Math.random() * 24,
+              life: 0.4 + Math.random() * 0.3, size: 1 + Math.random() * 2,
+              color: 'rgba(240,238,225,0.9)', gravity: 20, alpha: 0.7,
+            });
+          }
+          ctx.globalAlpha = 1;
+        }
       }
     }
 

@@ -16,7 +16,8 @@
       "x": 570, "y": 118, "w": 350, "h": 330,
       "bg": "#2e4632", "frame": "#8a5a2a", "text": "#f2e6c8",
       "font": 16, "step": 1.7, "rowH": 30,
-      "title": "КАФЕДРА ПОЛИАРТА", "titleColor": "#f0d9a0"
+      "title": "КАФЕДРА ПОЛИАРТА", "titleColor": "#f0d9a0",
+      "rep": "👩‍🏫", "repSize": 46
     }
   },
   "acts": [
