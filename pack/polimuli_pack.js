@@ -42,9 +42,10 @@ function validate(data, file) {
         if (!a.bg.top || !a.bg.bottom) warn(`acts[${i}].bg требует top и bottom`);
       }
       if (a.board != null && !Array.isArray(a.board))
-        warn(`acts[${i}].board должен быть массивом строк (доска конспекта)`);
-      if (Array.isArray(a.board) && a.board.some(s => typeof s !== 'string'))
-        warn(`acts[${i}].board содержит не строку`);
+        warn(`acts[${i}].board должен быть массивом (строки или объекты-блоки)`);
+      if (Array.isArray(a.board) && a.board.some(s =>
+          typeof s !== 'string' && (typeof s !== 'object' || s == null || typeof s.t !== 'string')))
+        warn(`acts[${i}].board содержит не строку и не объект-блок {t,...}`);
     });
   }
 

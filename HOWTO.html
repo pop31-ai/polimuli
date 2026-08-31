@@ -129,24 +129,36 @@ node pack/polimuli_pack.js a.pol -o out.html  # указать имя резул
   <tr><th>Секция</th><th>Что значит</th></tr>
   <tr><td><code>meta.dur</code></td><td>длина ролика в секундах (цикл)</td></tr>
   <tr><td><code>acts[]</code></td><td>сцены: <code>at</code> время старта, <code>text</code> подпись, <code>bg</code> градиент неба</td></tr>
-  <tr><td><code>acts[].board</code></td><td>доска конспекта: строки появляются «мелом» одна за другой (лекция)</td></tr>
+  <tr><td><code>acts[].board</code></td><td>доска конспекта: строки или объекты-блоки появляются «мелом» один за другим (лекция)</td></tr>
   <tr><td><code>actors[]</code></td><td>эмодзи-спрайты: <code>bob</code>/<code>sway</code> качание, <code>pulse</code> пульс размера, <code>cycle</code> смена эмодзи, <code>key[]</code> движение <code>x/y/size</code> по времени, <code>visible</code> <code>{from,to}</code> окно видимости</td></tr>
   <tr><td><code>particles[]</code></td><td>частицы от актора (<code>from</code>) или точки: скорость, жизнь, размер, прозрачность</td></tr>
   <tr><td><code>style</code></td><td>цвета HUD и подписи <code>{hud, caption}</code>, геометрия доски <code>{board}</code></td></tr>
 </table>
 
-<h3>5.1. Доска лектора (конспект строкой за строкой)</h3>
-<p>Для лекций курсов: лектор 🧑‍🏫 набрасывает материал на доску, строки
-пишутся мелом по очереди. Геометрия и цвета — в <code>style.board</code>,
-строки — в каждом акте:</p>
-
+<h3>5.1. Живая доска лектора (конспект строкой за строкой)</h3>
+<p>Для лекций курсов: лектор 🧑‍🏫 набрасывает материал на доску, записи
+пишутся мелом по очереди и <b>заполняют доску сверху вниз</b> (никакой
+пустой колбы — «вода» подачи). Геометрия и цвета — в <code>style.board</code>,
+записи — в каждом акте. Два вида элементов:</p>
+<ul>
+  <li>короткая строка: <code>"СТРОКА 1"</code>;</li>
+  <li>объект-блок с ролью и плашкой-подсветкой:
+    <code>{ "t": "СВОБОДА И ЦЕЛИ", "role": "thesis" }</code> —
+    роли: <code>thesis</code> (тезис ▪), <code>diagram</code> (схема ·),
+    <code>result</code> (итог ▸), <code>note</code> (заметка).</li>
+</ul>
 <pre>{
   "style": {
-    "board": { "x": 640, "y": 120, "w": 300, "h": 270, "bg": "#2e4632",
-               "frame": "#8a5a2a", "text": "#f2e6c8", "font": 18, "step": 1.4 }
+    "board": { "x": 570, "y": 118, "w": 350, "h": 330, "bg": "#2e4632",
+               "frame": "#8a5a2a", "text": "#f2e6c8", "font": 16, "step": 1.7,
+               "title": "КАФЕДРА ПОЛИАРТА", "rowH": 30 }
   },
   "acts": [
-    { "at": 0, "text": "ТЕМА", "board": ["СТРОКА 1", "СТРОКА 2"] }
+    { "at": 0, "text": "ТЕМА", "board": [
+        { "t": "КОДЕКС УНИВЕРСИТЕТА", "role": "thesis" },
+        { "t": "СВОБОДА И ЦЕЛИ", "role": "diagram", "indent": 8 },
+        { "t": "ИТОГ: ДОСКА ЖИВЁТ", "role": "result" }
+    ] }
   ],
   "actors": [
     { "id": "lecturer", "emoji": "🧑‍🏫", "x": 120, "y": 440, "size": 68,

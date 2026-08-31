@@ -93,7 +93,19 @@ var Polimuli = (() => {
       x: 640, y: 130, w: 300, h: 260,
       bg: '#2e4632', frame: '#8a5a2a', text: '#f2e6c8',
       font: 18, step: 1.4,
+      title: '',        // заголовок доски (шапка)
+      titleColor: '#e8cf9a',
+      gutter: 6,        // толщина рамки
+      padX: 16, padY: 14,
+      rowH: 34,         // шаг строки
     }, st.board || {});
+    // Индексы стилей ролей (плашки подсветки)
+    const ROLE = {
+      thesis:  { fill: 'rgba(240,230,200,0.10)', color: '#f4ecd8', lw: 1.6 },
+      diagram: { fill: 'rgba(120,170,220,0.12)',  color: '#bfd9f0', lw: 1.2 },
+      result:  { fill: 'rgba(158,43,37,0.35)',   color: '#ffe2b8', lw: 2.0 },
+      note:    { fill: 'rgba(90,143,192,0.16)',  color: '#d3e6f5', lw: 1.0 },
+    };
 
     const ctrl = { running: true, _t: 0, _start: null };
 
@@ -184,16 +196,65 @@ var Polimuli = (() => {
       const cur = atAct(P.acts, t);
       const lines = cur && Array.isArray(cur.board) ? cur.board : null;
       if (!lines || lines.length < 1) return;
+      const g = board.gutter;
+      const titleH = board.title ? (board.font * 0.9) : 0;
+
+      // рама и полотно
       ctx.fillStyle = board.frame;
       ctx.fillRect(board.x, board.y, board.w, board.h);
       ctx.fillStyle = board.bg;
-      ctx.fillRect(board.x + 6, board.y + 6, board.w - 12, board.h - 12);
-      ctx.font = `${board.font}px "Segoe UI", Arial, sans-serif`;
-      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-      ctx.fillStyle = board.text;
+      ctx.fillRect(board.x + g, board.y + g, board.w - 2 * g, board.h - 2 * g);
+
+      // заголовок доски (шапка) — тема лекции
+      if (board.title) {
+        ctx.font = `bold ${Math.round(board.font * 0.95)}px "Segoe UI", Arial, sans-serif`;
+        ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+        ctx.fillStyle = board.titleColor;
+        ctx.fillText(board.title, board.x + board.padX, board.y + g + 4);
+        // линия под шапкой
+        ctx.fillStyle = 'rgba(240,230,200,0.25)';
+        ctx.fillRect(board.x + board.padX, board.y + g + 4 + board.font, board.w - 2 * board.padX, 1);
+      }
+
+      function rowTop(i) {
+        return board.y + g + 10 + titleH + i * board.rowH;
+      }
+
       for (let i = 0; i < lines.length; i++) {
+        const rel = Math.max(0, (t - cur.at - i * board.step) / Math.max(0.0001, board.step * 0.55));
         if (t < cur.at + i * board.step) break;
-        ctx.fillText(lines[i], board.x + 16, board.y + 14 + i * (board.font + 10));
+        const k = clamp(rel, 0, 1);
+        const item = lines[i];
+        const txt = typeof item === 'string' ? item : (item && item.t != null ? item.t : '');
+        if (!txt) continue;
+        const role = (item && item.role) || 'note';
+        const st = ROLE[role] || ROLE.note;
+        const indent = (item && typeof item.indent === 'number') ? item.indent : 0;
+        const rowY = rowTop(i);
+        const fontPx = (item && item.font) ? item.font : board.font;
+
+        // плашка подсветки по роли
+        if (st.fill) {
+          ctx.fillStyle = st.fill;
+          ctx.fillRect(board.x + board.padX - 4, rowY - 3,
+                       board.w - 2 * board.padX + 8, board.rowH - 4);
+        }
+
+        ctx.font = `${fontPx}px "Segoe UI", Arial, sans-serif`;
+        ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+        ctx.fillStyle = (item && item.color) ? item.color : st.color;
+        ctx.globalAlpha = 0.35 + 0.65 * k;
+        ctx.fillText(txt, board.x + board.padX + indent, rowY);
+
+        // маркер-буллет для role != note
+        if (role !== 'note') {
+          ctx.fillStyle = st.color;
+          ctx.globalAlpha = k;
+          ctx.font = `${Math.round(fontPx * 0.9)}px "Segoe UI Emoji", sans-serif`;
+          const bullet = role === 'result' ? '▸' : (role === 'diagram' ? '·' : '▪');
+          ctx.fillText(bullet, board.x + board.padX - (bullet === '▸' ? 16 : 12), rowY + 1);
+        }
+        ctx.globalAlpha = 1;
       }
     }
 
