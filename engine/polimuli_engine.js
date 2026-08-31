@@ -68,12 +68,21 @@ var Polimuli = (() => {
   }
 
   // Прогресс-бар + подпись текущей сцены (режиссёрская подсказка).
+  // opts.speed — множитель темпа (если задан — «дыхание» подачи: можно
+  // притормозить и всмотреться, отвлечься, посчитать ворон и вернуться).
   function drawHUD(ctx, W, H, t, total, label, opts = {}) {
     if (opts.label) {
       ctx.font = `14px monospace`;
       ctx.textAlign = 'left'; ctx.textBaseline = 'top';
       ctx.fillStyle = opts.labelColor || 'rgba(255,255,255,0.85)';
       ctx.fillText(`🎬 ${label}`, 10, 8);
+    }
+    if (opts.speed) {
+      ctx.textAlign = 'right';
+      ctx.fillStyle = opts.barColor || 'rgba(255,255,255,0.85)';
+      ctx.font = `14px monospace`;
+      const eye = opts.speed < 1.01 && opts.speed > 0.99 ? '😌' : '🙂';
+      ctx.fillText(`${eye} темп ×${opts.speed.toFixed(2)} · колесо/+ −`, W - 10, 8);
     }
     const bw = W - 20, bh = 4;
     const bx = 10, by = H - 12;

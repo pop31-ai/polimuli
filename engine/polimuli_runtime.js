@@ -153,7 +153,7 @@ var Polimuli = (() => {
       note:    { fill: 'rgba(90,143,192,0.16)',  color: '#d3e6f5', lw: 1.0 },
     };
 
-    const ctrl = { running: true, _t: 0, _start: null };
+    const ctrl = { running: true, _t: 0, _start: null, _tt: 0, _tWall: 0, speed: 1 };
 
     function actorPos(a, t) {
       let x = keyVal(a.key, t, 'x', a.x);
@@ -351,9 +351,13 @@ var Polimuli = (() => {
     function frame(now) {
       if (!ctrl.running) return;
       if (!ctrl._start) ctrl._start = now;
-      let t = (now - ctrl._start) / 1000;
-      if (t > P.dur && P.data.meta.loop !== false) t = t % P.dur;
-      const dt = Math.min(0.05, Math.max(1e-4, t - ctrl._t));
+      const wall = (now - ctrl._start) / 1000;
+      const wallDt = Math.min(0.05, Math.max(1e-4, wall - ctrl._tWall));
+      ctrl._tWall = wall;
+      ctrl._tt += wallDt * ctrl.speed;
+      let t = ctrl._tt;
+      if (t > P.dur && P.data.meta.loop !== false) { t = t % P.dur; ctrl._tt = t; }
+      const dt = Math.min(0.05, Math.max(1e-4, wallDt * ctrl.speed));
       ctrl._t = t;
 
       ctx.clearRect(0, 0, W, H);
@@ -366,10 +370,28 @@ var Polimuli = (() => {
 
       Polimuli.drawHUD(ctx, W, H, t, P.dur,
         P.data.meta.title + ' · ' + ((atAct(P.acts, t) || {}).text || ''),
-        { labelColor: hud.labelColor, barColor: hud.barColor });
+        { labelColor: hud.labelColor, barColor: hud.barColor,
+          speed: Math.round(ctrl.speed * 100) / 100 });
 
       ctrl._raf = requestAnimationFrame(frame);
     }
+
+    // «дыхание» подачи: темп задаёт человек, а не лектор. Можно притормозить,
+    // всмотреться, отвлечься и вернуться — знание никуда не убежит.
+    const SPEED_MIN = 0.25, SPEED_MAX = 16;
+    ctrl.speed = 1;
+    ctrl.setSpeed = (n) => {
+      ctrl.speed = Math.max(SPEED_MIN, Math.min(SPEED_MAX, n));
+    };
+    CV.cv.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const f = e.deltaY < 0 ? 1.3 : 1 / 1.3;
+      ctrl.setSpeed(ctrl.speed * f);
+    }, { passive: false });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '+' || e.key === '=') { ctrl.setSpeed(ctrl.speed * 1.4); e.preventDefault(); }
+      else if (e.key === '-' || e.key === '_') { ctrl.setSpeed(ctrl.speed / 1.4); e.preventDefault(); }
+    });
 
     ctrl.pause = () => { if (ctrl.running) { ctrl.running = false; cancelAnimationFrame(ctrl._raf); } };
     ctrl.resume = () => { if (!ctrl.running) { ctrl.running = true; ctrl._start = null; ctrl._raf = requestAnimationFrame(frame); } };
