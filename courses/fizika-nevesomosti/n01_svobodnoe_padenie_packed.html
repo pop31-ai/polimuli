@@ -149,6 +149,49 @@ var Polimuli = (() => {
     return rgbToCss(r1.map((c, i) => lerp(c, r2[i], t)));
   }
 
+  // Deterministic pseudo-random (hash), чтобы зерно мела не дрожало по кадрам.
+  function chalkRand(seed) {
+    let x = (seed | 0) || 1;
+    return () => {
+      x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
+      return ((x < 0 ? ~x + 1 : x) % 10000) / 10000;
+    };
+  }
+
+  // Меловой след: текст рисуется от руки шероховатым «мелом» — несколько
+  // полупрозрачных проходов с микро-смещениями + зернистые точки поверх.
+  // font ДОЛЖЕН быть установлен до вызова. Возвращает ширину текста.
+  function chalkTextWidth(ctx, txt, fontPx) {
+    ctx.font = `${fontPx}px "Segoe UI", Arial, sans-serif`;
+    return ctx.measureText(txt).width;
+  }
+  function drawChalkText(ctx, txt, x, y, fontPx, color, seed, alpha = 1) {
+    ctx.font = `${fontPx}px "Segoe UI", Arial, sans-serif`;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    const rnd = chalkRand(seed);
+    // основной след чуть приглушённый
+    ctx.globalAlpha = alpha * 0.82;
+    ctx.fillStyle = color;
+    ctx.fillText(txt, x, y);
+    // «труд»: неровные наложения мела — микродрожание руки
+    for (let n = 0; n < 4; n++) {
+      ctx.globalAlpha = alpha * (0.15 + 0.12 * rnd());
+      ctx.fillText(txt,
+        x + (rnd() - 0.5) * 1.4,
+        y + (rnd() - 0.5) * 1.4);
+    }
+    // зернистость мела — меловые точки по низу букв
+    const w = ctx.measureText(txt).width;
+    const grains = Math.round(w * fontPx * 0.004);
+    ctx.globalAlpha = alpha * 0.5;
+    for (let g = 0; g < grains; g++) {
+      const gx = x + rnd() * w;
+      const gy = y + rnd() * (fontPx * 0.95);
+      ctx.fillRect(gx, gy, 1, 1);
+    }
+    ctx.globalAlpha = 1;
+  }
+
   // ---------- предобработка данных ----------
   function prep(data) {
     const acts = (data.acts || []).slice().sort((a, b) => a.at - b.at);
@@ -212,7 +255,22 @@ var Polimuli = (() => {
       x: 640, y: 130, w: 300, h: 260,
       bg: '#2e4632', frame: '#8a5a2a', text: '#f2e6c8',
       font: 18, step: 1.4,
+      title: '',        // заголовок доски (шапка)
+      titleColor: '#e8cf9a',
+      gutter: 6,        // толщина рамки
+      padX: 16, padY: 14,
+      rowH: 34,         // шаг строки
+      pen: '✍️',        // пишущая рука/мел
+      rep: '',          // представитель (аватар лектора) у доски, '' = выкл
+      repSize: 44,      // размер представителя
     }, st.board || {});
+    // Индексы стилей ролей (плашки подсветки)
+    const ROLE = {
+      thesis:  { fill: 'rgba(240,230,200,0.10)', color: '#f4ecd8', lw: 1.6 },
+      diagram: { fill: 'rgba(120,170,220,0.12)',  color: '#bfd9f0', lw: 1.2 },
+      result:  { fill: 'rgba(158,43,37,0.35)',   color: '#ffe2b8', lw: 2.0 },
+      note:    { fill: 'rgba(90,143,192,0.16)',  color: '#d3e6f5', lw: 1.0 },
+    };
 
     const ctrl = { running: true, _t: 0, _start: null };
 
@@ -303,16 +361,109 @@ var Polimuli = (() => {
       const cur = atAct(P.acts, t);
       const lines = cur && Array.isArray(cur.board) ? cur.board : null;
       if (!lines || lines.length < 1) return;
+      const g = board.gutter;
+      const titleH = board.title ? (board.font * 0.9) : 0;
+
+      // рама и полотно
       ctx.fillStyle = board.frame;
       ctx.fillRect(board.x, board.y, board.w, board.h);
       ctx.fillStyle = board.bg;
-      ctx.fillRect(board.x + 6, board.y + 6, board.w - 12, board.h - 12);
-      ctx.font = `${board.font}px "Segoe UI", Arial, sans-serif`;
-      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-      ctx.fillStyle = board.text;
+      ctx.fillRect(board.x + g, board.y + g, board.w - 2 * g, board.h - 2 * g);
+
+      // заголовок доски (шапка) — тема лекции
+      if (board.title) {
+        ctx.font = `bold ${Math.round(board.font * 0.95)}px "Segoe UI", Arial, sans-serif`;
+        ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+        ctx.fillStyle = board.titleColor;
+        ctx.fillText(board.title, board.x + board.padX, board.y + g + 4);
+        // линия под шапкой
+        ctx.fillStyle = 'rgba(240,230,200,0.25)';
+        ctx.fillRect(board.x + board.padX, board.y + g + 4 + board.font, board.w - 2 * board.padX, 1);
+      }
+
+      function rowTop(i) {
+        return board.y + g + 10 + titleH + i * board.rowH;
+      }
+
       for (let i = 0; i < lines.length; i++) {
-        if (t < cur.at + i * board.step) break;
-        ctx.fillText(lines[i], board.x + 16, board.y + 14 + i * (board.font + 10));
+        const lineStart = cur.at + i * board.step;
+        if (t < lineStart) break;
+        const item = lines[i];
+        const txt = typeof item === 'string' ? item : (item && item.t != null ? item.t : '');
+        if (!txt) continue;
+        const role = (item && item.role) || 'note';
+        const st = ROLE[role] || ROLE.note;
+        const indent = (item && typeof item.indent === 'number') ? item.indent : 0;
+        const rowY = rowTop(i);
+        const fontPx = (item && item.font) ? item.font : board.font;
+        const textX = board.x + board.padX + indent;
+
+        // доля «письма от руки»: строка пишется слева направо в окне board.step
+        const handW = Math.max(0.6, board.step * 0.85);
+        const f = clamp((t - lineStart) / handW, 0, 1);
+
+        // плашка подсветки по роли
+        if (st.fill) {
+          ctx.fillStyle = st.fill;
+          ctx.fillRect(board.x + board.padX - 4, rowY - 3,
+                       board.w - 2 * board.padX + 8, board.rowH - 4);
+        }
+
+        // перо/рука у доски: старание — пишущая рука ведёт по строке
+        const chalkColor = (item && item.color) ? item.color : st.color;
+        const txtW = Math.max(2, chalkTextWidth(ctx, txt, fontPx));
+        const reveal = f * txtW;
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(textX - 2, rowY - 3, reveal + 4, board.rowH);
+        ctx.clip();
+        // «труд»: меловой след пишется от руки по доске в окне раскрытия
+        drawChalkText(ctx, txt, textX, rowY, fontPx, chalkColor, i + 1, 1);
+        ctx.restore();
+
+        // маркер-буллет для role != note
+        if (role !== 'note') {
+          ctx.fillStyle = st.color;
+          ctx.font = `${Math.round(fontPx * 0.9)}px "Segoe UI Emoji", sans-serif`;
+          const bullet = role === 'result' ? '▸' : (role === 'diagram' ? '·' : '▪');
+          ctx.fillText(bullet, textX - (bullet === '▸' ? 16 : 12), rowY + 1);
+        }
+
+        // Представитель / аватар лектора у доски — виден во время письма:
+        // он реально «трудится»: стоит у пишущей строки, наклоняется к доске
+        // и ведёт рукой-мелом по строке (старание, а не типографский вывод).
+        if (board.rep && f > 0 && f < 1) {
+          const repX = board.x + board.w - board.repSize * 0.6;
+          const repY = rowY + board.rowH / 2 + Math.sin(t * 7) * 2;
+          ctx.save();
+          ctx.globalAlpha = 0.92;
+          ctx.font = `${board.repSize}px "Segoe UI Emoji", sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          // лёгкий наклон к доске в сторону пишущей строки
+          ctx.translate(repX, repY);
+          ctx.rotate(0.10 * (textX < board.x + board.w / 2 ? 1 : -1));
+          ctx.fillText(board.rep, 0, 0);
+          ctx.restore();
+        }
+
+        // пишущая рука/карандаш — видна, пока рука ведёт «чернило»
+        if (f > 0 && f < 1) {
+          const penX = textX + reveal;
+          ctx.globalAlpha = 0.95;
+          ctx.font = `${Math.round(fontPx * 0.95)}px "Segoe UI Emoji", sans-serif`;
+          ctx.fillText(board.pen || '✍️', penX + 6, rowY);
+          // меловая крошка из-под руки — настоящий «труд» (пыль с доски)
+          if (Math.random() < 0.6) {
+            Parts.spawn({
+              x: penX + 4, y: rowY + fontPx * 0.8,
+              vx: (Math.random() - 0.5) * 30, vy: -10 - Math.random() * 24,
+              life: 0.4 + Math.random() * 0.3, size: 1 + Math.random() * 2,
+              color: 'rgba(240,238,225,0.9)', gravity: 20, alpha: 0.7,
+            });
+          }
+          ctx.globalAlpha = 1;
+        }
       }
     }
 
@@ -355,7 +506,7 @@ var Polimuli = (() => {
   return Object.assign(base, { play });
 })();</script>
 <script>
-  window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"n01","title":"Невесомость №1: Свободное падение","genre":"курс «Физика невесомости» · урок 1","dur":24,"emojis":["🛗","🧍","🌍","🪂","❓"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8e6f0","barColor":"#5a8fb0"},"caption":{"font":24,"color":"#eef6f8","shadow":"rgba(15,35,50,0.5)"}},"acts":[{"at":0,"text":"НЕВЕСОМОСТЬ = ПАДЕНИЕ БЕЗ ОПОРЫ","bg":{"top":"#1c2c3c","bottom":"#0d1520"},"board":["N — СИЛА ОПОРЫ","НЕВЕСОМОСТЬ: N = 0"]},{"at":6,"text":"ЛИФТ РВЁТ ТРОС — ПАРИШЬ ВМЕСТЕ С ПОЛОМ","bg":{"top":"#183040","bottom":"#0a1520"},"board":["ТЫ ПАДАЕШЬ + ПОЛ ПАДАЕТ","ОПОРА НЕ ДАВИТ"]},{"at":12,"text":"ОПОРА НЕ ДАВИТ — ВЕС ИСЧЕЗ","bg":{"top":"#22384a","bottom":"#101c28"},"board":["P = N = 0","A = G: СВОБОДНОЕ ПАДЕНИЕ"]},{"at":18,"text":"ВОПРОС: ПОЧЕМУ НА СТАРТЕ ВНИЗ СТАНОВИТСЯ ЛЕГЧЕ?","bg":{"top":"#26404f","bottom":"#132030"},"board":["A → G ВНИЗ ⇒ ЛЕГЧЕ","ПОЛНЫЙ ОТВЕТ — В УРОКЕ №2"]}],"actors":[{"id":"lift","emoji":"🛗","x":480,"y":340,"size":110,"key":[{"at":0,"y":180},{"at":18,"y":420},{"at":24,"y":420}]},{"id":"guy","emoji":"🧍","x":480,"y":320,"size":60,"key":[{"at":0,"y":160},{"at":18,"y":400}],"visible":{"from":0,"to":18}},{"id":"parachute","emoji":"🪂","x":300,"y":260,"size":44,"sway":{"amp":8,"speed":1},"visible":{"from":6,"to":24}},{"id":"earth","emoji":"🌍","x":800,"y":460,"size":90,"pulse":{"amp":0.02,"speed":0.4}},{"id":"question","emoji":"❓","x":200,"y":170,"size":34,"pulse":{"amp":0.2,"speed":2},"visible":{"from":18,"to":24}},{"id":"zero","emoji":"0️⃣","x":660,"y":200,"size":40,"pulse":{"amp":0.1,"speed":1.2},"visible":{"from":12,"to":18}},{"id":"lecturer","emoji":"🧑‍🏫","x":120,"y":440,"size":68,"bob":{"amp":4,"speed":1}},{"id":"podium","emoji":"🎤","x":120,"y":480,"size":30,"pulse":{"amp":0.1,"speed":1.6}}],"particles":[{"from":"lift","dx":0,"dy":30,"emoji":"💨","rate":0.1,"vx":0,"vy":30,"life":0.7,"size":16,"alpha":0.7},{"from":"parachute","dx":0,"dy":-12,"emoji":"🪶","rate":0.05,"vx":4,"vy":-10,"life":1,"size":12,"alpha":0.6}]};
+  window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"n01","title":"Невесомость №1: Свободное падение","genre":"курс «Физика невесомости» · урок 1","dur":24,"emojis":["🛗","🧍","🌍","🪂","❓"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8e6f0","barColor":"#5a8fb0"},"caption":{"font":24,"color":"#eef6f8","shadow":"rgba(15,35,50,0.5)"},"board":{"x":640,"y":120,"w":300,"h":270,"bg":"#2e4632","frame":"#8a5a2a","text":"#f2e6c8","font":18,"step":1.4,"title":"ФИЗИКА · НЕВЕСОМОСТЬ","rowH":34,"rep":"👩‍🏫","repSize":44}},"acts":[{"at":0,"text":"НЕВЕСОМОСТЬ = ПАДЕНИЕ БЕЗ ОПОРЫ","bg":{"top":"#1c2c3c","bottom":"#0d1520"},"board":[{"t":"N — СИЛА ОПОРЫ","role":"thesis"},{"t":"НЕВЕСОМОСТЬ: N = 0","role":"result"}]},{"at":6,"text":"ЛИФТ РВЁТ ТРОС — ПАРИШЬ ВМЕСТЕ С ПОЛОМ","bg":{"top":"#183040","bottom":"#0a1520"},"board":[{"t":"ТЫ ПАДАЕШЬ + ПОЛ ПАДАЕТ","role":"thesis"},{"t":"ОПОРА НЕ ДАВИТ","role":"result"}]},{"at":12,"text":"ОПОРА НЕ ДАВИТ — ВЕС ИСЧЕЗ","bg":{"top":"#22384a","bottom":"#101c28"},"board":[{"t":"P = N = 0","role":"thesis"},{"t":"A = G: СВОБОДНОЕ ПАДЕНИЕ","role":"result"}]},{"at":18,"text":"ВОПРОС: ПОЧЕМУ НА СТАРТЕ ВНИЗ СТАНОВИТСЯ ЛЕГЧЕ?","bg":{"top":"#26404f","bottom":"#132030"},"board":[{"t":"A → G ВНИЗ ⇒ ЛЕГЧЕ","role":"thesis"},{"t":"ПОЛНЫЙ ОТВЕТ — В УРОКЕ №2","role":"result"}]}],"actors":[{"id":"lift","emoji":"🛗","x":480,"y":340,"size":110,"key":[{"at":0,"y":180},{"at":18,"y":420},{"at":24,"y":420}]},{"id":"guy","emoji":"🧍","x":480,"y":320,"size":60,"key":[{"at":0,"y":160},{"at":18,"y":400}],"visible":{"from":0,"to":18}},{"id":"parachute","emoji":"🪂","x":300,"y":260,"size":44,"sway":{"amp":8,"speed":1},"visible":{"from":6,"to":24}},{"id":"earth","emoji":"🌍","x":800,"y":460,"size":90,"pulse":{"amp":0.02,"speed":0.4}},{"id":"question","emoji":"❓","x":200,"y":170,"size":34,"pulse":{"amp":0.2,"speed":2},"visible":{"from":18,"to":24}},{"id":"zero","emoji":"0️⃣","x":620,"y":200,"size":40,"pulse":{"amp":0.1,"speed":1.2},"visible":{"from":12,"to":18}},{"id":"lecturer","emoji":"🧑‍🏫","x":120,"y":440,"size":68,"bob":{"amp":4,"speed":1}},{"id":"podium","emoji":"🎤","x":120,"y":480,"size":30,"pulse":{"amp":0.1,"speed":1.6}}],"particles":[{"from":"lift","dx":0,"dy":30,"emoji":"💨","rate":0.1,"vx":0,"vy":30,"life":0.7,"size":16,"alpha":0.7},{"from":"parachute","dx":0,"dy":-12,"emoji":"🪶","rate":0.05,"vx":4,"vy":-10,"life":1,"size":12,"alpha":0.6}]};
 </script>
 <script>
   (function(){

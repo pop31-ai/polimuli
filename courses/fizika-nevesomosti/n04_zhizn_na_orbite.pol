@@ -6,46 +6,255 @@
     "title": "Невесомость №4: Жизнь на орбите",
     "genre": "курс «Физика невесомости» · урок 4",
     "dur": 24,
-    "emojis": ["🧑‍🚀", "💧", "🔥", "🦴", "🚀"]
+    "emojis": [
+      "🧑‍🚀",
+      "💧",
+      "🔥",
+      "🦴",
+      "🚀"
+    ]
   },
-  "canvas": { "w": 960, "h": 540 },
+  "canvas": {
+    "w": 960,
+    "h": 540
+  },
   "style": {
-    "hud": { "labelColor": "#d8e6f0", "barColor": "#5a8fb0" },
-    "caption": { "font": 24, "color": "#eef6f8", "shadow": "rgba(15,35,50,0.5)" }
+    "hud": {
+      "labelColor": "#d8e6f0",
+      "barColor": "#5a8fb0"
+    },
+    "caption": {
+      "font": 24,
+      "color": "#eef6f8",
+      "shadow": "rgba(15,35,50,0.5)"
+    },
+    "board": {
+      "x": 640,
+      "y": 120,
+      "w": 300,
+      "h": 270,
+      "bg": "#2e4632",
+      "frame": "#8a5a2a",
+      "text": "#f2e6c8",
+      "font": 18,
+      "step": 1.4,
+      "title": "ФИЗИКА · НЕВЕСОМОСТЬ",
+      "rowH": 34,
+      "rep": "👩‍🏫",
+      "repSize": 44
+    }
   },
   "acts": [
-    { "at": 0,  "text": "ВОДА В НЕВЕСОМОСТИ — ШАР", "bg": { "top": "#0e1630", "bottom": "#050a18" }, "board": ["ВОДА → СФЕРА", "ПОВЕРХНОСТНОЕ НАТЯЖЕНИЕ"] },
-    { "at": 6,  "text": "ПЛАМЯ НЕ ТЯНЕТСЯ — ОНО СФЕРА", "bg": { "top": "#121a36", "bottom": "#080d1c" }, "board": ["ПЛАМЯ → ШАР", "НЕТ КОНВЕКЦИИ ВВЕРХ"] },
-    { "at": 12, "text": "БЕЗ ОПОРЫ МЫШЦЫ И КОСТИ СЛАБЕЮТ", "bg": { "top": "#161e3c", "bottom": "#0a0f20" }, "board": ["МЫШЦЫ/КОСТИ СЛАБЕЮТ", "−0.5…1% В МЕСЯЦ"] },
-    { "at": 18, "text": "ВОПРОС: ЗАЧЕМ АСТРОНАВТАМ СПОРТЗАЛ?", "bg": { "top": "#1a2242", "bottom": "#0c1124" }, "board": ["ТРЕНИРОВКИ 2 ЧАСА/ДЕНЬ", "ГРУЗЫ НА РЕЗИНКАХ"] }
+    {
+      "at": 0,
+      "text": "ВОДА В НЕВЕСОМОСТИ — ШАР",
+      "bg": {
+        "top": "#0e1630",
+        "bottom": "#050a18"
+      },
+      "board": [
+        {
+          "t": "ВОДА → СФЕРА",
+          "role": "thesis"
+        },
+        {
+          "t": "ПОВЕРХНОСТНОЕ НАТЯЖЕНИЕ",
+          "role": "result"
+        }
+      ]
+    },
+    {
+      "at": 6,
+      "text": "ПЛАМЯ НЕ ТЯНЕТСЯ — ОНО СФЕРА",
+      "bg": {
+        "top": "#121a36",
+        "bottom": "#080d1c"
+      },
+      "board": [
+        {
+          "t": "ПЛАМЯ → ШАР",
+          "role": "thesis"
+        },
+        {
+          "t": "НЕТ КОНВЕКЦИИ ВВЕРХ",
+          "role": "result"
+        }
+      ]
+    },
+    {
+      "at": 12,
+      "text": "БЕЗ ОПОРЫ МЫШЦЫ И КОСТИ СЛАБЕЮТ",
+      "bg": {
+        "top": "#161e3c",
+        "bottom": "#0a0f20"
+      },
+      "board": [
+        {
+          "t": "МЫШЦЫ/КОСТИ СЛАБЕЮТ",
+          "role": "thesis"
+        },
+        {
+          "t": "−0.5…1% В МЕСЯЦ",
+          "role": "result"
+        }
+      ]
+    },
+    {
+      "at": 18,
+      "text": "ВОПРОС: ЗАЧЕМ АСТРОНАВТАМ СПОРТЗАЛ?",
+      "bg": {
+        "top": "#1a2242",
+        "bottom": "#0c1124"
+      },
+      "board": [
+        {
+          "t": "ТРЕНИРОВКИ 2 ЧАСА/ДЕНЬ",
+          "role": "thesis"
+        },
+        {
+          "t": "ГРУЗЫ НА РЕЗИНКАХ",
+          "role": "result"
+        }
+      ]
+    }
   ],
   "actors": [
-    { "id": "astro", "emoji": "🧑‍🚀", "x": 240, "y": 260, "size": 74,
-      "bob": { "amp": 6, "speed": 1.2 } },
-    { "id": "water", "emoji": "💧", "x": 440, "y": 240, "size": 56,
-      "pulse": { "amp": 0.1, "speed": 1.4 } },
-    { "id": "flame", "emoji": "🔥", "x": 620, "y": 240, "size": 48,
-      "pulse": { "amp": 0.12, "speed": 2.0 } },
-    { "id": "bone", "emoji": "🦴", "x": 470, "y": 410, "size": 42,
-      "sway": { "amp": 5, "speed": 0.9 } },
-    { "id": "dumbbell", "emoji": "🏋️", "x": 780, "y": 380, "size": 50,
-      "bob": { "amp": 5, "speed": 1.3 },
-      "visible": { "from": 12, "to": 24 } },
-    { "id": "rocket", "emoji": "🚀", "x": 760, "y": 180, "size": 44,
-      "sway": { "amp": 6, "speed": 1.0 },
-      "visible": { "from": 0, "to": 12 } },
-    { "id": "question", "emoji": "❓", "x": 300, "y": 420, "size": 34,
-      "pulse": { "amp": 0.2, "speed": 2.0 },
-      "visible": { "from": 18, "to": 24 } },
-    { "id": "lecturer", "emoji": "🧑‍🏫", "x": 120, "y": 440, "size": 68,
-      "bob": { "amp": 4, "speed": 1.0 } },
-    { "id": "podium", "emoji": "🎤", "x": 120, "y": 480, "size": 30,
-      "pulse": { "amp": 0.1, "speed": 1.6 } }
+    {
+      "id": "astro",
+      "emoji": "🧑‍🚀",
+      "x": 240,
+      "y": 260,
+      "size": 74,
+      "bob": {
+        "amp": 6,
+        "speed": 1.2
+      }
+    },
+    {
+      "id": "water",
+      "emoji": "💧",
+      "x": 440,
+      "y": 240,
+      "size": 56,
+      "pulse": {
+        "amp": 0.1,
+        "speed": 1.4
+      }
+    },
+    {
+      "id": "flame",
+      "emoji": "🔥",
+      "x": 620,
+      "y": 240,
+      "size": 48,
+      "pulse": {
+        "amp": 0.12,
+        "speed": 2
+      }
+    },
+    {
+      "id": "bone",
+      "emoji": "🦴",
+      "x": 470,
+      "y": 410,
+      "size": 42,
+      "sway": {
+        "amp": 5,
+        "speed": 0.9
+      }
+    },
+    {
+      "id": "dumbbell",
+      "emoji": "🏋️",
+      "x": 500,
+      "y": 380,
+      "size": 50,
+      "bob": {
+        "amp": 5,
+        "speed": 1.3
+      },
+      "visible": {
+        "from": 12,
+        "to": 24
+      }
+    },
+    {
+      "id": "rocket",
+      "emoji": "🚀",
+      "x": 520,
+      "y": 180,
+      "size": 44,
+      "sway": {
+        "amp": 6,
+        "speed": 1
+      },
+      "visible": {
+        "from": 0,
+        "to": 12
+      }
+    },
+    {
+      "id": "question",
+      "emoji": "❓",
+      "x": 300,
+      "y": 420,
+      "size": 34,
+      "pulse": {
+        "amp": 0.2,
+        "speed": 2
+      },
+      "visible": {
+        "from": 18,
+        "to": 24
+      }
+    },
+    {
+      "id": "lecturer",
+      "emoji": "🧑‍🏫",
+      "x": 120,
+      "y": 440,
+      "size": 68,
+      "bob": {
+        "amp": 4,
+        "speed": 1
+      }
+    },
+    {
+      "id": "podium",
+      "emoji": "🎤",
+      "x": 120,
+      "y": 480,
+      "size": 30,
+      "pulse": {
+        "amp": 0.1,
+        "speed": 1.6
+      }
+    }
   ],
   "particles": [
-    { "from": "water", "dx": 0, "dy": -10, "emoji": "🫧", "rate": 0.08,
-      "vx": 4, "vy": -12, "life": 1.2, "size": 12, "alpha": 0.7 },
-    { "from": "flame", "dx": 0, "dy": -18, "emoji": "✨", "rate": 0.1,
-      "vx": 4, "vy": -16, "life": 0.8, "size": 10, "alpha": 0.8 }
+    {
+      "from": "water",
+      "dx": 0,
+      "dy": -10,
+      "emoji": "🫧",
+      "rate": 0.08,
+      "vx": 4,
+      "vy": -12,
+      "life": 1.2,
+      "size": 12,
+      "alpha": 0.7
+    },
+    {
+      "from": "flame",
+      "dx": 0,
+      "dy": -18,
+      "emoji": "✨",
+      "rate": 0.1,
+      "vx": 4,
+      "vy": -16,
+      "life": 0.8,
+      "size": 10,
+      "alpha": 0.8
+    }
   ]
 }
