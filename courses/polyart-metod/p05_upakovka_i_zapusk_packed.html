@@ -583,6 +583,10 @@ var Polimuli = (() => {
     window.addEventListener('keydown', (e) => {
       if (e.key === '+' || e.key === '=') { ctrl.setSpeed(ctrl.speed * 1.4); e.preventDefault(); }
       else if (e.key === '-' || e.key === '_') { ctrl.setSpeed(ctrl.speed / 1.4); e.preventDefault(); }
+      else if (e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        if (ctrl.running) ctrl.pause(); else ctrl.resume();
+      }
     });
 
     ctrl.pause = () => { if (ctrl.running) { ctrl.running = false; cancelAnimationFrame(ctrl._raf); } };
