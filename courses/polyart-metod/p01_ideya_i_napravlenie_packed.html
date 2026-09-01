@@ -272,6 +272,10 @@ var Polimuli = (() => {
       pen: '✍️',        // пишущая рука/мел
       rep: '',          // представитель (аватар лектора) у доски, '' = выкл
       repSize: 44,      // размер представителя
+      applause: false,          // рукоплескания, когда доска дописана
+      applauseStep: 0.16,       // золотой шаг волн аплодисментов (≈ φ-ритм)
+      applauseNote: '',         // плашка-благодарность (пусто = выкл)
+      applauseBecome: '',       // «кем станешь» — образ результата труда (пусто = выкл)
     }, st.board || {});
     // Индексы стилей ролей (плашки подсветки)
     const ROLE = {
@@ -282,6 +286,8 @@ var Polimuli = (() => {
     };
 
     const ctrl = { running: true, _t: 0, _start: null, _tt: 0, _tWall: 0, speed: 1 };
+    const applause = new Map();   // акт -> t старта рукоплесканий
+    const applauseSeen = new Set(); // акт.волна -> спаун выполнена
 
     function actorPos(a, t) {
       let x = keyVal(a.key, t, 'x', a.x);
@@ -474,6 +480,64 @@ var Polimuli = (() => {
           ctx.globalAlpha = 1;
         }
       }
+
+      // Рукоплескания по золотому сечению — невербальное подтверждение зрителю,
+      // который «вдохнул» знание. Когда доска дописана (последняя строка
+      // завершена рукой) — из-под доски всплеск 👏 с золотым ритмом спауна.
+      // Включается полем board.applause; без него — прежнее поведение.
+      if (board.applause) {
+        const last = lines.length - 1;
+        const lineStart = cur.at + last * board.step;
+        const handW = Math.max(0.6, board.step * 0.85);
+        if (t >= lineStart + handW) {
+          const bx0 = board.x + board.gutter, bx1 = board.x + board.w - board.gutter;
+          const by0 = board.y + board.h - board.gutter;
+          if (!applause.get(cur)) applause.set(cur, t);
+          const start = applause.get(cur);
+          const PHI = 1.6180339887;
+          // «полиномиально и золотым сечением»: волны аплодисментов идут
+          // ступенями, кратными φ — как живой зал, а не одинаковая циклограмма
+          const slot = Math.floor((t - start) / board.applauseStep);
+          for (let k = 0; k <= slot; k++) {
+            const tag = cur + '.' + k;
+            if (applauseSeen.has(tag)) continue;
+            applauseSeen.add(tag);
+            const n = Math.round(6 + k * 3);
+            for (let i = 0; i < n; i++) {
+              const u = i / Math.max(1, n - 1);
+              const x = bx0 + (bx1 - bx0) * u;
+              const emoji = (i % 3 === 2) ? (i % 7 === 5 ? '✨' : '🙂') : '👏';
+              Parts.spawn({
+                x, y: by0,
+                vx: (u - 0.5) * 90 + (Math.random() - 0.5) * 30,
+                vy: -70 - Math.random() * 60,
+                life: 0.8 + Math.random() * 0.7, size: 16 + Math.random() * 8,
+                emoji, gravity: 130, alpha: 0.9,
+              });
+            }
+          }
+          // образ результата труда — «кем ты станешь» (золотое сечение —
+          // просто инструмент композиции, цель — живой образ становления)
+          if (board.applauseNote || board.applauseBecome) {
+            const fade = Math.min(1, (t - start) / board.applauseStep);
+            const ax = bx0 + (bx1 - bx0) / PHI;   // φ-точка: инструмент, не догма
+            ctx.save();
+            ctx.globalAlpha = fade;
+            ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+            ctx.fillStyle = board.titleColor;
+            if (board.applauseBecome) {
+              ctx.font = `bold ${Math.round(board.font * 1.15)}px "Segoe UI", Arial, sans-serif`;
+              ctx.fillText(board.applauseBecome, ax, by0 - board.rowH * 0.9);
+            }
+            if (board.applauseNote) {
+              ctx.font = `${Math.round(board.font * 0.9)}px "Segoe UI", Arial, sans-serif`;
+              ctx.fillText(board.applauseNote, ax, by0 - board.rowH * 0.9
+                            - (board.applauseBecome ? board.font * 1.3 : 0));
+            }
+            ctx.restore();
+          }
+        }
+      }
     }
 
     function frame(now) {
@@ -537,7 +601,7 @@ var Polimuli = (() => {
   return Object.assign(base, { play });
 })();</script>
 <script>
-  window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"p01","title":"Полиарт-метод: Идея и направление","genre":"курс «Полиарт-метод» · урок 1","dur":24,"emojis":["💡","📚","🔍","🎯","🗺️"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8e6f5","barColor":"#5a8fc0"},"caption":{"font":24,"color":"#eef6ff","shadow":"rgba(15,35,60,0.5)"},"board":{"x":640,"y":120,"w":300,"h":270,"bg":"#2e4632","frame":"#8a5a2a","text":"#f2e6c8","font":18,"step":1.4,"title":"ПОЛИАРТ-МЕТОД","rowH":34,"rep":"👩‍🏫","repSize":44}},"acts":[{"at":0,"text":"КУРС — ЛЕКЦИЯ НА 1.5 ЧАСА","bg":{"top":"#1c2c3c","bottom":"#0d1520"},"board":[{"t":"КУРС = ОДНА ИДЕЯ","role":"thesis"},{"t":"ФОРМАТ: ЛЕКЦИЯ 1.5 Ч","role":"result"}]},{"at":6,"text":"ПОЛИАРТ ЖМЁТ СМЫСЛ В 24 СЕК","bg":{"top":"#22384a","bottom":"#101c28"},"board":[{"t":"24 СЕК = ОДИН СМЫСЛ","role":"thesis"},{"t":"ЭМОДЗИ = СЛОВАРЬ ИДЕЙ","role":"result"}]},{"at":12,"text":"ЭМОДЗИ НЕСУТ ИДЕЮ, НО СЮЖЕТ ВЕДЁТ","bg":{"top":"#26404f","bottom":"#132030"},"board":[{"t":"СЮЖЕТ ВЕДЁТ КАДР","role":"thesis"},{"t":"НЕ ПЕРЕГРУЖАЙ ЭКРАН","role":"result"}]},{"at":18,"text":"МЕТОД: ИДЕЯ→НАПРАВЛЕНИЕ→СЕРИЯ","bg":{"top":"#2a4654","bottom":"#162438"},"board":[{"t":"ИДЕЯ→НАПРАВЛЕНИЕ","role":"thesis"},{"t":"СТИЛЬ→СЕРИЯ","role":"result"}]}],"actors":[{"id":"idea","emoji":"💡","x":240,"y":300,"size":72,"pulse":{"amp":0.12,"speed":1.8}},{"id":"book","emoji":"📚","x":440,"y":340,"size":66,"bob":{"amp":4,"speed":1}},{"id":"lens","emoji":"🔍","x":620,"y":300,"size":60,"sway":{"amp":8,"speed":1.2}},{"id":"target","emoji":"🎯","x":520,"y":380,"size":52,"pulse":{"amp":0.08,"speed":0.9}},{"id":"compass","emoji":"🗺️","x":180,"y":180,"size":56,"pulse":{"amp":0.06,"speed":0.7}},{"id":"spark","emoji":"✨","x":580,"y":200,"size":30,"pulse":{"amp":0.22,"speed":2.4},"visible":{"from":6,"to":24}},{"id":"lecturer","emoji":"🧑‍🏫","x":120,"y":440,"size":68,"bob":{"amp":4,"speed":1}},{"id":"podium","emoji":"🎤","x":120,"y":480,"size":30,"pulse":{"amp":0.1,"speed":1.6}}],"particles":[{"from":"idea","dx":0,"dy":-24,"emoji":"✨","rate":0.1,"vx":6,"vy":-16,"life":1,"size":12,"alpha":0.9},{"from":"compass","dx":0,"dy":-14,"emoji":"🧭","rate":0.05,"vx":4,"vy":-12,"life":1.1,"size":12,"alpha":0.7}]};
+  window.__POL_DEMO__ = {"format":"polimuli/pol","version":1,"meta":{"id":"p01","title":"Полиарт-метод: Идея и направление","genre":"курс «Полиарт-метод» · урок 1","dur":24,"emojis":["💡","📚","🔍","🎯","🗺️"]},"canvas":{"w":960,"h":540},"style":{"hud":{"labelColor":"#d8e6f5","barColor":"#5a8fc0"},"caption":{"font":24,"color":"#eef6ff","shadow":"rgba(15,35,60,0.5)"},"board":{"x":640,"y":120,"w":300,"h":270,"bg":"#2e4632","frame":"#8a5a2a","text":"#f2e6c8","font":18,"step":1.4,"title":"ПОЛИАРТ-МЕТОД","rowH":34,"rep":"👩‍🏫","repSize":44,"applause":true,"applauseStep":0.16,"applauseNote":"БРАВО · МЕТОД ПОНЯТ","applauseBecome":"ТЫ СТАНОВИШЬСЯ АВТОРОМ МЕТОДА"}},"acts":[{"at":0,"text":"КУРС — ЛЕКЦИЯ НА 1.5 ЧАСА","bg":{"top":"#1c2c3c","bottom":"#0d1520"},"board":[{"t":"КУРС = ОДНА ИДЕЯ","role":"thesis"},{"t":"ФОРМАТ: ЛЕКЦИЯ 1.5 Ч","role":"result"}]},{"at":6,"text":"ПОЛИАРТ ЖМЁТ СМЫСЛ В 24 СЕК","bg":{"top":"#22384a","bottom":"#101c28"},"board":[{"t":"24 СЕК = ОДИН СМЫСЛ","role":"thesis"},{"t":"ЭМОДЗИ = СЛОВАРЬ ИДЕЙ","role":"result"}]},{"at":12,"text":"ЭМОДЗИ НЕСУТ ИДЕЮ, НО СЮЖЕТ ВЕДЁТ","bg":{"top":"#26404f","bottom":"#132030"},"board":[{"t":"СЮЖЕТ ВЕДЁТ КАДР","role":"thesis"},{"t":"НЕ ПЕРЕГРУЖАЙ ЭКРАН","role":"result"}]},{"at":18,"text":"МЕТОД: ИДЕЯ→НАПРАВЛЕНИЕ→СЕРИЯ","bg":{"top":"#2a4654","bottom":"#162438"},"board":[{"t":"ИДЕЯ→НАПРАВЛЕНИЕ","role":"thesis"},{"t":"СТИЛЬ→СЕРИЯ","role":"result"}]}],"actors":[{"id":"idea","emoji":"💡","x":240,"y":300,"size":72,"pulse":{"amp":0.12,"speed":1.8}},{"id":"book","emoji":"📚","x":440,"y":340,"size":66,"bob":{"amp":4,"speed":1}},{"id":"lens","emoji":"🔍","x":620,"y":300,"size":60,"sway":{"amp":8,"speed":1.2}},{"id":"target","emoji":"🎯","x":520,"y":380,"size":52,"pulse":{"amp":0.08,"speed":0.9}},{"id":"compass","emoji":"🗺️","x":180,"y":180,"size":56,"pulse":{"amp":0.06,"speed":0.7}},{"id":"spark","emoji":"✨","x":580,"y":200,"size":30,"pulse":{"amp":0.22,"speed":2.4},"visible":{"from":6,"to":24}},{"id":"lecturer","emoji":"🧑‍🏫","x":120,"y":440,"size":68,"bob":{"amp":4,"speed":1}},{"id":"podium","emoji":"🎤","x":120,"y":480,"size":30,"pulse":{"amp":0.1,"speed":1.6}}],"particles":[{"from":"idea","dx":0,"dy":-24,"emoji":"✨","rate":0.1,"vx":6,"vy":-16,"life":1,"size":12,"alpha":0.9},{"from":"compass","dx":0,"dy":-14,"emoji":"🧭","rate":0.05,"vx":4,"vy":-12,"life":1.1,"size":12,"alpha":0.7}]};
 </script>
 <script>
   (function(){

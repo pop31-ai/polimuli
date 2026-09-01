@@ -6,95 +6,426 @@
     "title": "Университет · Эмблема и Кодекс",
     "genre": "университет · ролик · товарищ профессор Полиартова",
     "dur": 40,
-    "emojis": ["👩‍🏫", "🥰", "😊", "🎓", "📜", "🏛️", "🪬", "✨", "⚜️", "🖍️", "🎯", "📐", "🕯️", "💡", "💛"]
+    "emojis": [
+      "👩‍🏫",
+      "🥰",
+      "😊",
+      "🎓",
+      "📜",
+      "🏛️",
+      "🪬",
+      "✨",
+      "⚜️",
+      "🖍️",
+      "🎯",
+      "📐",
+      "🕯️",
+      "💡",
+      "💛"
+    ]
   },
-  "canvas": { "w": 960, "h": 540 },
+  "canvas": {
+    "w": 960,
+    "h": 540
+  },
   "style": {
-    "hud": { "labelColor": "#d8e6f5", "barColor": "#c9a15a" },
-    "caption": { "font": 24, "color": "#f6efdc", "shadow": "rgba(10,20,35,0.6)" },
+    "hud": {
+      "labelColor": "#d8e6f5",
+      "barColor": "#c9a15a"
+    },
+    "caption": {
+      "font": 24,
+      "color": "#f6efdc",
+      "shadow": "rgba(10,20,35,0.6)"
+    },
     "board": {
-      "x": 570, "y": 118, "w": 350, "h": 330,
-      "bg": "#2e4632", "frame": "#8a5a2a", "text": "#f2e6c8",
-      "font": 16, "step": 1.7, "rowH": 30,
-      "title": "КАФЕДРА ПОЛИАРТА", "titleColor": "#f0d9a0",
-      "rep": "👩‍🏫", "repSize": 46
+      "x": 570,
+      "y": 118,
+      "w": 350,
+      "h": 330,
+      "bg": "#2e4632",
+      "frame": "#8a5a2a",
+      "text": "#f2e6c8",
+      "font": 16,
+      "step": 1.7,
+      "rowH": 30,
+      "title": "КАФЕДРА ПОЛИАРТА",
+      "titleColor": "#f0d9a0",
+      "rep": "👩‍🏫",
+      "repSize": 46,
+      "applause": true,
+      "applauseStep": 0.16,
+      "applauseNote": "БРАВО · ЗНАНИЕ ПРОЖИТО",
+      "applauseBecome": "ТЫ СТАНОВИШЬСЯ ПРОФЕССОРОМ"
     }
   },
   "acts": [
-    { "at": 0,  "text": "УНИВЕРСИТЕТ ПОЛИАРТА · ЭМБЛЕМА", "bg": { "top": "#1d2b3a", "bottom": "#0c1420" }, "board": [
-      { "t": "КОДЕКС УНИВЕРСИТЕТА", "role": "thesis" },
-      { "t": "СВОБОДА И ЦЕЛИ", "role": "diagram", "indent": 8 },
-      { "t": "ЦЕЛЬ: НЕВЕЖДЫ → ОБРАЗОВАННЫЕ", "role": "diagram", "indent": 8 },
-      { "t": "ДОСТУПНОЕ ОБУЧЕНИЕ ДЛЯ ВСЕХ", "role": "note" },
-      { "t": "ИТОГ: ДОСКА ЖИВЁТ · ТЫ НЕ ОДИН", "role": "result" }
-    ] },
-    { "at": 9,  "text": "СВОБОДА: ТЕМП И МЕТОД СВОИ", "bg": { "top": "#24384a", "bottom": "#111c2a" }, "board": [
-      { "t": "ТВОЙ ТЕМП ×0.25…×16", "role": "thesis" },
-      { "t": "ПАУЗА · ПОВТОР · РЕШИ САМ", "role": "diagram", "indent": 8 },
-      { "t": "ВЫБОР ДОСКИ И МЕТОДА", "role": "diagram", "indent": 8 },
-      { "t": "ЛЕВША / ПРАВША / НЕСТАНДАРТ", "role": "note" },
-      { "t": "ИТОГ: НИКТО НЕ ПОТЕРЯН", "role": "result" }
-    ] },
-    { "at": 18, "text": "СВЕЧА ЗНАНИЙ ГОРИТ ВЕЧНО", "bg": { "top": "#29404f", "bottom": "#14202e" }, "board": [
-      { "t": "ПЕТЛЯ ПРОСВЕЩЕНИЯ", "role": "thesis" },
-      { "t": "СТУДЕНТ → ПРОФЕССОР", "role": "diagram", "indent": 8 },
-      { "t": "СВЕЧА НЕ УГАСАЕТ", "role": "diagram", "indent": 8 },
-      { "t": "ПЕРЕДАЙ СВЕТ ДАЛЬШЕ", "role": "note" },
-      { "t": "ИТОГ: ЗНАНИЕ МНОЖИТСЯ С ТОБОЙ", "role": "result" }
-    ] },
-    { "at": 27, "text": "ДОСКА ЖИВЁТ · ПОЛИАРТ, НЕ ВИДЕО", "bg": { "top": "#2e4654", "bottom": "#182636" }, "board": [
-      { "t": "ДОСКА = БЕСКОНЕЧНАЯ ЛЕНТА", "role": "thesis" },
-      { "t": "СТЕНЫ-СПРАВОЧНИКИ ВКЛЮЧЕНЫ", "role": "diagram", "indent": 8 },
-      { "t": "ПОЛИАРТ, А НЕ ПРОСТО ВИДЕО", "role": "diagram", "indent": 8 },
-      { "t": "ВОДА УДЕРЖИВАЕТ ВНИМАНИЕ", "role": "note" },
-      { "t": "ИТОГ: ВСЁ АРХИВИРУЕТСЯ", "role": "result" }
-    ] },
-    { "at": 35, "text": "ДОБРО ПОЖАЛОВАТЬ · ПРИВЕТ!", "bg": { "top": "#33506a", "bottom": "#1a2b3a" }, "board": [
-      { "t": "ТОВАРИЩ ПРОФЕССОР ПОЛИАРТОВА", "role": "result" },
-      { "t": "РАДА ВИДЕТЬ ТЕБЯ В КАФЕДРЕ", "role": "result" },
-      { "t": "УЛЫБАЙСЯ · УЧИСЬ · РАСТИ", "role": "result" },
-      { "t": "СТАНОВИСЬ ПРОФЕССОРОМ", "role": "note" }
-    ] }
+    {
+      "at": 0,
+      "text": "УНИВЕРСИТЕТ ПОЛИАРТА · ЭМБЛЕМА",
+      "bg": {
+        "top": "#1d2b3a",
+        "bottom": "#0c1420"
+      },
+      "board": [
+        {
+          "t": "КОДЕКС УНИВЕРСИТЕТА",
+          "role": "thesis"
+        },
+        {
+          "t": "СВОБОДА И ЦЕЛИ",
+          "role": "diagram",
+          "indent": 8
+        },
+        {
+          "t": "ЦЕЛЬ: НЕВЕЖДЫ → ОБРАЗОВАННЫЕ",
+          "role": "diagram",
+          "indent": 8
+        },
+        {
+          "t": "ДОСТУПНОЕ ОБУЧЕНИЕ ДЛЯ ВСЕХ",
+          "role": "note"
+        },
+        {
+          "t": "ИТОГ: ДОСКА ЖИВЁТ · ТЫ НЕ ОДИН",
+          "role": "result"
+        }
+      ]
+    },
+    {
+      "at": 9,
+      "text": "СВОБОДА: ТЕМП И МЕТОД СВОИ",
+      "bg": {
+        "top": "#24384a",
+        "bottom": "#111c2a"
+      },
+      "board": [
+        {
+          "t": "ТВОЙ ТЕМП ×0.25…×16",
+          "role": "thesis"
+        },
+        {
+          "t": "ПАУЗА · ПОВТОР · РЕШИ САМ",
+          "role": "diagram",
+          "indent": 8
+        },
+        {
+          "t": "ВЫБОР ДОСКИ И МЕТОДА",
+          "role": "diagram",
+          "indent": 8
+        },
+        {
+          "t": "ЛЕВША / ПРАВША / НЕСТАНДАРТ",
+          "role": "note"
+        },
+        {
+          "t": "ИТОГ: НИКТО НЕ ПОТЕРЯН",
+          "role": "result"
+        }
+      ]
+    },
+    {
+      "at": 18,
+      "text": "СВЕЧА ЗНАНИЙ ГОРИТ ВЕЧНО",
+      "bg": {
+        "top": "#29404f",
+        "bottom": "#14202e"
+      },
+      "board": [
+        {
+          "t": "ПЕТЛЯ ПРОСВЕЩЕНИЯ",
+          "role": "thesis"
+        },
+        {
+          "t": "СТУДЕНТ → ПРОФЕССОР",
+          "role": "diagram",
+          "indent": 8
+        },
+        {
+          "t": "СВЕЧА НЕ УГАСАЕТ",
+          "role": "diagram",
+          "indent": 8
+        },
+        {
+          "t": "ПЕРЕДАЙ СВЕТ ДАЛЬШЕ",
+          "role": "note"
+        },
+        {
+          "t": "ИТОГ: ЗНАНИЕ МНОЖИТСЯ С ТОБОЙ",
+          "role": "result"
+        }
+      ]
+    },
+    {
+      "at": 27,
+      "text": "ДОСКА ЖИВЁТ · ПОЛИАРТ, НЕ ВИДЕО",
+      "bg": {
+        "top": "#2e4654",
+        "bottom": "#182636"
+      },
+      "board": [
+        {
+          "t": "ДОСКА = БЕСКОНЕЧНАЯ ЛЕНТА",
+          "role": "thesis"
+        },
+        {
+          "t": "СТЕНЫ-СПРАВОЧНИКИ ВКЛЮЧЕНЫ",
+          "role": "diagram",
+          "indent": 8
+        },
+        {
+          "t": "ПОЛИАРТ, А НЕ ПРОСТО ВИДЕО",
+          "role": "diagram",
+          "indent": 8
+        },
+        {
+          "t": "ВОДА УДЕРЖИВАЕТ ВНИМАНИЕ",
+          "role": "note"
+        },
+        {
+          "t": "ИТОГ: ВСЁ АРХИВИРУЕТСЯ",
+          "role": "result"
+        }
+      ]
+    },
+    {
+      "at": 35,
+      "text": "ДОБРО ПОЖАЛОВАТЬ · ПРИВЕТ!",
+      "bg": {
+        "top": "#33506a",
+        "bottom": "#1a2b3a"
+      },
+      "board": [
+        {
+          "t": "ТОВАРИЩ ПРОФЕССОР ПОЛИАРТОВА",
+          "role": "result"
+        },
+        {
+          "t": "РАДА ВИДЕТЬ ТЕБЯ В КАФЕДРЕ",
+          "role": "result"
+        },
+        {
+          "t": "УЛЫБАЙСЯ · УЧИСЬ · РАСТИ",
+          "role": "result"
+        },
+        {
+          "t": "СТАНОВИСЬ ПРОФЕССОРОМ",
+          "role": "note"
+        }
+      ]
+    }
   ],
   "actors": [
-    { "id": "seal_center", "emoji": "🎓", "x": 430, "y": 210, "size": 100,
-      "pulse": { "amp": 0.10, "speed": 1.4 } },
-    { "id": "seal_n", "emoji": "⚜️", "x": 430, "y": 66, "size": 30 },
-    { "id": "seal_s", "emoji": "📜", "x": 430, "y": 358, "size": 30 },
-    { "id": "seal_e", "emoji": "🏛️", "x": 592, "y": 210, "size": 40 },
-    { "id": "seal_w", "emoji": "🪬", "x": 268, "y": 210, "size": 34 },
-    { "id": "seal_ne", "emoji": "✨", "x": 566, "y": 98, "size": 26,
-      "pulse": { "amp": 0.3, "speed": 2.0 } },
-    { "id": "seal_nw", "emoji": "🖍️", "x": 294, "y": 98, "size": 26 },
-    { "id": "seal_se", "emoji": "🎯", "x": 566, "y": 322, "size": 26 },
-    { "id": "seal_sw", "emoji": "📐", "x": 294, "y": 322, "size": 26 },
-    { "id": "professor", "emoji": "👩‍🏫", "x": 150, "y": 400, "size": 86,
-      "bob": { "amp": 5, "speed": 1.1 } },
-    { "id": "smile", "emoji": "😊", "x": 120, "y": 310, "size": 44,
-      "visible": { "from": 2, "to": 40 },
-      "bob": { "amp": 6, "speed": 1.3 },
-      "pulse": { "amp": 0.12, "speed": 1.6 } },
-    { "id": "warm", "emoji": "🥰", "x": 190, "y": 300, "size": 40,
-      "visible": { "from": 9, "to": 40 },
-      "bob": { "amp": 6, "speed": 1.5 },
-      "pulse": { "amp": 0.14, "speed": 1.9 } },
-    { "id": "podium", "emoji": "🎤", "x": 150, "y": 462, "size": 32,
-      "pulse": { "amp": 0.1, "speed": 1.5 } },
-    { "id": "lightbulb", "emoji": "💡", "x": 250, "y": 120, "size": 40,
-      "visible": { "from": 9, "to": 40 },
-      "pulse": { "amp": 0.12, "speed": 1.3 } },
-    { "id": "flame1", "emoji": "🕯️", "x": 520, "y": 120, "size": 40,
-      "visible": { "from": 18, "to": 40 },
-      "bob": { "amp": 5, "speed": 1.5 } }
+    {
+      "id": "seal_center",
+      "emoji": "🎓",
+      "x": 430,
+      "y": 210,
+      "size": 100,
+      "pulse": {
+        "amp": 0.1,
+        "speed": 1.4
+      }
+    },
+    {
+      "id": "seal_n",
+      "emoji": "⚜️",
+      "x": 430,
+      "y": 66,
+      "size": 30
+    },
+    {
+      "id": "seal_s",
+      "emoji": "📜",
+      "x": 430,
+      "y": 358,
+      "size": 30
+    },
+    {
+      "id": "seal_e",
+      "emoji": "🏛️",
+      "x": 592,
+      "y": 210,
+      "size": 40
+    },
+    {
+      "id": "seal_w",
+      "emoji": "🪬",
+      "x": 268,
+      "y": 210,
+      "size": 34
+    },
+    {
+      "id": "seal_ne",
+      "emoji": "✨",
+      "x": 566,
+      "y": 98,
+      "size": 26,
+      "pulse": {
+        "amp": 0.3,
+        "speed": 2
+      }
+    },
+    {
+      "id": "seal_nw",
+      "emoji": "🖍️",
+      "x": 294,
+      "y": 98,
+      "size": 26
+    },
+    {
+      "id": "seal_se",
+      "emoji": "🎯",
+      "x": 566,
+      "y": 322,
+      "size": 26
+    },
+    {
+      "id": "seal_sw",
+      "emoji": "📐",
+      "x": 294,
+      "y": 322,
+      "size": 26
+    },
+    {
+      "id": "professor",
+      "emoji": "👩‍🏫",
+      "x": 150,
+      "y": 400,
+      "size": 86,
+      "bob": {
+        "amp": 5,
+        "speed": 1.1
+      }
+    },
+    {
+      "id": "smile",
+      "emoji": "😊",
+      "x": 120,
+      "y": 310,
+      "size": 44,
+      "visible": {
+        "from": 2,
+        "to": 40
+      },
+      "bob": {
+        "amp": 6,
+        "speed": 1.3
+      },
+      "pulse": {
+        "amp": 0.12,
+        "speed": 1.6
+      }
+    },
+    {
+      "id": "warm",
+      "emoji": "🥰",
+      "x": 190,
+      "y": 300,
+      "size": 40,
+      "visible": {
+        "from": 9,
+        "to": 40
+      },
+      "bob": {
+        "amp": 6,
+        "speed": 1.5
+      },
+      "pulse": {
+        "amp": 0.14,
+        "speed": 1.9
+      }
+    },
+    {
+      "id": "podium",
+      "emoji": "🎤",
+      "x": 150,
+      "y": 462,
+      "size": 32,
+      "pulse": {
+        "amp": 0.1,
+        "speed": 1.5
+      }
+    },
+    {
+      "id": "lightbulb",
+      "emoji": "💡",
+      "x": 250,
+      "y": 120,
+      "size": 40,
+      "visible": {
+        "from": 9,
+        "to": 40
+      },
+      "pulse": {
+        "amp": 0.12,
+        "speed": 1.3
+      }
+    },
+    {
+      "id": "flame1",
+      "emoji": "🕯️",
+      "x": 520,
+      "y": 120,
+      "size": 40,
+      "visible": {
+        "from": 18,
+        "to": 40
+      },
+      "bob": {
+        "amp": 5,
+        "speed": 1.5
+      }
+    }
   ],
   "particles": [
-    { "from": "seal_center", "dx": 0, "dy": -30, "emoji": "✨", "rate": 0.10,
-      "vx": 6, "vy": -16, "life": 1.1, "size": 13, "alpha": 0.9 },
-    { "from": "professor", "dx": 20, "dy": -36, "emoji": "💛", "rate": 0.06,
-      "vx": 10, "vy": -10, "life": 0.9, "size": 16, "alpha": 0.7 },
-    { "from": "smile", "dx": 0, "dy": -6, "emoji": "✨", "rate": 0.05,
-      "vx": 6, "vy": -8, "life": 0.8, "size": 12, "alpha": 0.6 },
-    { "from": "lightbulb", "dx": 0, "dy": -8, "emoji": "✨", "rate": 0.06,
-      "vx": 4, "vy": -12, "life": 0.9, "size": 12, "alpha": 0.7 }
+    {
+      "from": "seal_center",
+      "dx": 0,
+      "dy": -30,
+      "emoji": "✨",
+      "rate": 0.1,
+      "vx": 6,
+      "vy": -16,
+      "life": 1.1,
+      "size": 13,
+      "alpha": 0.9
+    },
+    {
+      "from": "professor",
+      "dx": 20,
+      "dy": -36,
+      "emoji": "💛",
+      "rate": 0.06,
+      "vx": 10,
+      "vy": -10,
+      "life": 0.9,
+      "size": 16,
+      "alpha": 0.7
+    },
+    {
+      "from": "smile",
+      "dx": 0,
+      "dy": -6,
+      "emoji": "✨",
+      "rate": 0.05,
+      "vx": 6,
+      "vy": -8,
+      "life": 0.8,
+      "size": 12,
+      "alpha": 0.6
+    },
+    {
+      "from": "lightbulb",
+      "dx": 0,
+      "dy": -8,
+      "emoji": "✨",
+      "rate": 0.06,
+      "vx": 4,
+      "vy": -12,
+      "life": 0.9,
+      "size": 12,
+      "alpha": 0.7
+    }
   ]
 }

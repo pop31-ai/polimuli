@@ -41,7 +41,11 @@
       "title": "ПОЛИАРТ-МЕТОД",
       "rowH": 34,
       "rep": "👩‍🏫",
-      "repSize": 44
+      "repSize": 44,
+      "applause": true,
+      "applauseStep": 0.16,
+      "applauseNote": "БРАВО · МЕТОД ПОНЯТ",
+      "applauseBecome": "ТЫ СТАНОВИШЬСЯ АВТОРОМ МЕТОДА"
     }
   },
   "acts": [
